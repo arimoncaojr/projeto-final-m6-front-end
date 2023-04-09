@@ -3,7 +3,17 @@ import { ReactNode } from 'react';
 
 interface IButtonProps {
      children: ReactNode;
-     typeStyle: "callRegister" | "callControl" | "detail" | "callAction" | "footer" | "seeAllAds";
+     typeStyle:
+          "callRegister" |
+          "callControl"  |
+          "detail"       |
+          "callAction"   |
+          "footer"       |
+          "seeAllAds"    |
+          "actionForm-1" |
+          "createAds"    |
+          "login"        |
+          "logout";
      onClick?: () => void;
      title?: string;
 }
