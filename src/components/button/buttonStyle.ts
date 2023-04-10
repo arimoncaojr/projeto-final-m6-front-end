@@ -73,7 +73,6 @@ export const ButtonStyle = styled.button`
                     `;
                case "actionForm-1":
                     return css`
-                         max-width: 315px;
                          background-color: var(--color-brand-1);
                     `
                case "createAds":

@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
 export const FooterStyle = styled.footer`
-     height: 80px;
      background-color: var(--gray-0);
      padding: 16px;
 
@@ -11,6 +10,7 @@ export const FooterStyle = styled.footer`
           justify-content: space-between;
           flex-direction: column;
           height: 100%;
+          gap: 15px;
 
           & > img {
                width: 153px;
@@ -27,6 +27,7 @@ export const FooterStyle = styled.footer`
           & {
               & > div {
                     flex-direction: row;
+                    gap: unset;
               }
           }
      }

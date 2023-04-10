@@ -1,11 +1,13 @@
-export const HomePage = () => {
 
+export const HomePage = () => {
+     
+     
 
      return (
           <>
                <div className="container">
                 
-                   <h1>HOMEPAGE</h1>
+                  <h1>HOMEPAGE</h1>
                </div>
            
           </>
