@@ -1,11 +1,14 @@
-
-
-
 export const HomePage = () => {
+
+
      return (
-          <div className="container">
-               <h1>HomePage</h1>
-          </div>
+          <>
+               <div className="container">
+                
+                   <h1>HOMEPAGE</h1>
+               </div>
+           
+          </>
          
      )
 }

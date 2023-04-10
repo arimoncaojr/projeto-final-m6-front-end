@@ -76,5 +76,5 @@ export const GlobalStyle = createGlobalStyle`
           max-width: 1600px;
           margin: 0 auto;
      }
-
 `;
+
