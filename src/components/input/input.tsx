@@ -14,11 +14,11 @@ interface IInputProps {
      register: UseFormRegister<any>;
      errors: Record<string, any>;
      options?: ISelectOption[];
-     typeStyle?: "filter";
+     tipo?: "filter";
 }
 
 
-export const Input = ({type,label, name, placeholder, register, errors, options, typeStyle}:IInputProps) => {
+export const Input = ({type,label, name, placeholder, register, errors, options, tipo}:IInputProps) => {
      
      
      return (
@@ -41,6 +41,7 @@ export const Input = ({type,label, name, placeholder, register, errors, options,
                               type={type}
                               placeholder={placeholder}
                               {...register(name)}
+                              tipo={tipo}
                          />
                     )}
                

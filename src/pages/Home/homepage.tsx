@@ -15,7 +15,7 @@ export const HomePage = () => {
      const schema = yup.object().shape({
           username: yup.string().required(),
           email: yup.string().email().required(),
-          // age: yup.number().required().positive().integer(),
+          age: yup.number().required().positive().integer(),
         });
 
      const {register,handleSubmit, formState: { errors }} = useForm<FormData>({
@@ -39,9 +39,9 @@ export const HomePage = () => {
                 
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                         <Input type="text" label="name" name="username" placeholder="Digite seu nome" register={register} errors={errors} />
-                         <Input type="text" label="email" name="email" placeholder="Digite seu Email" register={register} errors={errors} />
-                         <Input type="select" label="idade" name="age" placeholder="Digite sua idade" options={genders} register={register} errors={errors} />
+                         <Input type="text" label="login" name="username" placeholder="Digite seu nome" register={register} errors={errors} />
+                         <Input type="text" label="login" name="email" placeholder="Digite seu Email" register={register} errors={errors} tipo="filter"/>
+                         <Input type="select" label="login" name="age" placeholder="Digite sua idade" options={genders} register={register} errors={errors} />
                          <button type="submit">ok</button>
                     </form>
                </div>

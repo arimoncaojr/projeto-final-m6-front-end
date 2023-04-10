@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components"
 
 
-export interface IStyledButtonProps{
+interface IStyledButtonProps{
      typeStyle:
           "callRegister" |
           "callControl"  |

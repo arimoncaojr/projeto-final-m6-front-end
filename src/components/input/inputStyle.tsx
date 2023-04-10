@@ -1,4 +1,9 @@
-import styled from "styled-components"
+import styled, {css} from "styled-components"
+
+interface IStyledInputProps{
+     tipo?: "filter"
+}
+
 
 export const WrapperStyle = styled.div`
      display: flex;
@@ -14,6 +19,7 @@ export const LabelStyle = styled.label`
 `
 
 export const InputStyle = styled.input`
+     
      height: 48px;
      border-radius: 4px;
      border: 1.5px solid var(--gray-7);
@@ -21,10 +27,31 @@ export const InputStyle = styled.input`
      padding: 0px 16px;
      font: var(--font-placeholder);
      outline: none;
+   
+     ${({ tipo }:IStyledInputProps) =>
+          tipo === "filter" &&
+          css`
+               max-width: 142px;
+               height: 37px;
+               font: var(--font-heading-11);
+               border: none;
+               border-radius: unset;
+               background-color: var(--gray-5);
+          `
+     }       
+     
 
      &::placeholder{
           font: var(--font-placeholder);
+          
+          ${({ tipo }: IStyledInputProps) =>
+               tipo === "filter" &&
+                    css`
+                         font: var(--font-heading-11);
+                    `
+          }       
      }
+
 `
 export const SelectStyle = styled.select`
      height: 48px;
