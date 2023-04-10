@@ -1,3 +1,4 @@
+import "react-toastify/dist/ReactToastify.css";
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
@@ -75,8 +76,5 @@ export const GlobalStyle = createGlobalStyle`
           max-width: 1600px;
           margin: 0 auto;
      }
+`;
 
-     *{
-          /* border: 2px solid red !important; */
-     }
-`
