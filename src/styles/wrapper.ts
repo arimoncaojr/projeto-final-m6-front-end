@@ -1,6 +1,13 @@
 import styled from "styled-components"
 
-export const Wrapper = styled.div`
+export const WrapperGlobal = styled.div`
      width: 100vw;
      height: 100vh;
+     background-color: var(--gray-8);
+`
+export const Wrapper = styled.div`
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
 `

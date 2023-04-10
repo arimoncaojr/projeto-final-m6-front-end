@@ -45,7 +45,7 @@ export const Input = ({type,label, name, placeholder, register, errors, options,
                          />
                     )}
                
-               {errors[name] && <span>{errors[name].message}</span>}
+               {errors[name] && <span className="messageErrors">{errors[name].message}</span>}
         </WrapperStyle>
      )
 }

@@ -10,16 +10,25 @@ export const WrapperStyle = styled.div`
      flex-direction: column;
      width: 100%;
      gap: 12px;
-     padding: 16px;
+     margin-top: 24px;
+
+     .messageErrors{
+          color: var( --color-alert-1);
+          font-weight: 600;
+          font-family: var(--font-text);
+          font-size: 14px;
+          margin-top: -6px;
+          margin-left: 3px;
+     }
 `
 
 export const LabelStyle = styled.label`
      color: var(--gray-1);
      font: var(--font-label);
+     margin-left: 1px;
 `
 
 export const InputStyle = styled.input`
-     
      height: 48px;
      border-radius: 4px;
      border: 1.5px solid var(--gray-7);
