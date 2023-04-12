@@ -9,7 +9,7 @@ interface IStyledButtonProps{
           "callAction"   |
           "footer"       |
           "seeAllAds"    |
-          "actionForm-1" |
+          "actionForm" |
           "createAds"    |
           "login"        |
           "logout";
@@ -32,8 +32,6 @@ export const ButtonStyle = styled.button`
                     return css`
                          color: var(--gray-0);
                          border: 1.5px solid var(--gray-4);
-                         /* min-width: 133px;   
-                         max-width: 315px;    */
                     `;
                case "callControl":
                     return css`
@@ -71,7 +69,7 @@ export const ButtonStyle = styled.button`
                          max-width: 206px;
                          background-color: var(--gray-0); 
                     `;
-               case "actionForm-1":
+               case "actionForm":
                     return css`
                          background-color: var(--color-brand-1);
                     `
@@ -103,7 +101,6 @@ export const ButtonStyle = styled.button`
                          display: flex;
                          align-items: center;
                          justify-content: space-around;
-                         /* margin-left: -2px; */
                     `
           }
      }}

@@ -1,6 +1,7 @@
 import * as yup from 'yup';
+import { Ilogin } from '../../interfaces/login';
 
 export const loginSchema = yup.object().shape({
-     user: yup.string().required("Informe um usuario cadastrado"),
-     password: yup.string().required("Insira sua senha")
-})
+     email: yup.string().email("Informe um email valido").required("Informe um email cadastrado"),
+     password: yup.string().required("Insira sua senha"),
+}) as yup.ObjectSchema<Ilogin>

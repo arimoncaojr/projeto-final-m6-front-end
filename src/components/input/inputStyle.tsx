@@ -1,7 +1,8 @@
 import styled, {css} from "styled-components"
+import InputMask from "react-input-mask";
 
 interface IStyledInputProps{
-     tipo?: "filter"
+     typeStyled?: "filter"
 }
 
 
@@ -37,8 +38,8 @@ export const InputStyle = styled.input`
      font: var(--font-placeholder);
      outline: none;
    
-     ${({ tipo }:IStyledInputProps) =>
-          tipo === "filter" &&
+     ${({ typeStyled }:IStyledInputProps) =>
+          typeStyled === "filter" &&
           css`
                max-width: 142px;
                height: 37px;
@@ -53,8 +54,8 @@ export const InputStyle = styled.input`
      &::placeholder{
           font: var(--font-placeholder);
           
-          ${({ tipo }: IStyledInputProps) =>
-               tipo === "filter" &&
+          ${({ typeStyled }: IStyledInputProps) =>
+               typeStyled === "filter" &&
                     css`
                          font: var(--font-heading-11);
                     `
@@ -79,4 +80,24 @@ export const SelectStyle = styled.select`
      }
 
      
+`
+
+export const InputMaskStyle = styled(InputMask)`
+     height: 48px;
+     border-radius: 4px;
+     border: 1.5px solid var(--gray-7);
+     color: var(--gray-3);
+     padding: 0px 16px;
+     font: var(--font-placeholder);
+     outline: none;
+`
+export const TextAreaStyle = styled.textarea`
+     height: 80px;
+     border-radius: 4px;
+     border: 1.5px solid var(--gray-7);
+     color: var(--gray-3);
+     padding: 16px;
+     font: var(--font-placeholder);
+     outline: none;
+     resize: none;
 `

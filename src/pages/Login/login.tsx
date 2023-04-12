@@ -22,13 +22,13 @@ export const LoginPage = () => {
      return (
           <Wrapper>
                <Header/>
-               <LoginForm className="container">
+               <LoginForm>
                 
                     <h2>Login</h2>
-                    <Input type="text" name="user" label="Usuário" placeholder="Digite o usuário" register={register} errors={errors} />
+                    <Input type="text" name="email" label="Email" placeholder="Digite seu email" register={register} errors={errors} />
                     <Input type="password" name="password" label="Senha" placeholder="Digite sua senha" register={register} errors={errors} />
                     <p className="forgotPassword">Esqueci minha senha</p>
-                    <Button typeStyle="actionForm-1" onClick={handleSubmit(submitLogin)}>Entrar</Button>
+                    <Button typeStyle="actionForm" onClick={handleSubmit(submitLogin)}>Entrar</Button>
                     <p className="dontAccount">Ainda não possui conta?</p>
                     <Button typeStyle="callRegister">Cadastrar</Button>
                    

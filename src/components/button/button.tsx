@@ -10,7 +10,7 @@ interface IButtonProps {
           "callAction"   |
           "footer"       |
           "seeAllAds"    |
-          "actionForm-1" |
+          "actionForm" |
           "createAds"    |
           "login"        |
           "logout";
