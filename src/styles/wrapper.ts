@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const WrapperGlobal = styled.div`
      width: 100%;
@@ -15,3 +15,4 @@ export const Wrapper = styled.div`
      z-index:0;
      overflow-x: hidden;
 `
+
