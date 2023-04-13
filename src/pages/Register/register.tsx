@@ -45,11 +45,6 @@ export const RegisterPage = () => {
                }
      };
 
-     const handleAccountType  = (account:string) => { 
-          if (account === "anunciante") {
-               
-          }
-     }
 
      const submitRegister = (data: IUserCreated) => { 
           let x = new Date(data.dateOfBirth)
