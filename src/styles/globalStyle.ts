@@ -43,7 +43,7 @@ export const GlobalStyle = createGlobalStyle`
           --color-random-12: #30007D;
 
           /* config fonts */
-          --font-heading: 'Lexend', sans-serif;;
+          --font-heading: 'Lexend', sans-serif;
           --font-text: 'Inter', sans-serif;
         
           --font-heading-1 : 700 44px var(--font-heading);
@@ -77,4 +77,3 @@ export const GlobalStyle = createGlobalStyle`
           margin: 0 auto;
      }
 `;
-
