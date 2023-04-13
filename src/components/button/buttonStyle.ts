@@ -16,6 +16,7 @@ interface IStyledButtonProps{
      | "colorGray6"
      | "colorGray5"
      | "delete"
+     | "filter"
 }
 
 export const ButtonStyle = styled.button`
@@ -120,6 +121,12 @@ export const ButtonStyle = styled.button`
                     return css`
                          max-width: fit-content;
                          background-color: var(--color-alert-2);
+                    `
+               case "filter":
+                    return css`
+                         max-width: fit-content;
+                         color: var(--gray-3);
+                         font: var(--font-heading-12);
                     `
           }
      }}

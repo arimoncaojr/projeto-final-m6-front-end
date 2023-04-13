@@ -4,7 +4,7 @@ export const WrapperGlobal = styled.div`
      width: 100vw;
      min-height: 100vh;
      background-color: var(--gray-8);
-     overflow-wrap: break-word;
+     overflow-x: hidden;
 `
 export const Wrapper = styled.div`
      min-height: 100vh;
@@ -13,5 +13,5 @@ export const Wrapper = styled.div`
      justify-content: space-between;
      position: relative;
      z-index:0;
-     
+     overflow-x: hidden;
 `

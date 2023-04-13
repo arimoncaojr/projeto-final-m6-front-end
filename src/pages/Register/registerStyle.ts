@@ -8,7 +8,6 @@ export const RegisterForm = styled.form`
      border-radius: 4px;
      background-color: var(--gray-10);
      box-shadow: 0px 2px 9px 2px var(--gray-4);
-     overflow: hidden;
      position: relative;
      z-index: -2;
 
