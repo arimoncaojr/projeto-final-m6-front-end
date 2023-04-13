@@ -6,6 +6,7 @@ import {RiArrowDropUpLine as ArrowUp} from "react-icons/ri"
 export const Footer = () => {
      const handleScrollToTop = () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
+          console.log('opa')
      };
      
      return (

@@ -1,28 +1,31 @@
-import { ButtonStyle } from "./buttonStyle"
-import { ReactNode } from 'react';
+import { ButtonStyle } from "./buttonStyle";
+import { ReactNode } from "react";
 
 interface IButtonProps {
-     children: ReactNode;
+  children: ReactNode;
      typeStyle:
-          "callRegister" |
-          "callControl"  |
-          "detail"       |
-          "callAction"   |
-          "footer"       |
-          "seeAllAds"    |
-          "actionForm-1" |
-          "createAds"    |
-          "login"        |
-          "logout";
-     onClick?: () => void;
-     title?: string;
+     | "noColor"
+     | "colorBrand2"
+     | "detail"
+     | "colorBrand1"
+     | "colorBrand1Withlimit"
+     | "footer"
+     | "seeAllAds"
+     | "createAds"
+     | "login"
+     | "logout"
+     | "colorGray6"
+     | "colorGray5"
+     | "delete";
+     
+  onClick?: () => void;
+  title?: string;
 }
 
-export const Button = ({ children, typeStyle , onClick, title }:IButtonProps) => {
-
-     return (
-          <ButtonStyle typeStyle={typeStyle} onClick={onClick} title={title}>
-               {children}
-          </ButtonStyle>
-     )
-}
+export const Button = ({children,typeStyle,onClick,title,}: IButtonProps) => {
+  return (
+    <ButtonStyle typeStyle={typeStyle} onClick={onClick} title={title}>
+      {children}
+    </ButtonStyle>
+  );
+};

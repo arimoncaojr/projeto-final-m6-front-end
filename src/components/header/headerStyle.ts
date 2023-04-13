@@ -51,6 +51,7 @@ export const HeaderStyle = styled.header`
                transition: top 0.5s ease;
                animation: ${({isOpenMenu}:IStyledHeaderProps) => (isOpenMenu ? "fadeInDown 0.5s ease" : "fadeOutUp 30s ease")};
                z-index: -1;
+               background-color: var(--gray-10);
                box-shadow: -1px -2px 10px 0px var(--gray-4);
 
                & > li:first-child{
@@ -134,6 +135,7 @@ export const HeaderStyle = styled.header`
                          max-width: 370px;
                          min-height: 100%;
                          border-radius: unset;
+                         background-color: unset;
                          box-shadow: unset;
                          animation: unset;
                          transition: unset;

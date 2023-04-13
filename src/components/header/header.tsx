@@ -64,7 +64,7 @@ export const Header = ({type}:IHeaderProps) => {
                                         <Button typeStyle="login">Fazer Login</Button>
                                    </li>
                                    <li>
-                                        <Button typeStyle="callRegister">Cadastrar</Button>
+                                        <Button typeStyle="noColor">Cadastrar</Button>
                                    </li>
                               </>         
                          }
