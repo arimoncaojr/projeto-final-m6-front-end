@@ -7,6 +7,7 @@ interface IListPostsContextProps {
 
 interface IUser {
   phoneNumber: string;
+  name: string;
   email: string;
   id: string;
 }
@@ -22,7 +23,7 @@ interface IComments {
   createdAt: string;
 }
 
-interface IPosts {
+export interface IPosts {
   id: string;
   imageCap: string;
   isGoodPurchase: boolean;
@@ -59,7 +60,7 @@ export const ListPostsProvider = ({ children }: IListPostsContextProps) => {
       .then((res) => {
         setPostsInfo(res.data);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => console.log(`Mensagem de erro: ${err.message}`));
   }, []);
 
   return (
