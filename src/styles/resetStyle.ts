@@ -51,8 +51,4 @@ export const ResetStyle = createGlobalStyle`
 	button{
 		cursor: pointer;
 	}
-	body{
-		width: 100vw;
-		min-height: 100vh;
-	}
 `;
