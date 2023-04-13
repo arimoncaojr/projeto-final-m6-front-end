@@ -18,6 +18,7 @@ import {
   FilterGroup,
   FilterInput,
   InputGroup,
+  ClearFiltersButton,
 } from "./dashboardStyle";
 
 export const DashboardPage = () => {
@@ -28,6 +29,7 @@ export const DashboardPage = () => {
   );
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
+  const [showClearFiltersButton, setShowClearFiltersButton] = useState(false);
 
   useEffect(() => {
     if (selectedBrand) {
@@ -56,7 +58,30 @@ export const DashboardPage = () => {
     fuelType: "",
   });
 
+  const hasActiveFilters = () => {
+    return Object.values(filters).some((filterValue) => filterValue !== "");
+  };
+
+  useEffect(() => {
+    setShowClearFiltersButton(hasActiveFilters());
+  }, [filters]);
+
+  const clearFilters = () => {
+    setFilters({
+      brand: "",
+      model: "",
+      color: "",
+      year: "",
+      minKm: "",
+      maxKm: "",
+      minPrice: "",
+      maxPrice: "",
+      fuelType: "",
+    });
+  };
+
   const handleBrandClick = (brand: string) => {
+    setSelectedBrand(brand);
     setFilters((prevState) => ({ ...prevState, brand }));
     getCarDetails(brand);
   };
@@ -109,15 +134,17 @@ export const DashboardPage = () => {
 
       const brandMatch = !brand || post.mark === brand;
       const modelMatch = !model || post.model === model;
-      const colorMatch = !color || post.color === color;
+      const colorMatch =
+        !color || post.color.toLowerCase() === color.toLowerCase();
       const yearMatch = !year || post.year === year;
+      const fuelTypeMatch =
+        !fuelType || post.fuelType.toLowerCase() === fuelType.toLowerCase();
       const minKmMatch = !minKm || parseInt(post.kilometers) >= parseInt(minKm);
       const maxKmMatch = !maxKm || parseInt(post.kilometers) <= parseInt(maxKm);
       const minPriceMatch =
         !minPrice || parseInt(post.price) >= parseInt(minPrice);
       const maxPriceMatch =
         !maxPrice || parseInt(post.price) <= parseInt(maxPrice);
-      const fuelTypeMatch = !fuelType || post.fuelType === fuelType;
 
       return (
         brandMatch &&
@@ -135,23 +162,24 @@ export const DashboardPage = () => {
 
   const filteredPosts = filterPosts(postsInfo);
 
+  const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
+
+  const capitalizeFirstLetter = (str: string): string => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const uniqueFuelTypes = Array.from(
     new Set(postsInfo.map((post) => post.fuelType))
   )
     .filter(Boolean)
-    .map(
-      (fuelType: string) => fuelType.charAt(0).toUpperCase() + fuelType.slice(1)
-    );
+    .map((fuelType: string) => capitalizeFirstLetter(fuelType));
 
   const uniqueColors = Array.from(
-    new Set(
-      postsInfo.map(
-        (post) => post.color.charAt(0).toUpperCase() + post.color.slice(1)
-      )
-    )
-  );
-
-  const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
+    new Set(postsInfo.map((post) => post.color))
+  ).map((color: string) => capitalizeFirstLetter(color));
 
   return (
     <AppWrapper>
@@ -174,7 +202,7 @@ export const DashboardPage = () => {
                 typeStyle="filter"
                 onClick={() => handleBrandClick(brand)}
               >
-                {brand}
+                {capitalizeFirstLetter(brand)}
               </Button>
             ))}
           </FilterGroup>
@@ -186,7 +214,7 @@ export const DashboardPage = () => {
                 typeStyle="filter"
                 onClick={() => handleModelClick(model)}
               >
-                {model}
+                {capitalizeFirstLetter(model)}
               </Button>
             ))}
           </FilterGroup>
@@ -217,7 +245,11 @@ export const DashboardPage = () => {
           <FilterTitle>Combustível</FilterTitle>
           <FilterGroup>
             {uniqueFuelTypes.map((fuelType: string, index: number) => (
-              <Button key={index} typeStyle="filter">
+              <Button
+                key={index}
+                typeStyle="filter"
+                onClick={() => handleFuelTypeClick(fuelType)}
+              >
                 {fuelType}
               </Button>
             ))}
@@ -252,6 +284,11 @@ export const DashboardPage = () => {
               onChange={handleMaxPriceChange}
             />
           </InputGroup>
+          {showClearFiltersButton && (
+            <ClearFiltersButton typeStyle="filter" onClick={clearFilters}>
+              Limpar Filtros
+            </ClearFiltersButton>
+          )}
         </FilterContainer>
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post) => <PostCard key={post.id} post={post} />)
