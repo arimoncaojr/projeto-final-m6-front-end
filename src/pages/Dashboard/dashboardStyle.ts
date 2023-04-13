@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import motorsShopImage from "../../assets/motorsShop.png";
+import { Button } from "../../components/button/button";
 
 export const AppWrapper = styled.div`
   display: flex;
@@ -124,4 +125,21 @@ export const CardsContainer = styled.div`
   justify-content: space-between;
   margin-left: 24px;
   width: calc(100% - 312px);
+`;
+
+export const ClearFiltersButton = styled(Button)`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 28px;
+  gap: 10px;
+  width: 279px;
+  height: 48px;
+  background: #5126ea;
+  border: 1.5px solid #5126ea;
+  border-radius: 4px;
+  align-self: center;
+  margin-top: 10px;
 `;
