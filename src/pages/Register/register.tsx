@@ -193,8 +193,7 @@ export const RegisterPage = () => {
                               register={register}
                               errors={errors}
                          />
-                         <Button typeStyle="colorBrand1" onClick={handleSubmit(submitRegister)}>Finalizar Cadastro</Button>                     
-                         <Button typeStyle="filter" onClick={handleSubmit(submitRegister)}>Finalizar Cadastro</Button>                     
+                         <Button typeStyle="colorBrand1" onClick={handleSubmit(submitRegister)}>Finalizar Cadastro</Button>                                        
                                             
                    
                </RegisterForm>
