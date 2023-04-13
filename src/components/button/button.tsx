@@ -16,7 +16,8 @@ interface IButtonProps {
      | "logout"
      | "colorGray6"
      | "colorGray5"
-     | "delete";
+     | "delete"
+     | "filter"
      
   onClick?: () => void;
   title?: string;

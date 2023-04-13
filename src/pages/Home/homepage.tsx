@@ -1,3 +1,4 @@
+import { Card } from "../../components/card/card"
 
 export const HomePage = () => {
      
@@ -6,8 +7,7 @@ export const HomePage = () => {
      return (
           <>
                <div className="container">
-                
-                  <h1>HOMEPAGE</h1>
+                    <Card/>
                </div>
            
           </>
