@@ -28,9 +28,9 @@ export const LoginPage = () => {
                     <Input type="text" name="email" label="Email" placeholder="Digite seu email" register={register} errors={errors} />
                     <Input type="password" name="password" label="Senha" placeholder="Digite sua senha" register={register} errors={errors} />
                     <p className="forgotPassword">Esqueci minha senha</p>
-                    <Button typeStyle="actionForm" onClick={handleSubmit(submitLogin)}>Entrar</Button>
+                    <Button typeStyle="colorBrand1" onClick={handleSubmit(submitLogin)}>Entrar</Button>
                     <p className="dontAccount">Ainda não possui conta?</p>
-                    <Button typeStyle="callRegister">Cadastrar</Button>
+                    <Button typeStyle="noColor">Cadastrar</Button>
                    
                </LoginForm>
                <Footer/>

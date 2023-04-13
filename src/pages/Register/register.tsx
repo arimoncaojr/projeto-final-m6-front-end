@@ -17,16 +17,11 @@ export const RegisterPage = () => {
           city: "",
           street: "",
      })
+     
 
      const { register, handleSubmit , formState:{errors}, setValue } = useForm<IUserCreated>({
           resolver: yupResolver(registerSchema),
      })
-
-     const submitRegister = (data: IUserCreated) => { 
-          let x = new Date(data.dateOfBirth)
-          console.log(x)
-          console.log(data)
-     }
 
      const handleAddress = async (e: React.ChangeEvent<HTMLInputElement>) => {
           const cep = e.target.value.replace(/\D/g, "");
@@ -49,6 +44,18 @@ export const RegisterPage = () => {
                   }
                }
      };
+
+     const handleAccountType  = (account:string) => { 
+          if (account === "anunciante") {
+               
+          }
+     }
+
+     const submitRegister = (data: IUserCreated) => { 
+          let x = new Date(data.dateOfBirth)
+          console.log(x)
+          console.log(data)
+     }
      
      
      return (
@@ -172,8 +179,8 @@ export const RegisterPage = () => {
                     <p className="info">Tipo de conta</p>
 
                     <div id="joinInputs">
-                         <Button typeStyle="actionForm" onClick={handleSubmit(submitRegister)}>Comprador</Button>
-                         <Button typeStyle="callRegister" onClick={handleSubmit(submitRegister)}>Anunciante</Button>
+                         <Button typeStyle="noColor" onClick={handleSubmit(submitRegister)}>Comprador</Button>
+                         <Button typeStyle="noColor" onClick={handleSubmit(submitRegister)}>Anunciante</Button>
                     </div>
                          <Input
                               type="password"
@@ -191,8 +198,7 @@ export const RegisterPage = () => {
                               register={register}
                               errors={errors}
                          />
-                         <Button typeStyle="actionForm" onClick={handleSubmit(submitRegister)}>Finalizar Cadastro</Button>
-             
+                         <Button typeStyle="colorBrand1" onClick={handleSubmit(submitRegister)}>Finalizar Cadastro</Button>                     
                    
                </RegisterForm>
                <Footer/>

@@ -3,16 +3,19 @@ import styled, { css } from "styled-components"
 
 interface IStyledButtonProps{
      typeStyle:
-          "callRegister" |
-          "callControl"  |
-          "detail"       |
-          "callAction"   |
-          "footer"       |
-          "seeAllAds"    |
-          "actionForm" |
-          "createAds"    |
-          "login"        |
-          "logout";
+     | "noColor" 
+     | "colorBrand2"  
+     | "detail"       
+     | "colorBrand1"   
+     | "colorBrand1Withlimit" 
+     | "footer"       
+     | "seeAllAds"    
+     | "createAds"    
+     | "login"        
+     | "logout"
+     | "colorGray6"
+     | "colorGray5"
+     | "delete"
 }
 
 export const ButtonStyle = styled.button`
@@ -24,23 +27,23 @@ export const ButtonStyle = styled.button`
      color: var(--whiteFixed);
      width: 100%;
      height: 48px;
-     padding: 12px 28px;
+     padding: 12px 27px;
 
      ${({typeStyle}:IStyledButtonProps) => {
           switch (typeStyle) {
-               case "callRegister":
+               case "noColor":
                     return css`
                          color: var(--gray-0);
                          border: 1.5px solid var(--gray-4);
                     `;
-               case "callControl":
+               case "colorBrand2":
                     return css`
                          background-color: var(--color-brand-2);
                          max-width: 279px; 
                     `;
                case "detail":
                     return css`
-                         max-width: 55px; 
+                         max-width: fit-content; 
                          height: 32px;
                          padding: 4px 8px;
                          font: var(--font-body-3);
@@ -48,7 +51,7 @@ export const ButtonStyle = styled.button`
                          color: var(--color-brand-1);
                          cursor: unset;
                     `;
-               case "callAction":
+               case "colorBrand1Withlimit":
                     return css`
                          max-width: 100px; 
                          height: 38px;
@@ -56,6 +59,10 @@ export const ButtonStyle = styled.button`
                          background-color:  var(--color-brand-1);
                          font: var(--font-btn-medium);
                     `;
+               case "colorBrand1":
+                    return css`
+                         background-color: var(--color-brand-1);
+                    `
                case "footer":
                     return css`
                          max-width: 53px;
@@ -69,10 +76,6 @@ export const ButtonStyle = styled.button`
                          max-width: 206px;
                          background-color: var(--gray-0); 
                     `;
-               case "actionForm":
-                    return css`
-                         background-color: var(--color-brand-1);
-                    `
                case "createAds":
                     return css`
                          max-width: 160px;
@@ -101,6 +104,22 @@ export const ButtonStyle = styled.button`
                          display: flex;
                          align-items: center;
                          justify-content: space-around;
+                    `
+               case "colorGray6":
+                    return css`
+                         max-width: fit-content;
+                         color: var(--gray-2);
+                         background-color: var(--gray-6);
+                    `
+               case "colorGray5":
+                    return css`
+                         max-width: fit-content;
+                         background-color: var(--gray-5);
+                    `
+               case "delete":
+                    return css`
+                         max-width: fit-content;
+                         background-color: var(--color-alert-2);
                     `
           }
      }}

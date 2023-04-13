@@ -9,7 +9,9 @@ export const LoginForm = styled.form`
      border-radius: 4px;
      background-color: var(--gray-10);
      box-shadow: 0px 2px 9px 2px var(--gray-4);
-
+     position: relative;
+     z-index: -2;
+     
      & > h2 {
           font: var(--font-heading-8);
           color: #000000;
