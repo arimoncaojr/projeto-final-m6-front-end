@@ -8,7 +8,7 @@ function App() {
   return (
     <WrapperGlobal>
       <ResetStyle />
-      <GlobalStyle/>
+      <GlobalStyle />
       <RoutesMain />
       <ToastContainer />
     </WrapperGlobal>
