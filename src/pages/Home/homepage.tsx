@@ -10,7 +10,8 @@ export const HomePage = () => {
 
   return (
     <>
-      <div>
+      <div className="container">
+        <Card />
         <button onClick={() => showModalCreatePost(true)}></button>
         {modalCreatePost && <ModalPostsCreate />}
       </div>
