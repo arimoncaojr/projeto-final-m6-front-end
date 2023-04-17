@@ -12,7 +12,7 @@ interface IUser {
   id: string;
 }
 
-interface IImages {
+export interface IImages {
   imageLink: string;
 }
 
