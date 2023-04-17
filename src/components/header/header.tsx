@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import logoColor from "../../assets/logo-colored.svg"
 import { Button } from "../button/button"
 import {RiLogoutBoxRFill as Logout} from "react-icons/ri"
+import { useNavigate } from "react-router-dom"
 
 
 interface IHeaderProps {
@@ -20,7 +21,7 @@ const siglaName = (firstLetter + secondLetter).toUpperCase()
 export const Header = ({type}:IHeaderProps) => {
      const [isOpen, setOpen] = useState(false)
      const [menuClicked, setMenuClicked] = useState(false);
-
+     const navigate = useNavigate()
 
      useEffect(() => {
           if (menuClicked) {
@@ -61,10 +62,10 @@ export const Header = ({type}:IHeaderProps) => {
                               :
                               <>
                                    <li>
-                                        <Button typeStyle="login">Fazer Login</Button>
+                                        <Button typeStyle="login" onClick={()=> navigate("/login")}>Fazer Login</Button>
                                    </li>
                                    <li>
-                                        <Button typeStyle="noColor">Cadastrar</Button>
+                                        <Button typeStyle="noColor" onClick={()=> navigate("/register")}>Cadastrar</Button>
                                    </li>
                               </>         
                          }

@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components"
-import "animate.css"
+
 
 interface IStyledCardProps{
      isActive: boolean
@@ -25,7 +25,6 @@ export const CardStyle = styled.article`
           & > img {
                width: 262px;
                height: 150px;
-               animation: slideInRight 1s ease-in-out;
           }
           & > button {
                background-color: transparent;
