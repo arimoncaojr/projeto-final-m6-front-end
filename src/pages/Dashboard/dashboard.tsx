@@ -30,7 +30,8 @@ export const DashboardPage = () => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [showClearFiltersButton, setShowClearFiltersButton] = useState(false);
-
+  
+  
   useEffect(() => {
     if (selectedBrand) {
       const models = carDetails.map((car) => car.name);
