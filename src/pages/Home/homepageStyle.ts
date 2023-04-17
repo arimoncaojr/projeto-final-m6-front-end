@@ -5,6 +5,10 @@ interface IStyledFilterProps{
      filterClickMobile: boolean
 }
 
+interface IStyledMainProps{
+     length: number;
+}
+
 
 
 export const BannerStyle = styled.div`
@@ -67,6 +71,13 @@ export const MainContainer = styled.main`
                overflow: auto;
                margin: 10px;
                gap: 16px;
+
+               & > .messageNotFoundCar{
+                    width: 100%;
+                    text-align: center;
+                    color: var(--gray-2);
+                    font: var(--font-heading-3);
+               }
           }
           
           & > .filterContainer{
@@ -125,14 +136,17 @@ export const MainContainer = styled.main`
                          flex-wrap: wrap;
                          overflow: unset;
                          margin-top: 30px;
-                         gap: 16px;
+                         gap: 5px;
                          height: max-content;
                          justify-content: flex-end;
+                         width: ${({length}:IStyledMainProps)=> length === 0 && "100%"};
+                         
                     }
                     & > .filterContainer{
-                         width: 30%;
+                         width: 300px;
                          height: 100%;
-     
+                         justify-content: flex-start;
+
                          & > button{
                               display: none;
                          }
@@ -245,6 +259,20 @@ export const Filter = styled.div`
                display: none;
           }
 
+          & > h2{
+               width: unset;
+               max-width: unset;
+               margin: unset;
+          }
+          & > div{
+               width: unset;
+               max-width: unset;
+               margin: unset;
+          }
+          & > button{
+               width: unset;
+               max-width: unset;
+          }
      }
      
 `

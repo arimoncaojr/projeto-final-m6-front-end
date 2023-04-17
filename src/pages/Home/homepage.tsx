@@ -152,6 +152,7 @@ export const HomePage = () => {
         };
       
         const filteredPosts = filterPosts(postsInfo);
+        console.log(filteredPosts.length);
       
         const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
       
@@ -176,7 +177,7 @@ export const HomePage = () => {
           setFilterClickMobile(!filterClickMobile)
      }
 
-
+     
      return (
           <Wrapper>
                <Header/>
@@ -184,17 +185,14 @@ export const HomePage = () => {
                     <h1>Motors Shop</h1>
                     <p>A melhor plataforma de anúncios de carros do país!</p>
                </BannerStyle>
-               <MainContainer className="container">
+               <MainContainer className="container" length={filteredPosts.length}>
                     <section className="wrapperContainer">
                          <div className="cardsContainer">
-                              <Card />
-                              <Card/>
-                              <Card />
-                              <Card/>
-                              <Card />
-                              <Card/>
-                              <Card />
-                              <Card/>
+                         {filteredPosts.length > 0 ? (
+                              filteredPosts.map((post) => <Card key={post.id} post={post} type="home"/>)
+                         ) : (
+                              <p className="messageNotFoundCar">Não há carros disponíveis</p>
+                         )}
                          </div>
                          <div className="filterContainer">
                               <Button typeStyle="colorBrand1" onClick={HandleFilterMobileClick}>Filtros</Button>
