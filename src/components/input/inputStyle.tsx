@@ -41,12 +41,14 @@ export const InputStyle = styled.input`
      ${({ typeStyled }:IStyledInputProps) =>
           typeStyled === "filter" &&
           css`
-               max-width: 142px;
+               max-width: 110px;
                height: 37px;
+               padding-left:8px;
                font: var(--font-heading-11);
                border: none;
-               border-radius: unset;
+               border-radius: 3px;
                background-color: var(--gray-5);
+
           `
      }       
      

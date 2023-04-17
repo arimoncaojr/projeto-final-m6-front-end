@@ -7,7 +7,7 @@ interface IStyledCardProps{
 
 
 export const CardStyle = styled.article`
-     width: 312px;
+     width: 300px;
      height: 350px;
      border-radius: 4px;
      box-shadow: -1px -2px 10px 0px var(--gray-4);
@@ -97,6 +97,12 @@ export const CardStyle = styled.article`
           & > p {
                font: var(--font-heading-12);
                margin-left: auto;
+          }
+     }
+
+     @media(min-width: 767px){
+          &{
+               width: 312px;
           }
      }
 `
