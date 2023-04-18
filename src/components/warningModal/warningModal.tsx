@@ -54,7 +54,8 @@ export const WarningModal = ({ type, sucess, showModal }: IWarningModalProps) =>
                                    }
                               </div>
                          </>
-                    ): false}
+                    )
+                    : false}
                </ModalStyle>
           </ModalWrapper>
      )

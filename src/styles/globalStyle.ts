@@ -42,6 +42,9 @@ export const GlobalStyle = createGlobalStyle`
           --color-random-11: #5700E3;
           --color-random-12: #30007D;
 
+          --toastify-color-progress-success: #18794E;
+          --toastify-color-progress-error: #CD2B31;
+
           /* config fonts */
           --font-heading: 'Lexend', sans-serif;
           --font-text: 'Inter', sans-serif;
