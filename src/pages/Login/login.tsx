@@ -8,15 +8,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Ilogin } from "../../interfaces/login"
 import { loginSchema } from "./schemaLogin"
 import { Button } from "../../components/button/button"
+import { useContext } from "react"
+import { UserContext } from "../../contexts/UserContext"
 
 export const LoginPage = () => {
-
+     const { loginUser, showModal, sucessModal } = useContext(UserContext)
+     
      const { register, handleSubmit , formState:{errors} } = useForm<Ilogin>({
           resolver: yupResolver(loginSchema),
      })
 
      const submitLogin = (data:Ilogin) => { 
-          console.log(data)
+          loginUser(data)
      }
 
      return (
@@ -33,7 +36,7 @@ export const LoginPage = () => {
                     <Button typeStyle="noColor">Cadastrar</Button>
                    
                </LoginForm>
-               <Footer/>
+               <Footer />
           </Wrapper>
      )
 }
