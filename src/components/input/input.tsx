@@ -96,7 +96,7 @@ export const Input = ({
                               />
                          )
                }
-               
+
                {errors[name] && <span className="messageErrors">{errors[name].message}</span>}
         </WrapperStyle>
      )

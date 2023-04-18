@@ -32,10 +32,15 @@ export const RegisterForm = styled.form`
                
           }
      }
-
-     #confirmedPassword{
-          margin-bottom: 24px;
+     .errorsMessageTypeAccount{
+          color: var( --color-alert-1);
+          font-weight: 600;
+          font-family: var(--font-text);
+          font-size: 14px;
+          margin-top: 6px;
+          margin-left: 3px;
      }
+
 
      @media (min-width: 342px) {
           & {

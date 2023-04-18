@@ -11,6 +11,7 @@ import { IPosts, ListPostsContext } from "../../contexts/ListPostsContext"
 import { InputStyle } from "../../components/input/inputStyle"
 
 
+
 export const HomePage = () => {
      const [filterClickMobile, setFilterClickMobile] = useState(false)
      const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
@@ -176,7 +177,6 @@ export const HomePage = () => {
      const HandleFilterMobileClick = () => {
           setFilterClickMobile(!filterClickMobile)
      }
-
      
      return (
           <Wrapper>
