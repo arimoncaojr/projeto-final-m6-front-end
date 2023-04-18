@@ -7,17 +7,23 @@ export const Api = axios.create({
 });
 
 
+// export const registerApi = async (data: IUserCreatedRequest) => {
+  
+//   const resp = await fetch("http://localhost:3000/users", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(data),
+//   })
+//   .then(resp => resp.json())
+//   .catch(err => console.log(err.message))
+  
+//   return resp
+// }
 export const registerApi = async (data: IUserCreatedRequest) => {
   
-  const resp = await fetch("http://localhost:3000/users", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-  .then(resp => resp.json())
-  .catch(err => console.log(err.message))
+  const resp = await Api.post("/users",data)
   
   return resp
 }

@@ -41,6 +41,9 @@ export const RegisterForm = styled.form`
           margin-left: 3px;
      }
 
+     #confirmPassword{
+          margin-bottom: 24px;
+     }
 
      @media (min-width: 342px) {
           & {

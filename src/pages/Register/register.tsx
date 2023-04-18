@@ -12,9 +12,10 @@ import { RegisterForm } from "./registerStyle"
 import { registerSchema } from "./schemaRegister"
 import { IStyledButtonProps } from "../../components/button/buttonStyle"
 import { UserContext } from "../../contexts/UserContext"
+import { WarningModal } from "../../components/warningModal/warningModal"
 
 export const RegisterPage = () => {
-     const { createdUser } = useContext(UserContext)
+     const { createdUser, showModal, sucessModal } = useContext(UserContext)
      
      const [address, setAddress] = useState({
           state: "",
@@ -231,7 +232,8 @@ export const RegisterPage = () => {
                                             
                    
                </RegisterForm>
-               <Footer/>
+               <Footer />
+               <WarningModal type="register" showModal={showModal} sucess={sucessModal} />
           </Wrapper>
      )
 }
