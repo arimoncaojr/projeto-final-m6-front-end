@@ -21,13 +21,21 @@ import {
 } from "./indexStyle";
 import { ModalCreatePostsContext } from "../../contexts/ModalCreatePostsContext";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../schemas/yupCreatePost";
 import { IPostInfo } from "../../contexts/ModalCreatePostsContext";
+import { toast } from "react-toastify";
+import { get } from "lodash";
 
 export const ModalPostsCreate = () => {
+  const [fuelType, setFuelType] = useState<number | null>(null);
+  const [tablePriceFipe, setTablePriceFipe] = useState<number | null>(null);
+  const [imageCount, setImageCount] = useState<number>(2);
+  const [formattedPrice, setFormattedPrice] = useState("");
+  const [formattedKm, setFormattedKm] = useState("");
+
   const { showModalCreatePost, submitPostInfo } = useContext(
     ModalCreatePostsContext
   );
@@ -39,81 +47,284 @@ export const ModalPostsCreate = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    setError,
     formState: { errors },
   } = useForm<IPostInfo>({ resolver: yupResolver(schema) });
 
+  const addImageField = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (imageCount < 6) {
+      setImageCount(imageCount + 1);
+    } else {
+      toast.warning("Você só pode adicionar 6 imagens", { autoClose: 1500 });
+    }
+  };
+
+  const renderAdditionalImages = () => {
+    const additionalImages = [];
+
+    for (let i = 2; i < imageCount; i++) {
+      additionalImages.push(
+        <>
+          <Label key={`image${i + 1}`} htmlFor={`image${i + 1}`}>
+            {get(
+              errors,
+              `images[${i}].imageLink.message`,
+              `${i + 1}° Imagem da galeria`
+            )}
+          </Label>
+          <BigInput
+            key={`image${i + 1 + 1}`}
+            id={`image${i + 1}`}
+            {...register(`images.${i}.imageLink`, { required: false })}
+          />
+        </>
+      );
+    }
+
+    return additionalImages;
+  };
+
+  const fuelTypeLabel = (type: number | null) => {
+    switch (type) {
+      case 1:
+        return "flex";
+      case 2:
+        return "hibrido";
+      case 3:
+        return "eletrico";
+      default:
+        return "";
+    }
+  };
+
+  const capitalizeFirstLetter = (str: string): string => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const brand = event.target.value;
+    getCarDetails(brand);
+  };
+
+  const handleModelChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedModel = event.target.value;
+    const modelInfo = carDetails.find((model) => model.name === selectedModel);
+
+    if (modelInfo) {
+      setValue("fuelType", fuelTypeLabel(modelInfo.fuel));
+      setValue("tablePriceFiper", `${formatPrice(modelInfo.value)}`);
+      setFuelType(modelInfo.fuel);
+      setTablePriceFipe(modelInfo.value);
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    return price.toLocaleString("pt-BR");
+  };
+
+  const formatPriceInput = (price: string) => {
+    return price.replace(/\D/g, "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  };
+
+  const formatKmInput = (km: string) => {
+    return km.replace(/\D/g, "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  };
+
+  const getLabelContent = (errorPath: string, defaultMessage: string) => {
+    return get(errors, errorPath, defaultMessage);
+  };
+
   return (
     <ContainerModal>
-      <FormModal>
+      <FormModal onSubmit={handleSubmit(submitPostInfo)}>
         <TitleAndButton>
           <TitlePost>Criar anúncio</TitlePost>
-          <CloseBtn>X</CloseBtn>
+          <CloseBtn
+            type="button"
+            onClick={() => {
+              showModalCreatePost(false);
+              reset();
+            }}
+          >
+            X
+          </CloseBtn>
         </TitleAndButton>
         <ContentWrapper>
           <SubTitlePost>Informações do veículo</SubTitlePost>
-          <Label htmlFor="mark">Marca</Label>
-          <BigSelect id="mark">
+          <Label htmlFor="mark">
+            {getLabelContent("mark.message", "Marca")}
+          </Label>
+          <BigSelect
+            id="mark"
+            {...register("mark", { onChange: handleBrandChange })}
+          >
             <option value="">Selecione</option>
-            <option value="Mercedes Benz">Mercedes Benz</option>
+            {Object.keys(carBrandsInfo).map((brand) => (
+              <option key={brand} value={brand}>
+                {capitalizeFirstLetter(brand)}
+              </option>
+            ))}
           </BigSelect>
-          <Label htmlFor="model">Modelo</Label>
-          <BigSelect id="model">
+          <Label htmlFor="model">
+            {errors.model ? errors.model.message : "Modelo"}
+          </Label>
+          <BigSelect
+            id="model"
+            {...register("model", { onChange: handleModelChange })}
+          >
             <option value="">Selecione</option>
-            <option value="A 200 CGI ADVANCE SEDAN">
-              A 200 CGI ADVANCE SEDAN
-            </option>
+            {carDetails.map((model) => (
+              <option key={model.id} value={model.name}>
+                {capitalizeFirstLetter(model.name)}
+              </option>
+            ))}
           </BigSelect>
           <LabelAndFieldDiv>
-            <LabelAndInputWrapper>
-              <Label htmlFor="fuelType">Combustível</Label>
-              <SmallSelect id="fuelType">
+            <LabelAndInputWrapper changeGap>
+              <Label htmlFor="fuelType">
+                {errors.fuelType ? errors.fuelType.message : "Combustível"}
+              </Label>
+              <SmallSelect
+                id="fuelType"
+                {...register("fuelType")}
+                value={fuelTypeLabel(fuelType)}
+              >
                 <option value="">Selecione</option>
                 <option value="flex">Flex</option>
-                <option value="hibrido">Hibrido</option>
+                <option value="hibrido">Híbrido</option>
                 <option value="eletrico">Elétrico</option>
               </SmallSelect>
             </LabelAndInputWrapper>
-            <LabelAndInputWrapper>
-              <Label htmlFor="year">Ano</Label>
-              <SmallInput id="year" placeholder="ex: 2018" />
+            <LabelAndInputWrapper changeGap>
+              <Label htmlFor="year">
+                {errors.year ? errors.year.message : "Ano"}
+              </Label>
+              <SmallInput
+                id="year"
+                placeholder="ex: 2018"
+                {...register("year")}
+              />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
           <LabelAndFieldDiv>
-            <LabelAndInputWrapper>
-              <Label htmlFor="color">Cor</Label>
-              <SmallSelect id="color">
+            <LabelAndInputWrapper changeGap>
+              <Label htmlFor="color">
+                {errors.color ? errors.color.message : "Cor"}
+              </Label>
+              <SmallSelect id="color" {...register("color")}>
+                <option value="">Selecione</option>
                 <option value="azul">Azul</option>
                 <option value="branco">Branco</option>
+                <option value="cinza">Cinza</option>
+                <option value="marrom">Marrom</option>
+                <option value="prata">Prata</option>
                 <option value="preto">Preto</option>
+                <option value="verde">Verde</option>
+                <option value="vermelho">Vermelho</option>
               </SmallSelect>
             </LabelAndInputWrapper>
-            <LabelAndInputWrapper>
-              <Label htmlFor="kilometers">Quilometragem</Label>
-              <SmallInput id="kilometers" placeholder="ex: 30.000" />
+            <LabelAndInputWrapper changeGap>
+              <Label htmlFor="kilometers">
+                {errors.kilometers
+                  ? errors.kilometers.message
+                  : "Quilometragem"}
+              </Label>
+              <SmallInput
+                id="kilometers"
+                placeholder="ex: 30.000"
+                value={formattedKm}
+                {...register("kilometers", {
+                  onChange: (e) => {
+                    setValue("kilometers", e.target.value);
+                    setFormattedKm(formatKmInput(e.target.value));
+                  },
+                })}
+              />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
           <LabelAndFieldDiv>
-            <LabelAndInputWrapper>
-              <Label htmlFor="tablePriceFiper">Preço tabela FIPE</Label>
-              <SmallInput id="tablePriceFiper" readOnly />
+            <LabelAndInputWrapper changeGap>
+              <Label htmlFor="tablePriceFiper">
+                {errors.tablePriceFiper
+                  ? errors.tablePriceFiper.message
+                  : "Preço tabela FIPE"}
+              </Label>
+              <SmallInput
+                id="tablePriceFiper"
+                value={
+                  tablePriceFipe ? `R$ ${formatPrice(tablePriceFipe)}` : ""
+                }
+                readOnly
+                {...register("tablePriceFiper")}
+              />
             </LabelAndInputWrapper>
-            <LabelAndInputWrapper>
-              <Label htmlFor="price">Preço</Label>
-              <SmallInput id="price" placeholder="ex: R$50.000" />
+            <LabelAndInputWrapper changeGap>
+              <Label htmlFor="price">
+                {errors.price ? errors.price.message : "Preço"}
+              </Label>
+              <SmallInput
+                id="price"
+                placeholder="ex: R$ 50.000"
+                value={formattedPrice}
+                {...register("price", {
+                  onChange: (e) => {
+                    setValue("price", e.target.value);
+                    setFormattedPrice(`R$ ${formatPriceInput(e.target.value)}`);
+                  },
+                })}
+              />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
-          <Label htmlFor="description">Descrição</Label>
-          <TextArea></TextArea>
-          <Label htmlFor="imageCap"> Imagem da capa</Label>
-          <BigInput id="imgCap" />
-          <Label htmlFor="firstImage"> 1° Imagem da galeria</Label>
-          <BigInput id="firstImage" />
-          <Label htmlFor="secondImage">2° Imagem da galeria</Label>
-          <BigInput id="secondImage" />
-          <AddImageBtn>Adicionar campo para imagem da galeria</AddImageBtn>
+          <Label htmlFor="description">
+            {errors.description ? errors.description.message : "Descrição"}
+          </Label>
+          <TextArea {...register("description")}></TextArea>
+          <Label htmlFor="imageCap">
+            {" "}
+            {errors.imageCap ? errors.imageCap.message : "Imagem da capa"}
+          </Label>
+          <BigInput id="imageCap" {...register("imageCap")} />
+          <Label htmlFor="firstImage">
+            {errors.images && errors.images[0]?.imageLink
+              ? errors.images[0].imageLink.message
+              : "1° Imagem da galeria"}
+          </Label>
+          <BigInput id="firstImage" {...register("images.0.imageLink")} />
+          <Label htmlFor="secondImage">
+            {errors.images && errors.images[1]?.imageLink
+              ? errors.images[1].imageLink.message
+              : "2° Imagem da galeria"}
+          </Label>
+          <BigInput id="secondImage" {...register("images.1.imageLink")} />
+          {renderAdditionalImages()}
+          <AddImageBtn
+            type="button"
+            onClick={addImageField}
+            opacityLimit={imageCount >= 6 ? "0.5" : "1"}
+            cursorLimit={imageCount >= 6 ? "not-allowed" : "pointer"}
+            transitionLimit={
+              imageCount >= 6 ? "none" : "transform 0.3s ease-in-out"
+            }
+            transformLimit={imageCount >= 6 ? "none" : "scale(0.9)"}
+          >
+            Adicionar campo para imagem da galeria
+          </AddImageBtn>
           <DivFinalBtns>
-            <CancelBtn>Cancelar</CancelBtn>
-            <CreatePostBtn>Criar anúncio</CreatePostBtn>
+            <CancelBtn
+              type="button"
+              onClick={() => {
+                showModalCreatePost(false);
+                reset();
+              }}
+            >
+              Cancelar
+            </CancelBtn>
+            <CreatePostBtn type="submit">Criar anúncio</CreatePostBtn>
           </DivFinalBtns>
         </ContentWrapper>
       </FormModal>

@@ -1,8 +1,11 @@
 import styled from "styled-components";
 
-interface ILabelProps {
-  marginLabel?: string;
-  marginLabelMobile?: string;
+interface IStyledProps {
+  opacityLimit?: string;
+  cursorLimit?: string;
+  transitionLimit?: string;
+  transformLimit?: string;
+  changeGap?: boolean;
 }
 
 export const ContainerModal = styled.div`
@@ -80,8 +83,12 @@ export const CloseBtn = styled.button`
   background-color: transparent;
   width: 12px;
   height: 12px;
-  font-size: 12px;
   color: #adb5bd;
+  transition: transform 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(0.8);
+  }
 `;
 
 export const TitlePost = styled.h2`
@@ -105,28 +112,28 @@ export const SubTitlePost = styled.span`
 export const LabelAndFieldDiv = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 541px) {
+    flex-wrap: wrap;
+  }
 `;
 
-export const LabelAndInputWrapper = styled.div`
+export const LabelAndInputWrapper = styled.div<IStyledProps>`
   display: flex;
   flex-direction: row;
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
   width: 100%;
+  min-width: 45%;
 `;
 
-export const Label = styled.label<ILabelProps>`
+export const Label = styled.label`
   font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;
   color: #212529;
-  margin-right: ${(props) => props.marginLabel};
-
-  @media (max-width: 768px) {
-    margin-right: ${(props) => props.marginLabelMobile};
-  }
 `;
 
 export const BigInput = styled.input`
@@ -174,7 +181,7 @@ export const TextArea = styled.textarea`
   box-sizing: border-box;
 `;
 
-export const AddImageBtn = styled.button`
+export const AddImageBtn = styled.button<IStyledProps>`
   width: 70%;
   height: 40%;
   background: #edeafd;
@@ -184,6 +191,13 @@ export const AddImageBtn = styled.button`
   font-weight: 600;
   font-size: 0.875rem;
   padding: 10px;
+  opacity: ${(props) => props.opacityLimit};
+  cursor: ${(props) => props.cursorLimit};
+  transition: ${(props) => props.transitionLimit};
+
+  :hover {
+    transform: ${(props) => props.transformLimit};
+  }
 
   @media (max-width: 768px) {
     width: 100%;
@@ -213,6 +227,11 @@ export const CancelBtn = styled.button`
   font-weight: 600;
   font-size: 1rem;
   color: #495057;
+  transition: transform 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(0.9);
+  }
 
   @media (max-width: 768px) {
     width: 50%;
@@ -229,6 +248,11 @@ export const CreatePostBtn = styled.button`
   font-weight: 600;
   font-size: 1rem;
   color: #edeafd;
+  transition: transform 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(0.9);
+  }
 
   @media (max-width: 768px) {
     width: 50%;
