@@ -43,13 +43,17 @@ export const Card = ({post , type}:IPostCardProps) => {
      const secondLetter = post.user.name.split(" ")[1][0]
      const cipher = (firstLetter + secondLetter).toUpperCase()
      const dbImg = [{imageLink: post.imageCap}, ...post.images]
- 
+     const disableButton = dbImg.length === 1 ? true : false
+
+     console.log(dbImg.length)
+
      return (
           <CardStyle isActive={isActive}>
                <figure>
                     <button onClick={() =>
                          handleClickImg("back")}
                          className="back"
+                         disabled={disableButton}
                     >
                          <Back />
                     </button>
@@ -57,6 +61,7 @@ export const Card = ({post , type}:IPostCardProps) => {
                     <button onClick={() =>
                          handleClickImg("next")}
                          className="next"
+                         disabled={disableButton}
                     >
                          <Next />
                     </button>

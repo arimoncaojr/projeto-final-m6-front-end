@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components"
 
 
-interface IStyledButtonProps{
+export interface IStyledButtonProps{
      typeStyle:
      | "noColor" 
      | "colorBrand2"  

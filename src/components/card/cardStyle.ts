@@ -32,7 +32,12 @@ export const CardStyle = styled.article`
                font-size: 45px;
                position: absolute;
                top: 50px;
-               color: var( --gray-2);    
+               color: var( --gray-4);    
+          }
+
+          & > button:disabled {
+               cursor: unset;
+               opacity: 0.5;
           }
 
           & > button.next {
