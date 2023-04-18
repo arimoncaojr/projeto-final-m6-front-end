@@ -21,8 +21,8 @@ import {
 } from "./indexStyle";
 import { ModalCreatePostsContext } from "../../contexts/ModalCreatePostsContext";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
-import { useContext, useState } from "react";
-import { useForm, FieldErrors, FieldPath, FieldValues } from "react-hook-form";
+import { useContext, useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../schemas/yupCreatePost";
 import { IPostInfo } from "../../contexts/ModalCreatePostsContext";
@@ -48,6 +48,7 @@ export const ModalPostsCreate = () => {
     handleSubmit,
     reset,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<IPostInfo>({ resolver: yupResolver(schema) });
 
@@ -134,20 +135,8 @@ export const ModalPostsCreate = () => {
     return km.replace(/\D/g, "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   };
 
-  function getFieldErrorMessage<T extends FieldValues>(
-    field: FieldPath<T>,
-    errors: FieldErrors<T>
-  ): string | undefined {
-    const error = errors[field as keyof T] as { message: string } | undefined;
-
-    if (error && typeof error === "object" && "message" in error) {
-      return error.message;
-    }
-    return undefined;
-  }
-
-  const getLabel = (field: FieldPath<IPostInfo>, defaultMessage: string) => {
-    return getFieldErrorMessage(field, errors) ?? defaultMessage;
+  const getLabelContent = (errorPath: string, defaultMessage: string) => {
+    return get(errors, errorPath, defaultMessage);
   };
 
   return (
@@ -167,11 +156,12 @@ export const ModalPostsCreate = () => {
         </TitleAndButton>
         <ContentWrapper>
           <SubTitlePost>Informações do veículo</SubTitlePost>
-          <Label htmlFor="mark">{getLabel("mark", "Marca")}</Label>
+          <Label htmlFor="mark">
+            {getLabelContent("mark.message", "Marca")}
+          </Label>
           <BigSelect
             id="mark"
-            {...register("mark")}
-            onChange={handleBrandChange}
+            {...register("mark", { onChange: handleBrandChange })}
           >
             <option value="">Selecione</option>
             {Object.keys(carBrandsInfo).map((brand) => (
@@ -180,11 +170,12 @@ export const ModalPostsCreate = () => {
               </option>
             ))}
           </BigSelect>
-          <Label htmlFor="model">{getLabel("model", "Modelo")}</Label>
+          <Label htmlFor="model">
+            {errors.model ? errors.model.message : "Modelo"}
+          </Label>
           <BigSelect
             id="model"
-            {...register("model")}
-            onChange={handleModelChange}
+            {...register("model", { onChange: handleModelChange })}
           >
             <option value="">Selecione</option>
             {carDetails.map((model) => (
@@ -196,7 +187,7 @@ export const ModalPostsCreate = () => {
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
               <Label htmlFor="fuelType">
-                {getLabel("fuelType", "Combustível")}
+                {errors.fuelType ? errors.fuelType.message : "Combustível"}
               </Label>
               <SmallSelect
                 id="fuelType"
@@ -210,7 +201,9 @@ export const ModalPostsCreate = () => {
               </SmallSelect>
             </LabelAndInputWrapper>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="year">{getLabel("year", "Ano")}</Label>
+              <Label htmlFor="year">
+                {errors.year ? errors.year.message : "Ano"}
+              </Label>
               <SmallInput
                 id="year"
                 placeholder="ex: 2018"
@@ -220,7 +213,9 @@ export const ModalPostsCreate = () => {
           </LabelAndFieldDiv>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="color">{getLabel("color", "Cor")}</Label>
+              <Label htmlFor="color">
+                {errors.color ? errors.color.message : "Cor"}
+              </Label>
               <SmallSelect id="color" {...register("color")}>
                 <option value="">Selecione</option>
                 <option value="azul">Azul</option>
@@ -235,24 +230,29 @@ export const ModalPostsCreate = () => {
             </LabelAndInputWrapper>
             <LabelAndInputWrapper changeGap>
               <Label htmlFor="kilometers">
-                {getLabel("kilometers", "Quilometragem")}
+                {errors.kilometers
+                  ? errors.kilometers.message
+                  : "Quilometragem"}
               </Label>
               <SmallInput
                 id="kilometers"
                 placeholder="ex: 30.000"
                 value={formattedKm}
-                {...register("kilometers")}
-                onChange={(e) => {
-                  setValue("kilometers", e.target.value);
-                  setFormattedKm(formatKmInput(e.target.value));
-                }}
+                {...register("kilometers", {
+                  onChange: (e) => {
+                    setValue("kilometers", e.target.value);
+                    setFormattedKm(formatKmInput(e.target.value));
+                  },
+                })}
               />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
               <Label htmlFor="tablePriceFiper">
-                {getLabel("tablePriceFiper", "Preço tabela FIPE")}
+                {errors.tablePriceFiper
+                  ? errors.tablePriceFiper.message
+                  : "Preço tabela FIPE"}
               </Label>
               <SmallInput
                 id="tablePriceFiper"
@@ -264,25 +264,29 @@ export const ModalPostsCreate = () => {
               />
             </LabelAndInputWrapper>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="price">{getLabel("price", "Preço")}</Label>
+              <Label htmlFor="price">
+                {errors.price ? errors.price.message : "Preço"}
+              </Label>
               <SmallInput
                 id="price"
                 placeholder="ex: R$ 50.000"
-                {...register("price")}
                 value={formattedPrice}
-                onChange={(e) => {
-                  setValue("price", e.target.value);
-                  setFormattedPrice(`R$ ${formatPriceInput(e.target.value)}`);
-                }}
+                {...register("price", {
+                  onChange: (e) => {
+                    setValue("price", e.target.value);
+                    setFormattedPrice(`R$ ${formatPriceInput(e.target.value)}`);
+                  },
+                })}
               />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
           <Label htmlFor="description">
-            {getLabel("description", "Descrição")}
+            {errors.description ? errors.description.message : "Descrição"}
           </Label>
           <TextArea {...register("description")}></TextArea>
           <Label htmlFor="imageCap">
-            {getLabel("imageCap", "Imagem da capa")}
+            {" "}
+            {errors.imageCap ? errors.imageCap.message : "Imagem da capa"}
           </Label>
           <BigInput id="imageCap" {...register("imageCap")} />
           <Label htmlFor="firstImage">
@@ -320,12 +324,7 @@ export const ModalPostsCreate = () => {
             >
               Cancelar
             </CancelBtn>
-            <CreatePostBtn
-              type="submit"
-              onClick={() => handleSubmit(submitPostInfo)}
-            >
-              Criar anúncio
-            </CreatePostBtn>
+            <CreatePostBtn type="submit">Criar anúncio</CreatePostBtn>
           </DivFinalBtns>
         </ContentWrapper>
       </FormModal>
