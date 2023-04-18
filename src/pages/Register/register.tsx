@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "../../components/button/button"
 import { Footer } from "../../components/footer/footer"
@@ -10,14 +10,21 @@ import { getAddress } from "../../services/viaCepApi"
 import { Wrapper } from "../../styles/wrapper"
 import { RegisterForm } from "./registerStyle"
 import { registerSchema } from "./schemaRegister"
+import { IStyledButtonProps } from "../../components/button/buttonStyle"
+import { UserContext } from "../../contexts/UserContext"
+import { WarningModal } from "../../components/warningModal/warningModal"
 
 export const RegisterPage = () => {
+     const { createdUser, showModal, sucessModal } = useContext(UserContext)
+     
      const [address, setAddress] = useState({
           state: "",
           city: "",
           street: "",
      })
-     
+
+     const [buyerCheck, setBuyerCheck] = useState<IStyledButtonProps['typeStyle']>("noColor")
+     const [advertiserCheck, setAdvertiserCheck] = useState<IStyledButtonProps['typeStyle']>("noColor")
 
      const { register, handleSubmit , formState:{errors}, setValue } = useForm<IUserCreated>({
           resolver: yupResolver(registerSchema),
@@ -45,13 +52,40 @@ export const RegisterPage = () => {
                }
      };
 
-
+        
      const submitRegister = (data: IUserCreated) => { 
-          let x = new Date(data.dateOfBirth)
-          console.log(x)
-          console.log(data)
+          const address = {
+               cep: data.cep,
+               city: data.city,
+               state: data.state,
+               street: data.street
+          }
+
+          const dataRegister = {
+               name: data.name,
+               email: data.email,
+               cpf: data.cpf,
+               password: data.password,
+               phoneNumber: data.phoneNumber,
+               dateOfBirth: data.dateOfBirth,
+               typeOfAccount: data.typeOfAccount,
+               address: address
+          }
+          createdUser(dataRegister)
      }
      
+     const handleTypeAccount = (type: string, e:Event) => {
+          e.preventDefault();
+          setValue("typeOfAccount", type);
+
+          if (type === "comprador") {
+               setBuyerCheck("colorBrand1")
+               setAdvertiserCheck("noColor")
+          } else {
+               setAdvertiserCheck("colorBrand1")
+               setBuyerCheck("noColor")
+          }
+     }
      
      return (
           <Wrapper>
@@ -174,9 +208,10 @@ export const RegisterPage = () => {
                     <p className="info">Tipo de conta</p>
 
                     <div id="joinInputs">
-                         <Button typeStyle="noColor" onClick={handleSubmit(submitRegister)}>Comprador</Button>
-                         <Button typeStyle="noColor" onClick={handleSubmit(submitRegister)}>Anunciante</Button>
+                         <Button typeStyle={buyerCheck} onClick={(e)=>handleTypeAccount('comprador', e)}>Comprador</Button>
+                         <Button typeStyle={advertiserCheck} onClick={(e)=>handleTypeAccount('anunciante', e)}>Anunciante</Button>
                     </div>
+                    {<p className="errorsMessageTypeAccount">{errors.typeOfAccount?.message}</p>}
                          <Input
                               type="password"
                               label="Senha"
@@ -189,7 +224,7 @@ export const RegisterPage = () => {
                               type="password"
                               label="Confirmar senha"
                               placeholder="Digite a mesma senha"
-                              name="confirmedPassword"
+                              name="confirmPassword"
                               register={register}
                               errors={errors}
                          />
@@ -197,7 +232,8 @@ export const RegisterPage = () => {
                                             
                    
                </RegisterForm>
-               <Footer/>
+               <Footer />
+               <WarningModal type="register" showModal={showModal} sucess={sucessModal} />
           </Wrapper>
      )
 }

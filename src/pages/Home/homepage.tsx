@@ -188,13 +188,13 @@ export const HomePage = () => {
       <MainContainer className="container" length={filteredPosts.length}>
         <section className="wrapperContainer">
           <div className="cardsContainer">
-            {/* {filteredPosts.length > 0 ? (
+            {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
                 <Card key={post.id} post={post} type="home" />
               ))
             ) : (
               <p className="messageNotFoundCar">Não há carros disponíveis</p>
-            )} */}
+            )}
           </div>
           <div className="filterContainer">
             <Button typeStyle="colorBrand1" onClick={HandleFilterMobileClick}>

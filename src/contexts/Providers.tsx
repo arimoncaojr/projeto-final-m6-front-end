@@ -1,6 +1,7 @@
 import { ListPostsProvider } from "./ListPostsContext";
 import { ListCarsKenzieProvider } from "./ListCarsKenzieContext";
 import { ModalCreatePostsProvider } from "./ModalCreatePostsContext";
+import { UserProvider } from "./UserContext";
 
 interface IProviderProps {
   children: React.ReactNode;
@@ -8,10 +9,12 @@ interface IProviderProps {
 
 export const Providers = ({ children }: IProviderProps) => {
   return (
-    <ModalCreatePostsProvider>
+    <UserProvider>
       <ListPostsProvider>
-        <ListCarsKenzieProvider>{children}</ListCarsKenzieProvider>
+        <ListCarsKenzieProvider>
+          <ModalCreatePostsProvider>{children}</ModalCreatePostsProvider>
+        </ListCarsKenzieProvider>
       </ListPostsProvider>
-    </ModalCreatePostsProvider>
+    </UserProvider>
   );
 };

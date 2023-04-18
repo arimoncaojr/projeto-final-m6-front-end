@@ -19,7 +19,7 @@ interface IButtonProps {
      | "delete"
      | "filter"
      
-  onClick?: () => void;
+  onClick?: ((event: any) => void);
   title?: string;
 }
 

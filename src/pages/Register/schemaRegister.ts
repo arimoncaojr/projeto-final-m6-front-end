@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import { IUserCreated } from '../../interfaces/user';
 
+
 export const registerSchema = yup.object().shape({
      name: yup.string().required("Informe seu nome"),
      email: yup.string().email("Informe um email valido").required("Informe um email valido"),
@@ -30,6 +31,7 @@ export const registerSchema = yup.object().shape({
      street: yup.string().max(200).required("Informe a rua").lowercase(),
      number: yup.string().max(5).required("Informe o número de sua residencia"),
      complement: yup.string().max(200).notRequired().lowercase(),
+     typeOfAccount: yup.string().required("Escolha um tipo de conta"),
      password: yup.string()
           .matches(/[A-Z]/, "Deve conter ao menos 1 letra maiúscula")
           .matches(/[a-z]/, "Deve conter ao menos 1 letra minuscula")
@@ -39,3 +41,4 @@ export const registerSchema = yup.object().shape({
           .required('Senha é obrigatória'),
      confirmPassword: yup.string().oneOf([yup.ref('password')], 'Confirmação de senha deve ser igual a senha')
 }) as yup.ObjectSchema<IUserCreated>
+
