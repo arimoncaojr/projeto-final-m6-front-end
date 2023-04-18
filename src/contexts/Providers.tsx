@@ -8,10 +8,10 @@ interface IProviderProps {
 
 export const Providers = ({ children }: IProviderProps) => {
   return (
-    <ListPostsProvider>
-      <ListCarsKenzieProvider>
-        <ModalCreatePostsProvider>{children}</ModalCreatePostsProvider>
-      </ListCarsKenzieProvider>
-    </ListPostsProvider>
+    <ModalCreatePostsProvider>
+      <ListPostsProvider>
+        <ListCarsKenzieProvider>{children}</ListCarsKenzieProvider>
+      </ListPostsProvider>
+    </ModalCreatePostsProvider>
   );
 };

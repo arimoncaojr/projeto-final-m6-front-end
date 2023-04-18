@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
-import { PostCard } from "../../components/postCard/PostCard";
+// import { PostCard } from "../../components/postCard/PostCard";
 import { ListPostsContext } from "../../contexts/ListPostsContext";
 import { Footer } from "../../components/footer/footer";
 import { Header } from "../../components/header/header";
@@ -30,8 +30,7 @@ export const DashboardPage = () => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [showClearFiltersButton, setShowClearFiltersButton] = useState(false);
-  
-  
+
   useEffect(() => {
     if (selectedBrand) {
       const models = carDetails.map((car) => car.name);
@@ -291,11 +290,11 @@ export const DashboardPage = () => {
             </ClearFiltersButton>
           )}
         </FilterContainer>
-        {filteredPosts.length > 0 ? (
+        {/* {filteredPosts.length > 0 ? (
           filteredPosts.map((post) => <PostCard key={post.id} post={post} />)
         ) : (
           <div>Não há carros disponíveis com esses filtros</div>
-        )}
+        )} */}
       </MainContainer>
       <Footer />
     </AppWrapper>

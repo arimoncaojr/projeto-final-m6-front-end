@@ -38,12 +38,31 @@ export const ModalCreatePostsProvider = ({
 
   const [modalCreatePost, showModalCreatePost] = useState<boolean>(false);
 
+  const removePunctuation = (value: string) => {
+    return value.replace(/[.,]/g, "");
+  };
+
   const submitPostInfo = (infoData: IPostInfo) => {
-    Api.post(
-      "/posts",
-      { ...infoData },
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
+    console.log("submitPostInfo executado");
+    const formattedImages = infoData.images
+      .map((image: any) =>
+        image.imageLink ? { imageLink: image.imageLink } : null
+      )
+      .filter((image: any) => image !== null);
+
+    const formattedInfoData = {
+      ...infoData,
+      kilometers: removePunctuation(infoData.kilometers),
+      tablePriceFiper: removePunctuation(infoData.tablePriceFiper),
+      price: removePunctuation(infoData.price.replace(/R?\$?/g, "")),
+      images: formattedImages,
+    };
+
+    Api.post("/posts", formattedInfoData, {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlT2ZBY2NvdW50IjoiY29tcHJhZG9yIiwiaWF0IjoxNjgxODMxMjAzLCJleHAiOjE2ODE5MTc2MDMsInN1YiI6IjUxMjEyMDE4LTRhNGYtNDM2ZS1iY2Y4LTQ1YjM0YTU1NDRiNCJ9.fBteTObPynH4oqx8Y7-CoOfe-NYX0EIdMMI1V5tdkCY`,
+      },
+    })
       .then((res) => {
         toast.success("Anúncio criado com sucesso!");
         showModalCreatePost(false);
