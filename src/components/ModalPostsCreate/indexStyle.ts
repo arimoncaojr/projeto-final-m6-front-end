@@ -6,6 +6,7 @@ interface IStyledProps {
   transitionLimit?: string;
   transformLimit?: string;
   changeGap?: boolean;
+  errorColor?: string;
 }
 
 export const ContainerModal = styled.div`
@@ -69,13 +70,8 @@ export const FormModal = styled.form`
 export const TitleAndButton = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  gap: 320px;
+  justify-content: space-between;
   width: 100%;
-
-  @media (max-width: 768px) {
-    gap: 150px;
-  }
 `;
 
 export const CloseBtn = styled.button`
@@ -85,6 +81,7 @@ export const CloseBtn = styled.button`
   height: 12px;
   color: #adb5bd;
   transition: transform 0.3s ease-in-out;
+  margin-bottom: 5px;
 
   :hover {
     transform: scale(0.8);
@@ -128,12 +125,12 @@ export const LabelAndInputWrapper = styled.div<IStyledProps>`
   min-width: 45%;
 `;
 
-export const Label = styled.label`
+export const Label = styled.label<IStyledProps>`
   font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;
-  color: #212529;
+  color: ${(props) => props.errorColor};
 `;
 
 export const BigInput = styled.input`

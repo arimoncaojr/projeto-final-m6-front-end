@@ -53,14 +53,16 @@ export const ModalCreatePostsProvider = ({
     const formattedInfoData = {
       ...infoData,
       kilometers: removePunctuation(infoData.kilometers),
-      tablePriceFiper: removePunctuation(infoData.tablePriceFiper),
+      tablePriceFiper: removePunctuation(
+        infoData.tablePriceFiper.replace(/R?\$?/g, "")
+      ),
       price: removePunctuation(infoData.price.replace(/R?\$?/g, "")),
       images: formattedImages,
     };
 
     Api.post("/posts", formattedInfoData, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlT2ZBY2NvdW50IjoiY29tcHJhZG9yIiwiaWF0IjoxNjgxODMxMjAzLCJleHAiOjE2ODE5MTc2MDMsInN1YiI6IjUxMjEyMDE4LTRhNGYtNDM2ZS1iY2Y4LTQ1YjM0YTU1NDRiNCJ9.fBteTObPynH4oqx8Y7-CoOfe-NYX0EIdMMI1V5tdkCY`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {

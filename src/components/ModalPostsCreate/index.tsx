@@ -48,7 +48,7 @@ export const ModalPostsCreate = () => {
     handleSubmit,
     reset,
     setValue,
-    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<IPostInfo>({ resolver: yupResolver(schema) });
 
@@ -67,7 +67,13 @@ export const ModalPostsCreate = () => {
     for (let i = 2; i < imageCount; i++) {
       additionalImages.push(
         <>
-          <Label key={`image${i + 1}`} htmlFor={`image${i + 1}`}>
+          <Label
+            errorColor={
+              errors.images && errors.images[i]?.imageLink ? "red" : "#212529"
+            }
+            key={`image${i + 1}`}
+            htmlFor={`image${i + 1}`}
+          >
             {get(
               errors,
               `images[${i}].imageLink.message`,
@@ -120,6 +126,8 @@ export const ModalPostsCreate = () => {
       setValue("tablePriceFiper", `${formatPrice(modelInfo.value)}`);
       setFuelType(modelInfo.fuel);
       setTablePriceFipe(modelInfo.value);
+      clearErrors("tablePriceFiper");
+      clearErrors("fuelType");
     }
   };
 
@@ -156,7 +164,7 @@ export const ModalPostsCreate = () => {
         </TitleAndButton>
         <ContentWrapper>
           <SubTitlePost>Informações do veículo</SubTitlePost>
-          <Label htmlFor="mark">
+          <Label errorColor={errors.mark ? "red" : "#212529"} htmlFor="mark">
             {getLabelContent("mark.message", "Marca")}
           </Label>
           <BigSelect
@@ -170,7 +178,7 @@ export const ModalPostsCreate = () => {
               </option>
             ))}
           </BigSelect>
-          <Label htmlFor="model">
+          <Label errorColor={errors.model ? "red" : "#212529"} htmlFor="model">
             {errors.model ? errors.model.message : "Modelo"}
           </Label>
           <BigSelect
@@ -186,14 +194,13 @@ export const ModalPostsCreate = () => {
           </BigSelect>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="fuelType">
+              <Label
+                errorColor={errors.fuelType ? "red" : "#212529"}
+                htmlFor="fuelType"
+              >
                 {errors.fuelType ? errors.fuelType.message : "Combustível"}
               </Label>
-              <SmallSelect
-                id="fuelType"
-                {...register("fuelType")}
-                value={fuelTypeLabel(fuelType)}
-              >
+              <SmallSelect id="fuelType" {...register("fuelType")}>
                 <option value="">Selecione</option>
                 <option value="flex">Flex</option>
                 <option value="hibrido">Híbrido</option>
@@ -201,7 +208,10 @@ export const ModalPostsCreate = () => {
               </SmallSelect>
             </LabelAndInputWrapper>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="year">
+              <Label
+                errorColor={errors.year ? "red" : "#212529"}
+                htmlFor="year"
+              >
                 {errors.year ? errors.year.message : "Ano"}
               </Label>
               <SmallInput
@@ -213,7 +223,10 @@ export const ModalPostsCreate = () => {
           </LabelAndFieldDiv>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="color">
+              <Label
+                errorColor={errors.color ? "red" : "#212529"}
+                htmlFor="color"
+              >
                 {errors.color ? errors.color.message : "Cor"}
               </Label>
               <SmallSelect id="color" {...register("color")}>
@@ -229,7 +242,10 @@ export const ModalPostsCreate = () => {
               </SmallSelect>
             </LabelAndInputWrapper>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="kilometers">
+              <Label
+                errorColor={errors.kilometers ? "red" : "#212529"}
+                htmlFor="kilometers"
+              >
                 {errors.kilometers
                   ? errors.kilometers.message
                   : "Quilometragem"}
@@ -249,7 +265,10 @@ export const ModalPostsCreate = () => {
           </LabelAndFieldDiv>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="tablePriceFiper">
+              <Label
+                errorColor={errors.tablePriceFiper ? "red" : "#212529"}
+                htmlFor="tablePriceFiper"
+              >
                 {errors.tablePriceFiper
                   ? errors.tablePriceFiper.message
                   : "Preço tabela FIPE"}
@@ -264,7 +283,10 @@ export const ModalPostsCreate = () => {
               />
             </LabelAndInputWrapper>
             <LabelAndInputWrapper changeGap>
-              <Label htmlFor="price">
+              <Label
+                errorColor={errors.price ? "red" : "#212529"}
+                htmlFor="price"
+              >
                 {errors.price ? errors.price.message : "Preço"}
               </Label>
               <SmallInput
@@ -280,22 +302,38 @@ export const ModalPostsCreate = () => {
               />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
-          <Label htmlFor="description">
+          <Label
+            errorColor={errors.description ? "red" : "#212529"}
+            htmlFor="description"
+          >
             {errors.description ? errors.description.message : "Descrição"}
           </Label>
           <TextArea {...register("description")}></TextArea>
-          <Label htmlFor="imageCap">
+          <Label
+            errorColor={errors.imageCap ? "red" : "#212529"}
+            htmlFor="imageCap"
+          >
             {" "}
             {errors.imageCap ? errors.imageCap.message : "Imagem da capa"}
           </Label>
           <BigInput id="imageCap" {...register("imageCap")} />
-          <Label htmlFor="firstImage">
+          <Label
+            errorColor={
+              errors.images && errors.images[0]?.imageLink ? "red" : "#212529"
+            }
+            htmlFor="firstImage"
+          >
             {errors.images && errors.images[0]?.imageLink
               ? errors.images[0].imageLink.message
               : "1° Imagem da galeria"}
           </Label>
           <BigInput id="firstImage" {...register("images.0.imageLink")} />
-          <Label htmlFor="secondImage">
+          <Label
+            errorColor={
+              errors.images && errors.images[1]?.imageLink ? "red" : "#212529"
+            }
+            htmlFor="secondImage"
+          >
             {errors.images && errors.images[1]?.imageLink
               ? errors.images[1].imageLink.message
               : "2° Imagem da galeria"}
