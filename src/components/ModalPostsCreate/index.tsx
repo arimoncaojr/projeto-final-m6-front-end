@@ -21,7 +21,7 @@ import {
 } from "./indexStyle";
 import { ModalCreatePostsContext } from "../../contexts/ModalCreatePostsContext";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../schemas/yupCreatePost";
