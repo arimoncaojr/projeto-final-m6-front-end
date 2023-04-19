@@ -18,6 +18,8 @@ import {
   DivFinalBtns,
   CancelBtn,
   CreatePostBtn,
+  YesAndNoBtn,
+  YesAndNoDiv,
 } from "./indexStyle";
 import { ModalCreatePostsContext } from "../../contexts/ModalCreatePostsContext";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
@@ -33,8 +35,31 @@ export const ModalPostsCreate = () => {
   const [fuelType, setFuelType] = useState<number | null>(null);
   const [tablePriceFipe, setTablePriceFipe] = useState<number | null>(null);
   const [imageCount, setImageCount] = useState<number>(2);
-  const [formattedPrice, setFormattedPrice] = useState("");
-  const [formattedKm, setFormattedKm] = useState("");
+  const [formattedPrice, setFormattedPrice] = useState<string>("");
+  const [formattedKm, setFormattedKm] = useState<string>("");
+  const [valueYear, setValueYear] = useState<string>("");
+  const [valueColor, setValueColor] = useState<string>("");
+  const [valueDescription, setValueDescription] = useState<string>("");
+  const [valueImg, setValueImg] = useState<string>("");
+
+  // colocar no context de Edição de Anúncio ou algum outro contexto
+  const [editModal, setEditModal] = useState<boolean>(false);
+
+  const checkInputs = () => {
+    if (
+      !fuelType ||
+      !tablePriceFipe ||
+      formattedPrice.length <= 3 ||
+      formattedKm.length === 0 ||
+      valueColor.length === 0 ||
+      valueYear.length < 4 ||
+      valueDescription.length === 0 ||
+      valueImg.length === 0
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   const { showModalCreatePost, submitPostInfo } = useContext(
     ModalCreatePostsContext
@@ -114,7 +139,9 @@ export const ModalPostsCreate = () => {
 
   const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const brand = event.target.value;
-    getCarDetails(brand);
+    if (brand) {
+      getCarDetails(brand);
+    }
   };
 
   const handleModelChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -151,7 +178,9 @@ export const ModalPostsCreate = () => {
     <ContainerModal>
       <FormModal onSubmit={handleSubmit(submitPostInfo)}>
         <TitleAndButton>
-          <TitlePost>Criar anúncio</TitlePost>
+          <TitlePost>
+            {editModal ? "Editar Anúncio" : "Criar Anúncio"}
+          </TitlePost>
           <CloseBtn
             type="button"
             onClick={() => {
@@ -217,7 +246,9 @@ export const ModalPostsCreate = () => {
               <SmallInput
                 id="year"
                 placeholder="ex: 2018"
-                {...register("year")}
+                {...register("year", {
+                  onChange: (e) => setValueYear(e.target.value),
+                })}
               />
             </LabelAndInputWrapper>
           </LabelAndFieldDiv>
@@ -229,7 +260,12 @@ export const ModalPostsCreate = () => {
               >
                 {errors.color ? errors.color.message : "Cor"}
               </Label>
-              <SmallSelect id="color" {...register("color")}>
+              <SmallSelect
+                id="color"
+                {...register("color", {
+                  onChange: (e) => setValueColor(e.target.value),
+                })}
+              >
                 <option value="">Selecione</option>
                 <option value="azul">Azul</option>
                 <option value="branco">Branco</option>
@@ -308,7 +344,21 @@ export const ModalPostsCreate = () => {
           >
             {errors.description ? errors.description.message : "Descrição"}
           </Label>
-          <TextArea {...register("description")}></TextArea>
+          <TextArea
+            {...register("description", {
+              onChange: (e) => setValueDescription(e.target.value),
+            })}
+          ></TextArea>
+          {editModal && (
+            <>
+              <Label htmlFor="isActive">Publicado</Label>
+
+              <YesAndNoDiv>
+                <YesAndNoBtn>Sim</YesAndNoBtn>
+                <YesAndNoBtn>Não</YesAndNoBtn>
+              </YesAndNoDiv>
+            </>
+          )}
           <Label
             errorColor={errors.imageCap ? "red" : "#212529"}
             htmlFor="imageCap"
@@ -316,7 +366,12 @@ export const ModalPostsCreate = () => {
             {" "}
             {errors.imageCap ? errors.imageCap.message : "Imagem da capa"}
           </Label>
-          <BigInput id="imageCap" {...register("imageCap")} />
+          <BigInput
+            id="imageCap"
+            {...register("imageCap", {
+              onChange: (e) => setValueImg(e.target.value),
+            })}
+          />
           <Label
             errorColor={
               errors.images && errors.images[0]?.imageLink ? "red" : "#212529"
@@ -352,17 +407,28 @@ export const ModalPostsCreate = () => {
           >
             Adicionar campo para imagem da galeria
           </AddImageBtn>
-          <DivFinalBtns>
+          <DivFinalBtns marginChange={editModal ? "0" : "125px"}>
             <CancelBtn
+              widthChange={editModal ? "262px" : "126px"}
               type="button"
               onClick={() => {
                 showModalCreatePost(false);
                 reset();
               }}
             >
-              Cancelar
+              {editModal ? "Excluir Anúncio" : "Cancelar"}
             </CancelBtn>
-            <CreatePostBtn type="submit">Criar anúncio</CreatePostBtn>
+            <CreatePostBtn
+              type="submit"
+              transformLimit={checkInputs() ? "scale(0.9)" : "none"}
+              transitionLimit={
+                checkInputs() ? "transform 0.3s ease-in-out" : "none"
+              }
+              cursorLimit={checkInputs() ? "pointer" : "not-allowed"}
+              backgroundChange={checkInputs() ? "#4529E6" : "#b0a6f0"}
+            >
+              {editModal ? "Salvar alterações" : "Criar anúncio"}
+            </CreatePostBtn>
           </DivFinalBtns>
         </ContentWrapper>
       </FormModal>

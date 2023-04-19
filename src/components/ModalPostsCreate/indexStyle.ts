@@ -7,6 +7,9 @@ interface IStyledProps {
   transformLimit?: string;
   changeGap?: boolean;
   errorColor?: string;
+  backgroundChange?: string;
+  widthChange?: string;
+  marginChange?: string;
 }
 
 export const ContainerModal = styled.div`
@@ -202,12 +205,12 @@ export const AddImageBtn = styled.button<IStyledProps>`
   }
 `;
 
-export const DivFinalBtns = styled.div`
+export const DivFinalBtns = styled.div<IStyledProps>`
   display: flex;
   gap: 10px;
   justify-content: flex-end;
   align-items: flex-end;
-  margin-left: 125px;
+  margin-left: ${(props) => props.marginChange};
 
   @media (max-width: 768px) {
     align-items: center;
@@ -215,8 +218,8 @@ export const DivFinalBtns = styled.div`
   }
 `;
 
-export const CancelBtn = styled.button`
-  width: 126px;
+export const CancelBtn = styled.button<IStyledProps>`
+  width: ${(props) => props.widthChange};
   height: 48px;
   background: #dee2e6;
   border: 1.5px solid #dee2e6;
@@ -235,23 +238,52 @@ export const CancelBtn = styled.button`
   }
 `;
 
-//Fazer props para alterar o estilo do botão de acordo com os campos preenchidos
-export const CreatePostBtn = styled.button`
+export const CreatePostBtn = styled.button<IStyledProps>`
   width: 193px;
   height: 48px;
-  background: #b0a6f0;
+  background: ${(props) => props.backgroundChange};
   border: 1.5px solid #b0a6f0;
   border-radius: 4px;
   font-weight: 600;
   font-size: 1rem;
   color: #edeafd;
-  transition: transform 0.3s ease-in-out;
+  transition: ${(props) => props.transitionLimit};
+  cursor: ${(props) => props.cursorLimit};
 
   :hover {
-    transform: scale(0.9);
+    transform: ${(props) => props.transformLimit};
   }
 
   @media (max-width: 768px) {
     width: 50%;
+  }
+`;
+
+export const YesAndNoDiv = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    margin-left: 0;
+  }
+`;
+
+export const YesAndNoBtn = styled.button`
+  width: 228px;
+  height: 48px;
+  border: 1.5px solid #adb5bd;
+  border-radius: 4px;
+  color: #0b0d0d;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  background-color: #ffffff;
+
+  :hover {
+    background-color: #4529e6;
+    color: #ffffff;
   }
 `;
