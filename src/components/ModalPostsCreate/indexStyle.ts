@@ -1,8 +1,15 @@
 import styled from "styled-components";
 
-interface ILabelProps {
-  marginLabel?: string;
-  marginLabelMobile?: string;
+interface IStyledProps {
+  opacityLimit?: string;
+  cursorLimit?: string;
+  transitionLimit?: string;
+  transformLimit?: string;
+  changeGap?: boolean;
+  errorColor?: string;
+  backgroundChange?: string;
+  widthChange?: string;
+  marginChange?: string;
 }
 
 export const ContainerModal = styled.div`
@@ -66,13 +73,8 @@ export const FormModal = styled.form`
 export const TitleAndButton = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  gap: 320px;
+  justify-content: space-between;
   width: 100%;
-
-  @media (max-width: 768px) {
-    gap: 150px;
-  }
 `;
 
 export const CloseBtn = styled.button`
@@ -80,8 +82,13 @@ export const CloseBtn = styled.button`
   background-color: transparent;
   width: 12px;
   height: 12px;
-  font-size: 12px;
   color: #adb5bd;
+  transition: transform 0.3s ease-in-out;
+  margin-bottom: 5px;
+
+  :hover {
+    transform: scale(0.8);
+  }
 `;
 
 export const TitlePost = styled.h2`
@@ -105,28 +112,28 @@ export const SubTitlePost = styled.span`
 export const LabelAndFieldDiv = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 541px) {
+    flex-wrap: wrap;
+  }
 `;
 
-export const LabelAndInputWrapper = styled.div`
+export const LabelAndInputWrapper = styled.div<IStyledProps>`
   display: flex;
   flex-direction: row;
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
   width: 100%;
+  min-width: 45%;
 `;
 
-export const Label = styled.label<ILabelProps>`
+export const Label = styled.label<IStyledProps>`
   font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;
-  color: #212529;
-  margin-right: ${(props) => props.marginLabel};
-
-  @media (max-width: 768px) {
-    margin-right: ${(props) => props.marginLabelMobile};
-  }
+  color: ${(props) => props.errorColor};
 `;
 
 export const BigInput = styled.input`
@@ -174,7 +181,7 @@ export const TextArea = styled.textarea`
   box-sizing: border-box;
 `;
 
-export const AddImageBtn = styled.button`
+export const AddImageBtn = styled.button<IStyledProps>`
   width: 70%;
   height: 40%;
   background: #edeafd;
@@ -184,6 +191,13 @@ export const AddImageBtn = styled.button`
   font-weight: 600;
   font-size: 0.875rem;
   padding: 10px;
+  opacity: ${(props) => props.opacityLimit};
+  cursor: ${(props) => props.cursorLimit};
+  transition: ${(props) => props.transitionLimit};
+
+  :hover {
+    transform: ${(props) => props.transformLimit};
+  }
 
   @media (max-width: 768px) {
     width: 100%;
@@ -191,12 +205,12 @@ export const AddImageBtn = styled.button`
   }
 `;
 
-export const DivFinalBtns = styled.div`
+export const DivFinalBtns = styled.div<IStyledProps>`
   display: flex;
   gap: 10px;
   justify-content: flex-end;
   align-items: flex-end;
-  margin-left: 125px;
+  margin-left: ${(props) => props.marginChange};
 
   @media (max-width: 768px) {
     align-items: center;
@@ -204,8 +218,8 @@ export const DivFinalBtns = styled.div`
   }
 `;
 
-export const CancelBtn = styled.button`
-  width: 126px;
+export const CancelBtn = styled.button<IStyledProps>`
+  width: ${(props) => props.widthChange};
   height: 48px;
   background: #dee2e6;
   border: 1.5px solid #dee2e6;
@@ -213,24 +227,63 @@ export const CancelBtn = styled.button`
   font-weight: 600;
   font-size: 1rem;
   color: #495057;
+  transition: transform 0.3s ease-in-out;
+
+  :hover {
+    transform: scale(0.9);
+  }
 
   @media (max-width: 768px) {
     width: 50%;
   }
 `;
 
-//Fazer props para alterar o estilo do botão de acordo com os campos preenchidos
-export const CreatePostBtn = styled.button`
+export const CreatePostBtn = styled.button<IStyledProps>`
   width: 193px;
   height: 48px;
-  background: #b0a6f0;
+  background: ${(props) => props.backgroundChange};
   border: 1.5px solid #b0a6f0;
   border-radius: 4px;
   font-weight: 600;
   font-size: 1rem;
   color: #edeafd;
+  transition: ${(props) => props.transitionLimit};
+  cursor: ${(props) => props.cursorLimit};
+
+  :hover {
+    transform: ${(props) => props.transformLimit};
+  }
 
   @media (max-width: 768px) {
     width: 50%;
+  }
+`;
+
+export const YesAndNoDiv = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    margin-left: 0;
+  }
+`;
+
+export const YesAndNoBtn = styled.button`
+  width: 228px;
+  height: 48px;
+  border: 1.5px solid #adb5bd;
+  border-radius: 4px;
+  color: #0b0d0d;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  background-color: #ffffff;
+
+  :hover {
+    background-color: #4529e6;
+    color: #ffffff;
   }
 `;

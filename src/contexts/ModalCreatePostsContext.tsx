@@ -38,12 +38,33 @@ export const ModalCreatePostsProvider = ({
 
   const [modalCreatePost, showModalCreatePost] = useState<boolean>(false);
 
+  const removePunctuation = (value: string) => {
+    return value.replace(/[.,]/g, "");
+  };
+
   const submitPostInfo = (infoData: IPostInfo) => {
-    Api.post(
-      "/posts",
-      { ...infoData },
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
+    console.log("submitPostInfo executado");
+    const formattedImages = infoData.images
+      .map((image: any) =>
+        image.imageLink ? { imageLink: image.imageLink } : null
+      )
+      .filter((image: any) => image !== null);
+
+    const formattedInfoData = {
+      ...infoData,
+      kilometers: removePunctuation(infoData.kilometers),
+      tablePriceFiper: removePunctuation(
+        infoData.tablePriceFiper.replace(/R?\$?/g, "")
+      ),
+      price: removePunctuation(infoData.price.replace(/R?\$?/g, "")),
+      images: formattedImages,
+    };
+
+    Api.post("/posts", formattedInfoData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         toast.success("Anúncio criado com sucesso!");
         showModalCreatePost(false);

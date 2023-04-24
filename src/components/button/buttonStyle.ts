@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components"
 
 
-interface IStyledButtonProps{
+export interface IStyledButtonProps{
      typeStyle:
      | "noColor" 
      | "colorBrand2"  
@@ -127,6 +127,10 @@ export const ButtonStyle = styled.button`
                          max-width: fit-content;
                          color: var(--gray-3);
                          font: var(--font-heading-12);
+                         padding: unset;
+                         height: unset;
+                         margin: 4px 0px;
+                         text-align: left;
                     `
           }
      }}

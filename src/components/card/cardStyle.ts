@@ -1,17 +1,20 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 
 interface IStyledCardProps{
      isActive: boolean
 }
+interface IStyledIconUserProps{
+     firstLetter: string;
+}
 
 
 export const CardStyle = styled.article`
-     width: 312px;
+     width: 300px;
      height: 350px;
      border-radius: 4px;
      box-shadow: -1px -2px 10px 0px var(--gray-4);
-     padding: 4px;
+     padding: 4px 10px;
 
      & > figure {
           display: flex;
@@ -26,21 +29,22 @@ export const CardStyle = styled.article`
           & > button {
                background-color: transparent;
                border-style: none;
-               font-size: 28px;
+               font-size: 45px;
                position: absolute;
-               top: 47px;
-               color: var( --color-random-7);
-
-               & > svg{
-                    width: 40px;
-                    height: 40px;
-               }
+               top: 50px;
+               color: var( --gray-4);    
           }
+
+          & > button:disabled {
+               cursor: unset;
+               opacity: 0.5;
+          }
+
           & > button.next {
-              right: 0;
+              right: -22px;
           }
           & > button.back {
-               left: 0;
+               left: -22px;
           }
 
           .isGoodPurchase{
@@ -86,6 +90,7 @@ export const CardStyle = styled.article`
           -webkit-line-clamp: 2;
           -moz-line-clamp: 2;
           line-height: 24px;
+          min-height: 49px;
      }
 
      & > .containerDetail{
@@ -99,6 +104,12 @@ export const CardStyle = styled.article`
                margin-left: auto;
           }
      }
+
+     @media(min-width: 767px){
+          &{
+               width: 312px;
+          }
+     }
 `
 
 export const IconUserStyle = styled.div`
@@ -106,11 +117,10 @@ export const IconUserStyle = styled.div`
      align-items: center;
      gap: 6px;
      width: 100%;
-     max-width: 80%;
+     max-width: 310px;
      margin-top: 12px;
 
      .iconUser{
-          background-color: var(--color-brand-2);
           width: 32px;
           height: 32px;
           padding: 6px;
@@ -122,10 +132,59 @@ export const IconUserStyle = styled.div`
           display: flex;
           align-items: center;
           justify-content: center;
-     } 
+          background-color: var(--color-brand-2);
+          ${({ firstLetter }: IStyledIconUserProps) => {
+          switch (firstLetter) {
+               case "A":
+               case "B":
+               case "C":
+               case "D":
+               case "E":
+                    return css`
+                         background-color: var(--color-random-1);
+                    `;
+               case "F":
+               case "G":
+               case "H":
+               case "I":               
+               case "J":               
+                    return css`
+                         background-color: var(--color-random-3);
+                    `;
+               case "K":
+               case "L":
+               case "M":
+               case "N":               
+               case "O":               
+                    return css`
+                         background-color: var(--color-random-4);
+                    `;
+               case "P":
+               case "Q":
+               case "R":
+               case "S":               
+               case "T":               
+                    return css`
+                         background-color: var(--color-random-12);
+                    `;
+               case "U":
+               case "V":
+               case "X":
+               case "W":               
+               case "Z":               
+                    return css`
+                         background-color: var(--color-random-7);
+                    `;
+               }
+          }}
+     
+     }
 
      .nameUser {
           font: var(--font-body-2);
           color: var(--gray-2);
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
      }
 `
