@@ -36,8 +36,10 @@ export const Card = ({ post, type }: IPostCardProps) => {
 
   const nameCar =
     post.model[0].toUpperCase() + post.model.slice(1).toLowerCase();
-  const description =
-    post.description[0].toUpperCase() + post.description.slice(1).toLowerCase();
+  const description = post.description
+    ? post.description[0].toUpperCase() +
+      post.description.slice(1).toLowerCase()
+    : "";
   const isActive = post.isActive;
   const isGoodPurchase = post.isGoodPurchase;
   const km = post.kilometers;
@@ -50,7 +52,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
     match.toUpperCase()
   );
   const firstLetter = post.user.name.split(" ")[0][0];
-  const secondLetter = post.user.name.split(" ")[1][0];
+  const secondLetter = " "; //post.user.name.split(" ")[1][0];
   const cipher = (firstLetter + secondLetter).toUpperCase();
   const dbImg = [{ imageLink: post.imageCap }, ...post.images];
   const disableButton = dbImg.length === 1 ? true : false;
