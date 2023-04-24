@@ -323,7 +323,7 @@ export const NewComment = styled.div`
     }
   }
 
-  div {
+  form {
     display: flex;
     align-items: end;
     flex-direction: column;
@@ -336,7 +336,7 @@ export const NewComment = styled.div`
     border: 1px solid var(--gray-3);
   }
 
-  div:hover {
+  form:hover {
     outline: 1px solid black;
   }
 

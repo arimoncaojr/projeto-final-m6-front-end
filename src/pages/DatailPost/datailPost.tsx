@@ -25,6 +25,7 @@ import ModalImage from "./ModalImage/modalImage";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { newCommentSchema } from "../../schemas/yupCreateComment";
+import { Flip, toast } from "react-toastify";
 
 interface IUser {
   id: string;
@@ -76,29 +77,80 @@ export const DatailPostPage = () => {
     const getPost = async () => {
       try {
         const { data } = await Api.get<IPost>(`/posts/${id}`);
-
         setPost(data);
-        setCommentList(data.comments);
+        const commentListReverse = data.comments.reverse();
+        setCommentList(commentListReverse);
       } catch (error) {
         console.log(error);
         setPost(null);
         setCommentList([]);
-        navigate("/dashboard");
+        navigate("/");
       }
     };
 
     getPost();
   }, [id, navigate]);
 
-  const newComment = (dataNewPost: IComment) => {
-    const token = window.localStorage.getItem("@token");
+  const newComment = async (dataNewPost: INewComment) => {
+    const loadingToast = toast.loading("Carregando...");
+    const token = window.localStorage.getItem("@motorsShopToken");
+    if (token) {
+      try {
+        const { data } = await Api.post(`/posts/${id}/comments`, dataNewPost, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setCommentList([data, ...commentList]);
+
+        toast.update(loadingToast, {
+          render: "Comentario adicionado",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+          theme: "dark",
+          position: "top-center",
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          transition: Flip,
+          style: {
+            backgroundColor: "#f8f9fa",
+            font: "var(--font-body-1)",
+            color: "var(--color-sucess-1)",
+            border: "1.5px solid var(--color-sucess-1)",
+            padding: "8px",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        toast.update(loadingToast, {
+          render: `Comentario não adicionado`,
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+          theme: "dark",
+          position: "top-center",
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          transition: Flip,
+          style: {
+            backgroundColor: "#f8f9fa",
+            font: "var(--font-body-1)",
+            color: "var(--color-alert-1)",
+            border: "1.5px solid var(--color-alert-1)",
+            padding: "8px",
+          },
+        });
+      }
+    }
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<INewComment>({
+  const { register, handleSubmit } = useForm<INewComment>({
     resolver: yupResolver(newCommentSchema),
   });
 
@@ -213,22 +265,21 @@ export const DatailPostPage = () => {
             ) : (
               <></>
             )}
-            <div>
+            <form onSubmit={handleSubmit(newComment)}>
               <textarea
                 id="newComment"
-                placeholder="Digetar comentario"
+                placeholder="Digitar comentario"
                 cols={30}
                 rows={10}
                 {...register("description")}
               ></textarea>
-              <p>{errors.description?.message}</p>
               <Button
                 typeStyle={user ? "colorBrand1Withlimit" : "colorGray5"}
                 onClick={user ? () => {} : () => navigate("/login")}
               >
                 Comentar
               </Button>
-            </div>
+            </form>
           </NewComment>
         </CommentsContainer>
       </ContainerMain>

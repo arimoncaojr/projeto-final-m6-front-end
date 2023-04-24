@@ -1,20 +1,3 @@
-export interface IUserCreated {
-  name: string;
-  email: string;
-  cpf: string;
-  phoneNumber: string;
-  dateOfBirth: Date;
-  description?: string;
-  cep: string;
-  city: string;
-  state: string;
-  street: string;
-  number: string;
-  complement?: string;
-  password: string;
-  confirmPassword: string;
-}
-
 export interface IUserPostResponse {
   id: string;
   name: string;
@@ -29,6 +12,24 @@ export interface IAddressRequest {
   city: string;
   number?: string | null;
   complement?: string | null;
+}
+
+export interface IUserCreated {
+  name: string;
+  email: string;
+  cpf: string;
+  phoneNumber: string;
+  dateOfBirth: Date;
+  description?: string;
+  cep: string;
+  city: string;
+  state: string;
+  street: string;
+  number: string;
+  complement?: string;
+  typeOfAccount: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export interface IUserCreatedRequest {
