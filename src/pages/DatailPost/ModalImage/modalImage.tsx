@@ -2,7 +2,7 @@ import React, { SetStateAction } from "react";
 import {
   BackGroundContainer,
   ImageContainer,
-  ModalCantainer,
+  ModalContainer,
   TitleContainer,
 } from "./modalImageStyle";
 
@@ -24,7 +24,7 @@ const ModalImage: React.FC<ModaImageProps> = ({
 
   return img ? (
     <BackGroundContainer>
-      <ModalCantainer>
+      <ModalContainer>
         <TitleContainer>
           <h2>Imagem do carro</h2>
           <button onClick={() => closeModal()}>X</button>
@@ -32,7 +32,7 @@ const ModalImage: React.FC<ModaImageProps> = ({
         <ImageContainer>
           <img src={img} alt="" />
         </ImageContainer>
-      </ModalCantainer>
+      </ModalContainer>
     </BackGroundContainer>
   ) : (
     <h2>Sem imagem</h2>

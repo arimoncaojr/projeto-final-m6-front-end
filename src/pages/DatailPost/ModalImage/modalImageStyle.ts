@@ -18,17 +18,22 @@ export const BackGroundContainer = styled.div`
   background-color: #0b0d0d50;
 `;
 
-export const ModalCantainer = styled.div`
+export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  width: 500px;
-  padding: 15px;
+  max-width: 500px;
+  padding: 15px 15px 35px;
 
   border-radius: 5px;
   gap: 1rem;
 
   background-color: var(--gray-10);
+
+  & > p {
+    font: var(--font-body-2);
+    max-width: 380px;
+  }
 `;
 
 export const TitleContainer = styled.div`
@@ -37,8 +42,7 @@ export const TitleContainer = styled.div`
   justify-content: space-between;
 
   h2 {
-    font-size: 1rem;
-    font-weight: 600;
+    font: var(--font-heading-8);
   }
 
   button {
