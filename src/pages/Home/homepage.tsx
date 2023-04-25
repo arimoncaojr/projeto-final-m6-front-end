@@ -153,7 +153,7 @@ export const HomePage = () => {
   };
 
   const filteredPosts = filterPosts(postsInfo);
-  console.log(filteredPosts.length);
+  // console.log(filteredPosts.length);
 
   const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
 
