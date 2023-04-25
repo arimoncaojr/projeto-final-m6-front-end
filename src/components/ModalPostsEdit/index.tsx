@@ -18,16 +18,18 @@ import {
   DivFinalBtns,
   CancelBtn,
   CreatePostBtn,
-} from "./indexStyle";
-import { ModalCreatePostsContext } from "../../contexts/ModalCreatePostsContext";
+  YesAndNoBtn,
+  YesAndNoDiv,
+} from "../ModalPostsCreate/indexStyle";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../schemas/yupCreatePost";
-import { IPostInfo } from "../../contexts/ModalCreatePostsContext";
+import { editSchema } from "../../schemas/yupEditPost";
+import { IPostInfoEdit } from "../../contexts/ModalEditPostsContext";
 import { toast } from "react-toastify";
 import { get } from "lodash";
+import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
 
 export const ModalPostsCreate = () => {
   const [fuelType, setFuelType] = useState<number | null>(null);
@@ -39,6 +41,7 @@ export const ModalPostsCreate = () => {
   const [valueColor, setValueColor] = useState<string>("");
   const [valueDescription, setValueDescription] = useState<string>("");
   const [valueImg, setValueImg] = useState<string>("");
+  //   const [isActive, setIsActive] = useState<boolean>(true);
 
   const checkInputs = () => {
     if (
@@ -56,11 +59,11 @@ export const ModalPostsCreate = () => {
     return true;
   };
 
-  const { showModalCreatePost, submitPostInfo } = useContext(
-    ModalCreatePostsContext
-  );
   const { carBrandsInfo, carDetails, getCarDetails } = useContext(
     ListCarsKenzieContext
+  );
+  const { submitEditedPostInfo, showModalEditPost } = useContext(
+    ModalEditPostsContext
   );
 
   const {
@@ -70,7 +73,7 @@ export const ModalPostsCreate = () => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<IPostInfo>({ resolver: yupResolver(schema) });
+  } = useForm<IPostInfoEdit>({ resolver: yupResolver(editSchema) });
 
   const addImageField = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -169,15 +172,24 @@ export const ModalPostsCreate = () => {
     return get(errors, errorPath, defaultMessage);
   };
 
+  const handleIsActiveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const value = event.currentTarget.getAttribute("data-value");
+    if (value === "true") {
+      setValue("isActive", "true");
+    } else if (value === "false") {
+      setValue("isActive", "false");
+    }
+  };
+
   return (
     <ContainerModal>
-      <FormModal onSubmit={handleSubmit(submitPostInfo)}>
+      <FormModal onSubmit={handleSubmit(submitEditedPostInfo)}>
         <TitleAndButton>
-          <TitlePost>Criar Anúncio</TitlePost>
+          <TitlePost>Editar Anúncio</TitlePost>
           <CloseBtn
             type="button"
             onClick={() => {
-              showModalCreatePost(false);
+              showModalEditPost(false);
               reset();
             }}
           >
@@ -342,6 +354,15 @@ export const ModalPostsCreate = () => {
               onChange: (e) => setValueDescription(e.target.value),
             })}
           ></TextArea>
+          <Label htmlFor="isActive">Publicado</Label>
+          <YesAndNoDiv>
+            <YesAndNoBtn data-value="true" onClick={handleIsActiveClick}>
+              Sim
+            </YesAndNoBtn>
+            <YesAndNoBtn data-value="false" onClick={handleIsActiveClick}>
+              Não
+            </YesAndNoBtn>
+          </YesAndNoDiv>
           <Label
             errorColor={errors.imageCap ? "red" : "#212529"}
             htmlFor="imageCap"
@@ -390,15 +411,16 @@ export const ModalPostsCreate = () => {
           >
             Adicionar campo para imagem da galeria
           </AddImageBtn>
-          <DivFinalBtns>
+          <DivFinalBtns marginChange={"0"}>
             <CancelBtn
+              widthChange={"262px"}
               type="button"
               onClick={() => {
-                showModalCreatePost(false);
+                showModalEditPost(false);
                 reset();
               }}
             >
-              Cancelar
+              Excluir Anúncio
             </CancelBtn>
             <CreatePostBtn
               type="submit"
@@ -409,7 +431,7 @@ export const ModalPostsCreate = () => {
               cursorLimit={checkInputs() ? "pointer" : "not-allowed"}
               backgroundChange={checkInputs() ? "#4529E6" : "#b0a6f0"}
             >
-              Criar anúncio
+              Salvar alterações
             </CreatePostBtn>
           </DivFinalBtns>
         </ContentWrapper>
