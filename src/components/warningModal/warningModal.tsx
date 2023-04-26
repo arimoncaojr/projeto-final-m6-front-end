@@ -5,7 +5,7 @@ import { Button } from "../button/button";
 import { ModalStyle, ModalWrapper } from "./warningModalStyle"
 
 interface IWarningModalProps {
-     type: "register";
+     type: "register" | "resetPassword";
      sucess?: boolean;
      showModal: string;
 }
@@ -52,6 +52,27 @@ export const WarningModal = ({ type, sucess, showModal }: IWarningModalProps) =>
                                              Ir para login
                                         </Button>
                                    }
+                              </div>
+                         </>
+                    )
+                    : type === "resetPassword" ? (
+                         <>
+                              <div className="closeModal">
+                                   <p>Sucesso!</p>
+                                   <button onClick={()=> setShowModal('none')}>X</button>
+                              </div>
+                              <div className="containerContent">
+                                   <h3>Sua senha foi atualizada com sucesso </h3>  
+                                   <p>Agora você poderá fazer login novamente</p>
+                                   <Button
+                                        typeStyle="colorBrand1"
+                                        onClick={() => (
+                                             // eslint-disable-next-line no-sequences
+                                             navigate("/login"),
+                                             setShowModal('none'))
+                                        }>
+                                        Ir para login
+                                   </Button>
                               </div>
                          </>
                     )

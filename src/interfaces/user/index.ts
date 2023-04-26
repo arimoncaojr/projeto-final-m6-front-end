@@ -43,3 +43,11 @@ export interface IUserCreatedRequest {
   typeOfAccount: string;
   password: string;
 }
+
+export interface IResetPassword{
+  password: string;
+  confirmedPassword: string;
+}
+export interface IResetPasswordRequest{
+  password: string;
+}

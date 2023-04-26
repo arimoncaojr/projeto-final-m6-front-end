@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Ilogin } from "../interfaces/login";
-import { IUserCreatedRequest } from "../interfaces/user";
+import { IResetPasswordRequest, IUserCreatedRequest } from "../interfaces/user";
 
 export const Api = axios.create({
   baseURL: "http://localhost:3000",
@@ -25,3 +25,23 @@ export const loginApi = async (data: Ilogin) => {
   const resp = await Api.post("/login", data);
   return resp;
 };
+
+export const accessAuthenticationTokenSendEmail = async (token:any) => {
+  const resp = await Api.get(`/users/authentication/${token}`);
+  return resp;
+}
+
+export const resetPasswordUser = async (token:string | undefined, data:IResetPasswordRequest) => {
+  console.log(data)
+  const resp = await Api.post(`/users/reset/${token}`, data);
+  // const resp = await fetch(`http://localhost:3000/users/reset/${token}`, {
+  //     headers: {'Content-Type': 'application/json'},
+  //     method: 'POST',
+  //     body: JSON.stringify(data)
+  //   })
+  //   .then(resp => resp.json())
+  //   .then(resp => resp)
+  //   .catch(err => console.error(err))
+    
+  return resp;
+}

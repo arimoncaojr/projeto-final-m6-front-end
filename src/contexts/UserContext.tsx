@@ -1,9 +1,10 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Ilogin } from "../interfaces/login";
-import { IUserCreatedRequest } from "../interfaces/user";
-import { getProfileUser, loginApi, registerApi } from "../services/api";
+import { IResetPasswordRequest, IUserCreatedRequest } from "../interfaces/user";
+import { getProfileUser, loginApi, registerApi, resetPasswordUser } from "../services/api";
 import { toast, Flip } from "react-toastify";
+import { AxiosError } from "axios";
 
 interface IUserContextProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ interface IUserContext {
   sucessModal: boolean;
   setSucessModal: React.Dispatch<React.SetStateAction<boolean>>;
   loginUser: (data: Ilogin) => Promise<void>;
+  resetPassword: (data: IResetPasswordRequest, token: string | undefined) => Promise<void>;
 }
 
 export const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -25,28 +27,28 @@ export const UserProvider = ({ children }: IUserContextProps) => {
   const [sucessModal, setSucessModal] = useState(false);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  // 	(async () => {
-  // 		const token = localStorage.getItem("@motorsShopToken");
+//   useEffect(() => {
+//     (async () => {
+//       const token = localStorage.getItem("@motorsShopToken");
 
-  // 		if (token) {
-  //                try {
-  //                     const responseApi = await getProfileUser(token);
-  //                     navigate("/dashboard")
-  //                } catch (error) {
-  //                     console.log(error);
-  //                     localStorage.removeItem("@motorsShopToken");
-  //                     navigate("/");
-  //                }
-  // 		} else {
-  // 		     navigate("/");
-  // 		}
-  // 	})();
-  // }, []);
+//       if (token) {
+//                  try {
+//                       const responseApi = await getProfileUser(token);
+//                       navigate("/dashboard")
+//                  } catch (error) {
+//                       console.log(error);
+//                       localStorage.removeItem("@motorsShopToken");
+//                       navigate("/");
+//                  }
+//       } else {
+//            navigate("/");
+//       }
+//     })();
+//   }, []);
 
   const createdUser = async (data: IUserCreatedRequest) => {
     try {
-      const userCreated = await registerApi(data);
+      await registerApi(data);
       setSucessModal(true);
       setShowModal("flex");
     } catch (error) {
@@ -106,7 +108,42 @@ export const UserProvider = ({ children }: IUserContextProps) => {
         },
       });
     }
-  };
+    };
+    
+    const resetPassword = async (data: IResetPasswordRequest, token: string | undefined,) => { 
+        
+        try {
+            await resetPasswordUser(token, data)
+            setShowModal("flex");
+            
+        } catch (error: any) {
+            const loadingToast = toast.loading("Carregando...");
+            toast.update(loadingToast, {
+                render: `${error.response.data.message}, você será redirecionado para homepage`,
+                type: "error",
+                isLoading: false,
+                autoClose: 2000,
+                theme: "dark",
+                position: "top-center",
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                transition: Flip,
+                style: {
+                  backgroundColor: "#f8f9fa",
+                  font: "var(--font-body-1)",
+                  color: "var(--color-alert-1)",
+                  border: "1.5px solid var(--color-alert-1)",
+                  padding: "8px",
+                },
+            });
+            setTimeout(() => {
+                navigate("/")
+            },3400)
+        }
+
+    }
 
   return (
     <UserContext.Provider
@@ -117,6 +154,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
         sucessModal,
         setSucessModal,
         loginUser,
+        resetPassword
       }}
     >
       {children}
