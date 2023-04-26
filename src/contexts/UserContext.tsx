@@ -27,6 +27,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
   const [sucessModal, setSucessModal] = useState(false);
   const navigate = useNavigate();
 
+
 //   useEffect(() => {
 //     (async () => {
 //       const token = localStorage.getItem("@motorsShopToken");
@@ -45,6 +46,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
 //       }
 //     })();
 //   }, []);
+
 
   const createdUser = async (data: IUserCreatedRequest) => {
     try {
