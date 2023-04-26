@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { CardStyle, IconUserStyle } from "./cardStyle";
 // import { MdKeyboardDoubleArrowRight as Next, MdKeyboardDoubleArrowLeft as Back } from "react-icons/md"
-import {
-  IoIosArrowForward as Next,
-  IoIosArrowBack as Back,
-} from "react-icons/io";
+import {IoIosArrowForward as Next, IoIosArrowBack as Back} from "react-icons/io";
 import { CgDollar as Money } from "react-icons/cg";
 import { Button } from "../button/button";
 import { IPosts } from "../../contexts/ListPostsContext";
@@ -16,6 +13,7 @@ interface IPostCardProps {
 
 export const Card = ({ post, type }: IPostCardProps) => {
   const [indexImg, setIndexImg] = useState(0);
+  
   const handleClickImg = (button: string) => {
     const sizeDbImg = dbImg.length - 1;
 
@@ -34,10 +32,10 @@ export const Card = ({ post, type }: IPostCardProps) => {
     }
   };
 
-  const nameCar =
-    post.model[0].toUpperCase() + post.model.slice(1).toLowerCase();
-  const description = post.description
-    ? post.description[0].toUpperCase() +
+  const nameCar = post.model[0].toUpperCase() + post.model.slice(1).toLowerCase();
+  const description =
+    post.description ?
+      post.description[0].toUpperCase() +
       post.description.slice(1).toLowerCase()
     : "";
   const isActive = post.isActive;
@@ -52,12 +50,10 @@ export const Card = ({ post, type }: IPostCardProps) => {
     match.toUpperCase()
   );
   const firstLetter = post.user.name.split(" ")[0][0];
-  const secondLetter = " "; //post.user.name.split(" ")[1][0];
+  const secondLetter = post.user.name.split(" ")[1][0];
   const cipher = (firstLetter + secondLetter).toUpperCase();
   const dbImg = [{ imageLink: post.imageCap }, ...post.images];
   const disableButton = dbImg.length === 1 ? true : false;
-
-  console.log(dbImg.length);
 
   return (
     <CardStyle isActive={isActive}>
