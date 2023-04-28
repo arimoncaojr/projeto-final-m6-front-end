@@ -13,7 +13,7 @@ interface IUser {
 }
 
 export interface IImages {
-  imageLink: string;
+  imageLink?: string;
 }
 
 interface IComments {
