@@ -6,13 +6,12 @@ import { RegisterPage } from "../pages/Register/register";
 import { DatailPostPage } from "../pages/DatailPost/datailPost";
 import { ModalPostsEdit } from "../components/ModalPostsEdit";
 import { ResetPassword } from "../pages/ResetPassword/resetPassword";
-import { ModalPostsCreate } from "../components/ModalPostsCreate";
 
 export const RoutesMain = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<ModalPostsCreate />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
