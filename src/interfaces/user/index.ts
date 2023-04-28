@@ -1,3 +1,5 @@
+import { IComments, IImages, IPosts } from "../../contexts/ListPostsContext";
+
 export interface IUserPostResponse {
   id: string;
   name: string;
@@ -44,10 +46,46 @@ export interface IUserCreatedRequest {
   password: string;
 }
 
-export interface IResetPassword{
+export interface IPostUser {
+  id: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  mark: string;
+  model: string;
+  year: string;
+  fuelType: string;
+  price: string;
+  tablePriceFiper: string;
+  isGoodPurchase: boolean;
+  color: string;
+  kilometers: string;
+  description: string;
+  imageCap: string;
+  images: IImages[];
+  comments: IComments[];
+}
+
+export interface IUserProfileRequest {
+  id: string;
+  name: string;
+  email: string;
+  cpf: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  description: string;
+  typeOfAccount: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  posts: IPosts[];
+}
+
+export interface IResetPassword {
   password: string;
   confirmedPassword: string;
 }
-export interface IResetPasswordRequest{
+
+export interface IResetPasswordRequest {
   password: string;
 }

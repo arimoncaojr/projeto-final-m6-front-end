@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Ilogin } from "../interfaces/login";
-import { IResetPasswordRequest, IUserCreatedRequest } from "../interfaces/user";
+import { IResetPasswordRequest, IUserCreatedRequest, IUserProfileRequest } from "../interfaces/user";
 import { getProfileUser, loginApi, registerApi, resetPasswordUser } from "../services/api";
 import { toast, Flip } from "react-toastify";
 import { AxiosError } from "axios";
@@ -17,6 +17,8 @@ interface IUserContext {
   sucessModal: boolean;
   setSucessModal: React.Dispatch<React.SetStateAction<boolean>>;
   loginUser: (data: Ilogin) => Promise<void>;
+  user: IUserProfileRequest | null;
+  setUser: React.Dispatch<React.SetStateAction<IUserProfileRequest | null>>;
   resetPassword: (data: IResetPasswordRequest, token: string | undefined) => Promise<void>;
 }
 
@@ -25,27 +27,28 @@ export const UserContext = createContext<IUserContext>({} as IUserContext);
 export const UserProvider = ({ children }: IUserContextProps) => {
   const [showModal, setShowModal] = useState("none");
   const [sucessModal, setSucessModal] = useState(false);
+  const [user, setUser] = useState<IUserProfileRequest | null>(null);
   const navigate = useNavigate();
 
 
-//   useEffect(() => {
-//     (async () => {
-//       const token = localStorage.getItem("@motorsShopToken");
+  useEffect(() => {
+    (async () => {
+      const token = localStorage.getItem("@motorsShopToken");
 
-//       if (token) {
-//                  try {
-//                       const responseApi = await getProfileUser(token);
-//                       navigate("/dashboard")
-//                  } catch (error) {
-//                       console.log(error);
-//                       localStorage.removeItem("@motorsShopToken");
-//                       navigate("/");
-//                  }
-//       } else {
-//            navigate("/");
-//       }
-//     })();
-//   }, []);
+      if (token) {
+                 try {
+                      const responseApi = await getProfileUser(token);
+                      navigate("/dashboard")
+                 } catch (error) {
+                      console.log(error);
+                      localStorage.removeItem("@motorsShopToken");
+                      navigate("/");
+                 }
+      } else {
+           navigate("/");
+      }
+    })();
+  }, []);
 
 
   const createdUser = async (data: IUserCreatedRequest) => {
@@ -156,6 +159,8 @@ export const UserProvider = ({ children }: IUserContextProps) => {
         sucessModal,
         setSucessModal,
         loginUser,
+        user,
+        setUser,
         resetPassword
       }}
     >
