@@ -80,3 +80,12 @@ export interface IUserProfileRequest {
   updatedAt: string;
   posts: IPosts[];
 }
+
+export interface IResetPassword {
+  password: string;
+  confirmedPassword: string;
+}
+
+export interface IResetPasswordRequest {
+  password: string;
+}

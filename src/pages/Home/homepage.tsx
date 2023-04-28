@@ -35,6 +35,77 @@ export const HomePage = () => {
     ListCarsKenzieContext
   );
 
+  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));
+  };
+
+  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilters((prevState) => ({ ...prevState, maxPrice: e.target.value }));
+  };
+
+  const handleFuelTypeClick = (fuelType: string) => {
+    setFilters((prevState) => ({ ...prevState, fuelType }));
+  };
+
+  const filterPosts = (posts: IPosts[]) => {
+    return posts.filter((post) => {
+      const {
+        brand,
+        model,
+        color,
+        year,
+        minKm,
+        maxKm,
+        minPrice,
+        maxPrice,
+        fuelType,
+      } = filters;
+
+      const brandMatch = !brand || post.mark === brand;
+      const modelMatch = !model || post.model === model;
+      const colorMatch =
+        !color || post.color.toLowerCase() === color.toLowerCase();
+      const yearMatch = !year || post.year === year;
+      const fuelTypeMatch =
+        !fuelType || post.fuelType.toLowerCase() === fuelType.toLowerCase();
+      const minKmMatch = !minKm || parseInt(post.kilometers) >= parseInt(minKm);
+      const maxKmMatch = !maxKm || parseInt(post.kilometers) <= parseInt(maxKm);
+      const minPriceMatch =
+        !minPrice || parseInt(post.price) >= parseInt(minPrice);
+      const maxPriceMatch =
+        !maxPrice || parseInt(post.price) <= parseInt(maxPrice);
+
+      return (
+        brandMatch &&
+        modelMatch &&
+        colorMatch &&
+        yearMatch &&
+        minKmMatch &&
+        maxKmMatch &&
+        minPriceMatch &&
+        maxPriceMatch &&
+        fuelTypeMatch
+      );
+    });
+  };
+
+  const filteredPosts = filterPosts(postsInfo);
+
+  const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
+
+  const capitalizeFirstLetter = (str: string): string => {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const uniqueFuelTypes = Array.from(
+    new Set(postsInfo.map((post) => post.fuelType))
+  )
+    .filter(Boolean)
+    .map((fuelType: string) => capitalizeFirstLetter(fuelType));
+
   useEffect(() => {
     if (selectedBrand) {
       const models = carDetails.map((car) => car.name);
@@ -97,78 +168,6 @@ export const HomePage = () => {
   const handleMaxKmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prevState) => ({ ...prevState, maxKm: e.target.value }));
   };
-
-  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));
-  };
-
-  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters((prevState) => ({ ...prevState, maxPrice: e.target.value }));
-  };
-
-  const handleFuelTypeClick = (fuelType: string) => {
-    setFilters((prevState) => ({ ...prevState, fuelType }));
-  };
-
-  const filterPosts = (posts: IPosts[]) => {
-    return posts.filter((post) => {
-      const {
-        brand,
-        model,
-        color,
-        year,
-        minKm,
-        maxKm,
-        minPrice,
-        maxPrice,
-        fuelType,
-      } = filters;
-
-      const brandMatch = !brand || post.mark === brand;
-      const modelMatch = !model || post.model === model;
-      const colorMatch =
-        !color || post.color.toLowerCase() === color.toLowerCase();
-      const yearMatch = !year || post.year === year;
-      const fuelTypeMatch =
-        !fuelType || post.fuelType.toLowerCase() === fuelType.toLowerCase();
-      const minKmMatch = !minKm || parseInt(post.kilometers) >= parseInt(minKm);
-      const maxKmMatch = !maxKm || parseInt(post.kilometers) <= parseInt(maxKm);
-      const minPriceMatch =
-        !minPrice || parseInt(post.price) >= parseInt(minPrice);
-      const maxPriceMatch =
-        !maxPrice || parseInt(post.price) <= parseInt(maxPrice);
-
-      return (
-        brandMatch &&
-        modelMatch &&
-        colorMatch &&
-        yearMatch &&
-        minKmMatch &&
-        maxKmMatch &&
-        minPriceMatch &&
-        maxPriceMatch &&
-        fuelTypeMatch
-      );
-    });
-  };
-
-  const filteredPosts = filterPosts(postsInfo);
-  // console.log(filteredPosts.length);
-
-  const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
-
-  const capitalizeFirstLetter = (str: string): string => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
-  const uniqueFuelTypes = Array.from(
-    new Set(postsInfo.map((post) => post.fuelType))
-  )
-    .filter(Boolean)
-    .map((fuelType: string) => capitalizeFirstLetter(fuelType));
 
   const uniqueColors = Array.from(
     new Set(postsInfo.map((post) => post.color))

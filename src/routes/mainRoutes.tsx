@@ -5,6 +5,8 @@ import { LoginPage } from "../pages/Login/login";
 import { RegisterPage } from "../pages/Register/register";
 import { DatailPostPage } from "../pages/DatailPost/datailPost";
 import { ProfilePage } from "../pages/Profile/profile";
+import { ModalPostsEdit } from "../components/ModalPostsEdit";
+import { ResetPassword } from "../pages/ResetPassword/resetPassword";
 
 export const RoutesMain = () => {
   return (
@@ -16,6 +18,7 @@ export const RoutesMain = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dashboard/:id" element={<DatailPostPage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="/resetpassword/:token" element={<ResetPassword />} />
       </Routes>
     </>
   );
