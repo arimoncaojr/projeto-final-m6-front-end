@@ -5,7 +5,6 @@ import { LoginPage } from "../pages/Login/login";
 import { RegisterPage } from "../pages/Register/register";
 import { DatailPostPage } from "../pages/DatailPost/datailPost";
 import { ProfilePage } from "../pages/Profile/profile";
-import { ModalPostsEdit } from "../components/ModalPostsEdit";
 import { ResetPassword } from "../pages/ResetPassword/resetPassword";
 
 export const RoutesMain = () => {
