@@ -2,8 +2,6 @@ import React, { useState, createContext } from "react";
 import { toast } from "react-toastify";
 import { Api } from "../services/api";
 import { IImages } from "./ListPostsContext";
-import { IPostInfo } from "./ModalCreatePostsContext";
-
 interface IModalEditPostsContextProps {
   children: React.ReactNode;
 }
@@ -29,9 +27,24 @@ export interface IPostInfoEdit {
   color?: string;
   kilometers?: string;
   description?: string;
-  isActive?: string;
+  isActive?: string | boolean;
   imageCap?: string;
   images?: IImages[];
+}
+
+interface IPostInfo {
+  mark: string;
+  model: string;
+  year: string;
+  fuelType: string;
+  price: string;
+  tablePriceFiper: string;
+  color: string;
+  isActive: boolean;
+  kilometers: string;
+  description?: string;
+  imageCap: string;
+  images: IImages[];
 }
 
 export const ModalEditPostsContext = createContext<IModalEditPostsContext>(
@@ -42,7 +55,7 @@ export const ModalEditPostsProvider = ({
   children,
 }: IModalEditPostsContextProps) => {
   const token: string =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlT2ZBY2NvdW50IjoiY29tcHJhZG9yIiwiaWF0IjoxNjgyNTE5MTkxLCJleHAiOjE2ODI2MDU1OTEsInN1YiI6IjBiMGQ3MzZiLTIxNDMtNDMyNy05MmEyLTI5ZTgxNTQ2MmVjOSJ9.lSx9wx-moJnldQ2ZnnKlcnuAnZ5kcLBwsFeE4__fLJ8";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlT2ZBY2NvdW50IjoiY29tcHJhZG9yIiwiaWF0IjoxNjgyNjg5NTcxLCJleHAiOjE2ODI3NzU5NzEsInN1YiI6IjBiMGQ3MzZiLTIxNDMtNDMyNy05MmEyLTI5ZTgxNTQ2MmVjOSJ9.gYpKFkQntnfvpDaV8KHqftTgXpR0dW9U-JZjjc-TEzs";
 
   const [modalEditPost, showModalEditPost] = useState<boolean>(false);
   const [idPost, setIdPost] = useState<string>("");
@@ -54,6 +67,7 @@ export const ModalEditPostsProvider = ({
     price: "",
     tablePriceFiper: "",
     color: "",
+    isActive: true,
     kilometers: "",
     description: "",
     imageCap: "",

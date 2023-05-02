@@ -22,7 +22,7 @@ import {
   YesAndNoDiv,
 } from "../ModalPostsCreate/indexStyle";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { editSchema } from "../../schemas/yupEditPost";
@@ -42,6 +42,12 @@ export const ModalPostsEdit = () => {
   const [valueDescription, setValueDescription] = useState<string>("");
   const [valueImg, setValueImg] = useState<string>("");
   //   const [isActive, setIsActive] = useState<boolean>(true);
+
+  const countImages = () => {
+    if (infoPost.images && infoPost.images.length > 0) {
+      setImageCount(infoPost.images.length);
+    }
+  };
 
   const checkInputs = () => {
     if (
@@ -64,6 +70,10 @@ export const ModalPostsEdit = () => {
   );
   const { submitEditedPostInfo, showModalEditPost, infoPost, listPostById } =
     useContext(ModalEditPostsContext);
+
+  useEffect(() => {
+    countImages();
+  }, [infoPost]);
 
   const {
     register,
@@ -149,6 +159,7 @@ export const ModalPostsEdit = () => {
     if (modelInfo) {
       setValue("fuelType", fuelTypeLabel(modelInfo.fuel));
       setValue("tablePriceFiper", `${formatPrice(modelInfo.value)}`);
+      setValue("model", selectedModel);
       setFuelType(modelInfo.fuel);
       setTablePriceFipe(modelInfo.value);
       clearErrors("tablePriceFiper");
@@ -183,7 +194,7 @@ export const ModalPostsEdit = () => {
 
   return (
     <ContainerModal>
-      <FormModal>
+      <FormModal onSubmit={handleSubmit(submitEditedPostInfo)}>
         <TitleAndButton>
           <TitlePost>Editar Anúncio</TitlePost>
           <CloseBtn
@@ -207,36 +218,6 @@ export const ModalPostsEdit = () => {
           >
             Botão de Teste
           </button>
-          <Label errorColor={errors.mark ? "red" : "#212529"} htmlFor="mark">
-            {getLabelContent("mark.message", "Marca")}
-          </Label>
-          <BigSelect
-            id="mark"
-            value={infoPost.mark}
-            {...register("mark", { onChange: handleBrandChange })}
-          >
-            <option value="">Selecione</option>
-            {Object.keys(carBrandsInfo).map((brand) => (
-              <option key={brand} value={brand}>
-                {capitalizeFirstLetter(brand)}
-              </option>
-            ))}
-          </BigSelect>
-          <Label errorColor={errors.model ? "red" : "#212529"} htmlFor="model">
-            {errors.model ? errors.model.message : "Modelo"}
-          </Label>
-          <BigSelect
-            id="model"
-            value={infoPost.model}
-            {...register("model", { onChange: handleModelChange })}
-          >
-            <option value="">Selecione</option>
-            {carDetails.map((model) => (
-              <option key={model.id} value={model.name}>
-                {capitalizeFirstLetter(model.name)}
-              </option>
-            ))}
-          </BigSelect>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
               <Label
@@ -311,7 +292,7 @@ export const ModalPostsEdit = () => {
               <SmallInput
                 id="kilometers"
                 placeholder="ex: 30.000"
-                value={infoPost.kilometers}
+                value={formatKmInput(infoPost.kilometers)}
                 {...register("kilometers", {
                   onChange: (e) => {
                     setValue("kilometers", e.target.value);
@@ -333,11 +314,7 @@ export const ModalPostsEdit = () => {
               </Label>
               <SmallInput
                 id="tablePriceFiper"
-                value={
-                  tablePriceFipe
-                    ? `R$ ${formatPrice(Number(infoPost.tablePriceFiper))}`
-                    : ""
-                }
+                value={`R$ ${formatPrice(Number(infoPost.tablePriceFiper))}`}
                 readOnly
                 {...register("tablePriceFiper")}
               />
@@ -352,7 +329,7 @@ export const ModalPostsEdit = () => {
               <SmallInput
                 id="price"
                 placeholder="ex: R$ 50.000"
-                value={infoPost.price}
+                value={`R$ ${formatPriceInput(infoPost.price)}`}
                 {...register("price", {
                   onChange: (e) => {
                     setValue("price", e.target.value);
