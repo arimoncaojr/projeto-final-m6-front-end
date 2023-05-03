@@ -22,7 +22,7 @@ import {
   YesAndNoDiv,
 } from "../ModalPostsCreate/indexStyle";
 import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { editSchema } from "../../schemas/yupEditPost";
@@ -31,7 +31,7 @@ import { toast } from "react-toastify";
 import { get } from "lodash";
 import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
 
-export const ModalPostsCreate = () => {
+export const ModalPostsEdit = () => {
   const [fuelType, setFuelType] = useState<number | null>(null);
   const [tablePriceFipe, setTablePriceFipe] = useState<number | null>(null);
   const [imageCount, setImageCount] = useState<number>(2);
@@ -42,6 +42,12 @@ export const ModalPostsCreate = () => {
   const [valueDescription, setValueDescription] = useState<string>("");
   const [valueImg, setValueImg] = useState<string>("");
   //   const [isActive, setIsActive] = useState<boolean>(true);
+
+  const countImages = () => {
+    if (infoPost.images && infoPost.images.length > 0) {
+      setImageCount(infoPost.images.length);
+    }
+  };
 
   const checkInputs = () => {
     if (
@@ -62,9 +68,12 @@ export const ModalPostsCreate = () => {
   const { carBrandsInfo, carDetails, getCarDetails } = useContext(
     ListCarsKenzieContext
   );
-  const { submitEditedPostInfo, showModalEditPost } = useContext(
-    ModalEditPostsContext
-  );
+  const { submitEditedPostInfo, showModalEditPost, infoPost, listPostById } =
+    useContext(ModalEditPostsContext);
+
+  useEffect(() => {
+    countImages();
+  }, [infoPost]);
 
   const {
     register,
@@ -106,6 +115,7 @@ export const ModalPostsCreate = () => {
           <BigInput
             key={`image${i + 1 + 1}`}
             id={`image${i + 1}`}
+            value={infoPost.images[i]?.imageLink}
             {...register(`images.${i}.imageLink`, { required: false })}
           />
         </>
@@ -149,6 +159,7 @@ export const ModalPostsCreate = () => {
     if (modelInfo) {
       setValue("fuelType", fuelTypeLabel(modelInfo.fuel));
       setValue("tablePriceFiper", `${formatPrice(modelInfo.value)}`);
+      setValue("model", selectedModel);
       setFuelType(modelInfo.fuel);
       setTablePriceFipe(modelInfo.value);
       clearErrors("tablePriceFiper");
@@ -198,34 +209,15 @@ export const ModalPostsCreate = () => {
         </TitleAndButton>
         <ContentWrapper>
           <SubTitlePost>Informações do veículo</SubTitlePost>
-          <Label errorColor={errors.mark ? "red" : "#212529"} htmlFor="mark">
-            {getLabelContent("mark.message", "Marca")}
-          </Label>
-          <BigSelect
-            id="mark"
-            {...register("mark", { onChange: handleBrandChange })}
+          <button
+            type="button"
+            onClick={() => {
+              listPostById();
+              console.log(infoPost);
+            }}
           >
-            <option value="">Selecione</option>
-            {Object.keys(carBrandsInfo).map((brand) => (
-              <option key={brand} value={brand}>
-                {capitalizeFirstLetter(brand)}
-              </option>
-            ))}
-          </BigSelect>
-          <Label errorColor={errors.model ? "red" : "#212529"} htmlFor="model">
-            {errors.model ? errors.model.message : "Modelo"}
-          </Label>
-          <BigSelect
-            id="model"
-            {...register("model", { onChange: handleModelChange })}
-          >
-            <option value="">Selecione</option>
-            {carDetails.map((model) => (
-              <option key={model.id} value={model.name}>
-                {capitalizeFirstLetter(model.name)}
-              </option>
-            ))}
-          </BigSelect>
+            Botão de Teste
+          </button>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
               <Label
@@ -234,7 +226,11 @@ export const ModalPostsCreate = () => {
               >
                 {errors.fuelType ? errors.fuelType.message : "Combustível"}
               </Label>
-              <SmallSelect id="fuelType" {...register("fuelType")}>
+              <SmallSelect
+                id="fuelType"
+                value={infoPost.fuelType}
+                {...register("fuelType")}
+              >
                 <option value="">Selecione</option>
                 <option value="flex">Flex</option>
                 <option value="hibrido">Híbrido</option>
@@ -251,6 +247,7 @@ export const ModalPostsCreate = () => {
               <SmallInput
                 id="year"
                 placeholder="ex: 2018"
+                value={infoPost.year}
                 {...register("year", {
                   onChange: (e) => setValueYear(e.target.value),
                 })}
@@ -267,6 +264,7 @@ export const ModalPostsCreate = () => {
               </Label>
               <SmallSelect
                 id="color"
+                value={infoPost.color}
                 {...register("color", {
                   onChange: (e) => setValueColor(e.target.value),
                 })}
@@ -294,7 +292,7 @@ export const ModalPostsCreate = () => {
               <SmallInput
                 id="kilometers"
                 placeholder="ex: 30.000"
-                value={formattedKm}
+                value={formatKmInput(infoPost.kilometers)}
                 {...register("kilometers", {
                   onChange: (e) => {
                     setValue("kilometers", e.target.value);
@@ -316,9 +314,7 @@ export const ModalPostsCreate = () => {
               </Label>
               <SmallInput
                 id="tablePriceFiper"
-                value={
-                  tablePriceFipe ? `R$ ${formatPrice(tablePriceFipe)}` : ""
-                }
+                value={`R$ ${formatPrice(Number(infoPost.tablePriceFiper))}`}
                 readOnly
                 {...register("tablePriceFiper")}
               />
@@ -333,7 +329,7 @@ export const ModalPostsCreate = () => {
               <SmallInput
                 id="price"
                 placeholder="ex: R$ 50.000"
-                value={formattedPrice}
+                value={`R$ ${formatPriceInput(infoPost.price)}`}
                 {...register("price", {
                   onChange: (e) => {
                     setValue("price", e.target.value);
@@ -350,6 +346,7 @@ export const ModalPostsCreate = () => {
             {errors.description ? errors.description.message : "Descrição"}
           </Label>
           <TextArea
+            value={infoPost.description}
             {...register("description", {
               onChange: (e) => setValueDescription(e.target.value),
             })}
@@ -372,6 +369,7 @@ export const ModalPostsCreate = () => {
           </Label>
           <BigInput
             id="imageCap"
+            value={infoPost.imageCap}
             {...register("imageCap", {
               onChange: (e) => setValueImg(e.target.value),
             })}
@@ -386,7 +384,11 @@ export const ModalPostsCreate = () => {
               ? errors.images[0].imageLink.message
               : "1° Imagem da galeria"}
           </Label>
-          <BigInput id="firstImage" {...register("images.0.imageLink")} />
+          <BigInput
+            id="firstImage"
+            value={infoPost.images[0]?.imageLink}
+            {...register("images.0.imageLink")}
+          />
           <Label
             errorColor={
               errors.images && errors.images[1]?.imageLink ? "red" : "#212529"
@@ -397,7 +399,11 @@ export const ModalPostsCreate = () => {
               ? errors.images[1].imageLink.message
               : "2° Imagem da galeria"}
           </Label>
-          <BigInput id="secondImage" {...register("images.1.imageLink")} />
+          <BigInput
+            id="secondImage"
+            value={infoPost.images[1]?.imageLink}
+            {...register("images.1.imageLink")}
+          />
           {renderAdditionalImages()}
           <AddImageBtn
             type="button"

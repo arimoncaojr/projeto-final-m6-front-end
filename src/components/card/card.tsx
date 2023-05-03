@@ -16,6 +16,7 @@ interface IPostCardProps {
 
 export const Card = ({ post, type }: IPostCardProps) => {
   const [indexImg, setIndexImg] = useState(0);
+
   const handleClickImg = (button: string) => {
     const sizeDbImg = dbImg.length - 1;
 
@@ -52,12 +53,10 @@ export const Card = ({ post, type }: IPostCardProps) => {
     match.toUpperCase()
   );
   const firstLetter = post.user.name.split(" ")[0][0];
-  const secondLetter = " "; //post.user.name.split(" ")[1][0];
+  const secondLetter = post.user.name.split(" ")[1][0];
   const cipher = (firstLetter + secondLetter).toUpperCase();
   const dbImg = [{ imageLink: post.imageCap }, ...post.images];
   const disableButton = dbImg.length === 1 ? true : false;
-
-  console.log(dbImg.length);
 
   return (
     <CardStyle isActive={isActive}>

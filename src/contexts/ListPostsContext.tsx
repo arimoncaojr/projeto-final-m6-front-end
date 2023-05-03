@@ -13,10 +13,10 @@ interface IUser {
 }
 
 export interface IImages {
-  imageLink: string;
+  imageLink?: string;
 }
 
-interface IComments {
+export interface IComments {
   id: string;
   description: string;
   userComment: string;
