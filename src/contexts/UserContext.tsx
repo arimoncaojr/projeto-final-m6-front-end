@@ -25,24 +25,24 @@ export const UserProvider = ({ children }: IUserContextProps) => {
   const [sucessModal, setSucessModal] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => {
-      const token = localStorage.getItem("@motorsShopToken");
+  // useEffect(() => {
+  //   (async () => {
+  //     const token = localStorage.getItem("@motorsShopToken");
 
-      if (token) {
-        try {
-          const responseApi = await getProfileUser(token);
-          navigate("/dashboard");
-        } catch (error) {
-          console.log(error);
-          localStorage.removeItem("@motorsShopToken");
-          navigate("/");
-        }
-      } else {
-        navigate("/");
-      }
-    })();
-  }, []);
+  //     if (token) {
+  //       try {
+  //         const responseApi = await getProfileUser(token);
+  //         navigate("/dashboard");
+  //       } catch (error) {
+  //         console.log(error);
+  //         localStorage.removeItem("@motorsShopToken");
+  //         navigate("/");
+  //       }
+  //     } else {
+  //       navigate("/");
+  //     }
+  //   })();
+  // }, []);
 
   const createdUser = async (data: IUserCreatedRequest) => {
     try {
