@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useContext, useState } from "react";
 import {
   BackGroundContainer,
   ModalContainer,
@@ -7,7 +7,7 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { updateUserSchema } from "../../schemas/yupEditProfile";
-import { IUserPostResponse, IUserUpdate } from "../../interfaces/user";
+import { IUserUpdate } from "../../interfaces/user";
 import InputMask from "react-input-mask";
 import { Api } from "../../services/api";
 import { Flip, toast } from "react-toastify";
@@ -17,6 +17,7 @@ import {
   InputsContainerStyle,
 } from "./ModalProfileEditDeleteStyle";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext";
 
 interface IModalProfileProps {
   setShowModalProfile: React.Dispatch<SetStateAction<boolean>>;
@@ -25,8 +26,8 @@ interface IModalProfileProps {
 const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
   setShowModalProfile,
 }) => {
+  const { user, setUser } = useContext(UserContext);
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const [user, setUser] = useState<IUserPostResponse | null>(null);
   const navigate = useNavigate();
 
   const formatedDataforRequest = (obj: IUserUpdate) => {
@@ -40,26 +41,6 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
     );
   };
 
-  useEffect(() => {
-    const token = window.localStorage.getItem("@motorsShopToken");
-    const getUser = async () => {
-      try {
-        const { data } = await Api.get<IUserPostResponse>("/users/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(data);
-        console.log(user);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getUser();
-  }, []);
-
   const updateUser = async (data: IUserUpdate) => {
     const dataRequest = formatedDataforRequest(data);
     const token = window.localStorage.getItem("@motorsShopToken");
@@ -69,11 +50,12 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
     if (token) {
       try {
         setLoadingBtn(true);
-        await Api.patch("/users/profile", dataRequest, {
+        const { data } = await Api.patch("/users/profile", dataRequest, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        setUser(data);
         toast.update(loadingToast, {
           render: "Dados atualizados",
           type: "success",
@@ -205,9 +187,8 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
               <label>Nome</label>
               <input
                 type="text"
-                placeholder="Digite seu nome"
                 {...register("name")}
-                // defaultValue={}
+                defaultValue={user?.name}
               />
               <p className="erroMenssage">{errors.name?.message}</p>
             </InputDivStyle>
@@ -217,6 +198,7 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
                 type="text"
                 placeholder="Digite seu email"
                 {...register("email")}
+                defaultValue={user?.email}
               />
               <p className="erroMenssage">{errors.email?.message}</p>
             </InputDivStyle>
@@ -227,6 +209,7 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
                 type="text"
                 placeholder="000.000.000-00"
                 {...register("cpf")}
+                defaultValue={user?.cpf}
               />
               <p className="erroMenssage">{errors.cpf?.message}</p>
             </InputDivStyle>
@@ -237,16 +220,13 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
                 type="text"
                 placeholder="(00) 00000-0000"
                 {...register("phoneNumber")}
+                defaultValue={user?.phoneNumber}
               />
               <p className="erroMenssage">{errors.phoneNumber?.message}</p>
             </InputDivStyle>
             <InputDivStyle>
               <label>Data de nascimento</label>
-              <input
-                type="date"
-                placeholder="00/00/0000"
-                {...register("dateOfBirth")}
-              />
+              <input type="date" {...register("dateOfBirth")} />
               <p className="erroMenssage">{errors.dateOfBirth?.message}</p>
             </InputDivStyle>
             <InputDivStyle>
@@ -255,6 +235,7 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
                 type="text"
                 placeholder="Digite sua descrição"
                 {...register("description")}
+                defaultValue={user?.description}
               />
               <p className="erroMenssage">{errors.description?.message}</p>
             </InputDivStyle>

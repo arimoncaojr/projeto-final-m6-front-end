@@ -48,7 +48,8 @@ export const UserProvider = ({ children }: IUserContextProps) => {
 
       if (token) {
         try {
-          const responseApi = await getProfileUser(token);
+          const { data } = await getProfileUser(token);
+          setUser(data);
           navigate("/dashboard");
         } catch (error) {
           console.log(error);
