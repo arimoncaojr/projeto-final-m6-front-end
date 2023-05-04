@@ -54,8 +54,7 @@ export const ModalEditPostsContext = createContext<IModalEditPostsContext>(
 export const ModalEditPostsProvider = ({
   children,
 }: IModalEditPostsContextProps) => {
-  const token: string =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlT2ZBY2NvdW50IjoiY29tcHJhZG9yIiwiaWF0IjoxNjgyNjg5NTcxLCJleHAiOjE2ODI3NzU5NzEsInN1YiI6IjBiMGQ3MzZiLTIxNDMtNDMyNy05MmEyLTI5ZTgxNTQ2MmVjOSJ9.gYpKFkQntnfvpDaV8KHqftTgXpR0dW9U-JZjjc-TEzs";
+  const token: string | null = localStorage.getItem("motorsShop:Token");
 
   const [modalEditPost, showModalEditPost] = useState<boolean>(false);
   const [idPost, setIdPost] = useState<string>("");
@@ -99,15 +98,11 @@ export const ModalEditPostsProvider = ({
       images: formattedImages,
     };
 
-    Api.patch(
-      `/posts/425b558a-b041-4ab7-8232-7486d2bdaaff`,
-      formattedInfoData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    Api.patch(`/posts/${idPost}`, formattedInfoData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         toast.success("Anúncio atualizado com sucesso!");
         showModalEditPost(false);
@@ -118,7 +113,7 @@ export const ModalEditPostsProvider = ({
   };
 
   const listPostById = () => {
-    Api.get<IPostInfo>(`/posts/425b558a-b041-4ab7-8232-7486d2bdaaff`, {
+    Api.get<IPostInfo>(`/posts/${idPost}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
