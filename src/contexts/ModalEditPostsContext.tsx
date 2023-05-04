@@ -15,6 +15,7 @@ interface IModalEditPostsContext {
   showModalEditPost: React.Dispatch<React.SetStateAction<boolean>>;
   submitEditedPostInfo: (infoData: Partial<IPostInfoEdit>) => void;
   listPostById: () => void;
+  deletePost: () => void;
 }
 
 export interface IPostInfoEdit {
@@ -124,6 +125,15 @@ export const ModalEditPostsProvider = ({
       });
   };
 
+  const deletePost = () => {
+    Api.delete(`/posts/${idPost}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then(() => {
+      toast.success("Anúncio deletado com sucesso!");
+      showModalEditPost(false);
+    });
+  };
+
   return (
     <ModalEditPostsContext.Provider
       value={{
@@ -135,6 +145,7 @@ export const ModalEditPostsProvider = ({
         listPostById,
         showModalEditPost,
         submitEditedPostInfo,
+        deletePost,
       }}
     >
       {children}
