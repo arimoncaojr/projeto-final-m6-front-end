@@ -59,6 +59,7 @@ export const InputDivStyle = styled.div`
 
 export const ButtonsConatinerStyle = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
 
   margin-top: 30px;

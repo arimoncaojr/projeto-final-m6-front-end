@@ -13,7 +13,6 @@ import {
   resetPasswordUser,
 } from "../services/api";
 import { toast, Flip } from "react-toastify";
-import { AxiosError } from "axios";
 
 interface IUserContextProps {
   children: React.ReactNode;
@@ -43,23 +42,19 @@ export const UserProvider = ({ children }: IUserContextProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
+    const autoLogin = async () => {
       const token = localStorage.getItem("@motorsShopToken");
-
       if (token) {
         try {
           const { data } = await getProfileUser(token);
           setUser(data);
-          navigate("/dashboard");
         } catch (error) {
           console.log(error);
-          localStorage.removeItem("@motorsShopToken");
-          navigate("/");
+          localStorage.clear();
         }
-      } else {
-        navigate("/");
       }
-    })();
+    };
+    autoLogin();
   }, []);
 
   const createdUser = async (data: IUserCreatedRequest) => {
@@ -80,6 +75,9 @@ export const UserProvider = ({ children }: IUserContextProps) => {
     try {
       const token = await loginApi(data);
       localStorage.setItem("@motorsShopToken", token.data.token);
+
+      const getUser = await getProfileUser(token.data.token);
+      setUser(getUser.data);
 
       toast.update(loadingToast, {
         render: "Seja bem vindo",
