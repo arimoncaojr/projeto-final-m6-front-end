@@ -68,8 +68,13 @@ export const ModalPostsEdit = () => {
   const { carBrandsInfo, carDetails, getCarDetails } = useContext(
     ListCarsKenzieContext
   );
-  const { submitEditedPostInfo, showModalEditPost, infoPost, listPostById } =
-    useContext(ModalEditPostsContext);
+  const {
+    submitEditedPostInfo,
+    showModalEditPost,
+    infoPost,
+    listPostById,
+    deletePost,
+  } = useContext(ModalEditPostsContext);
 
   useEffect(() => {
     countImages();
@@ -422,7 +427,7 @@ export const ModalPostsEdit = () => {
               widthChange={"262px"}
               type="button"
               onClick={() => {
-                showModalEditPost(false);
+                deletePost();
                 reset();
               }}
             >
