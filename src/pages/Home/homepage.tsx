@@ -9,14 +9,11 @@ import {
   MdKeyboardDoubleArrowLeft as Back,
 } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
-import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
 import { IPosts, ListPostsContext } from "../../contexts/ListPostsContext";
 import { InputStyle } from "../../components/input/inputStyle";
 
 export const HomePage = () => {
   const [filterClickMobile, setFilterClickMobile] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [selectedModels, setSelectedModels] = useState<string[]>([]);
   const [showClearFiltersButton, setShowClearFiltersButton] = useState(false);
   const [filters, setFilters] = useState({
     brand: "",
@@ -29,11 +26,9 @@ export const HomePage = () => {
     maxPrice: "",
     fuelType: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { postsInfo } = useContext(ListPostsContext);
-  const { carBrandsInfo, carDetails, getCarDetails } = useContext(
-    ListCarsKenzieContext
-  );
 
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));
@@ -91,6 +86,14 @@ export const HomePage = () => {
 
   const filteredPosts = filterPosts(postsInfo);
 
+  const totalPages = Math.ceil(filteredPosts.length / 9);
+
+  const paginatedPosts = (posts: IPosts[], page: number) => {
+    const startIndex = (page - 1) * 9;
+    const endIndex = startIndex + 9;
+    return posts.slice(startIndex, endIndex);
+  };
+
   const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
 
   const capitalizeFirstLetter = (str: string): string => {
@@ -106,21 +109,6 @@ export const HomePage = () => {
     .filter(Boolean)
     .map((fuelType: string) => capitalizeFirstLetter(fuelType));
 
-  useEffect(() => {
-    if (selectedBrand) {
-      const models = carDetails.map((car) => car.name);
-      setSelectedModels(models);
-    } else {
-      const initialModels: string[] = [];
-      Object.entries(carBrandsInfo).forEach(([_, models]) => {
-        if (models.length > 0) {
-          initialModels.push(models[0].name);
-        }
-      });
-      setSelectedModels(initialModels);
-    }
-  }, [carBrandsInfo, carDetails, selectedBrand]);
-
   const hasActiveFilters = () => {
     return Object.values(filters).some((filterValue) => filterValue !== "");
   };
@@ -129,28 +117,19 @@ export const HomePage = () => {
     setShowClearFiltersButton(hasActiveFilters());
   }, [filters]);
 
-  const clearFilters = () => {
-    setFilters({
-      brand: "",
-      model: "",
-      color: "",
-      year: "",
-      minKm: "",
-      maxKm: "",
-      minPrice: "",
-      maxPrice: "",
-      fuelType: "",
-    });
-  };
-
   const handleBrandClick = (brand: string) => {
-    setSelectedBrand(brand);
     setFilters((prevState) => ({ ...prevState, brand }));
-    getCarDetails(brand);
+    setDisplayedModels(filterModelsByBrand(brand));
+    setDisplayedColors(filterColorsByBrand(brand));
+    setDisplayedYears(filterYearsByBrand(brand));
+    setDisplayedFuelTypes(filterFuelTypesByBrand(brand));
   };
 
   const handleModelClick = (model: string) => {
     setFilters((prevState) => ({ ...prevState, model }));
+    setDisplayedColors(filterColorsByModel(filters.brand, model));
+    setDisplayedYears(filterYearsByModel(filters.brand, model));
+    setDisplayedFuelTypes(filterFuelTypesByModel(filters.brand, model));
   };
 
   const handleColorClick = (color: string) => {
@@ -173,8 +152,141 @@ export const HomePage = () => {
     new Set(postsInfo.map((post) => post.color))
   ).map((color: string) => capitalizeFirstLetter(color));
 
+  const uniqueBrands = Array.from(new Set(postsInfo.map((post) => post.mark)));
+
+  const uniqueModels = Array.from(new Set(postsInfo.map((post) => post.model)));
+
   const HandleFilterMobileClick = () => {
     setFilterClickMobile(!filterClickMobile);
+  };
+
+  const [displayedModels, setDisplayedModels] =
+    useState<string[]>(uniqueModels);
+  const [displayedColors, setDisplayedColors] =
+    useState<string[]>(uniqueColors);
+  const [displayedYears, setDisplayedYears] = useState<string[]>(uniqueYears);
+  const [displayedFuelTypes, setDisplayedFuelTypes] =
+    useState<string[]>(uniqueFuelTypes);
+
+  const filterModelsByBrand = (selectedBrand: string): string[] => {
+    if (!selectedBrand) return uniqueModels;
+    const models = postsInfo
+      .filter((post) => post.mark === selectedBrand)
+      .map((post) => post.model);
+
+    return Array.from(new Set(models));
+  };
+
+  const filterColorsByBrand = (selectedBrand: string): string[] => {
+    if (!selectedBrand) return uniqueColors;
+    const colors = postsInfo
+      .filter((post) => post.mark === selectedBrand)
+      .map((post) => post.color);
+    return Array.from(new Set(colors)).map((color: string) =>
+      capitalizeFirstLetter(color)
+    );
+  };
+
+  const filterYearsByBrand = (selectedBrand: string): string[] => {
+    if (!selectedBrand) return uniqueYears;
+    const years = postsInfo
+      .filter((post) => post.mark === selectedBrand)
+      .map((post) => post.year);
+    return Array.from(new Set(years));
+  };
+
+  const filterFuelTypesByBrand = (selectedBrand: string): string[] => {
+    if (!selectedBrand) return uniqueFuelTypes;
+    const fuelTypes = postsInfo
+      .filter((post) => post.mark === selectedBrand)
+      .map((post) => post.fuelType);
+    return Array.from(new Set(fuelTypes)).map((fuelType: string) =>
+      capitalizeFirstLetter(fuelType)
+    );
+  };
+
+  const filterColorsByModel = (
+    selectedBrand: string,
+    selectedModel: string
+  ): string[] => {
+    if (!selectedBrand || !selectedModel) return uniqueColors;
+    const colors = postsInfo
+      .filter(
+        (post) => post.mark === selectedBrand && post.model === selectedModel
+      )
+      .map((post) => post.color);
+
+    return Array.from(new Set(colors)).map((color: string) =>
+      capitalizeFirstLetter(color)
+    );
+  };
+
+  const filterYearsByModel = (
+    selectedBrand: string,
+    selectedModel: string
+  ): string[] => {
+    if (!selectedBrand || !selectedModel) return uniqueYears;
+    const years = postsInfo
+      .filter(
+        (post) => post.mark === selectedBrand && post.model === selectedModel
+      )
+      .map((post) => post.year);
+
+    return Array.from(new Set(years));
+  };
+
+  const filterFuelTypesByModel = (
+    selectedBrand: string,
+    selectedModel: string
+  ): string[] => {
+    if (!selectedBrand || !selectedModel) return uniqueFuelTypes;
+    const fuelTypes = postsInfo
+      .filter(
+        (post) => post.mark === selectedBrand && post.model === selectedModel
+      )
+      .map((post) => post.fuelType);
+
+    return Array.from(new Set(fuelTypes)).map((fuelType: string) =>
+      capitalizeFirstLetter(fuelType)
+    );
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      brand: "",
+      model: "",
+      color: "",
+      year: "",
+      minKm: "",
+      maxKm: "",
+      minPrice: "",
+      maxPrice: "",
+      fuelType: "",
+    });
+    setDisplayedModels([]);
+    setDisplayedColors([]);
+    setDisplayedFuelTypes([]);
+    setDisplayedYears([]);
+  };
+
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handleFirstPageClick = () => {
+    setCurrentPage(1);
+  };
+
+  const handleLastPageClick = () => {
+    setCurrentPage(totalPages);
   };
 
   return (
@@ -188,7 +300,7 @@ export const HomePage = () => {
         <section className="wrapperContainer">
           <div className="cardsContainer">
             {filteredPosts.length > 0 ? (
-              filteredPosts.map((post) => (
+              paginatedPosts(filteredPosts, currentPage).map((post) => (
                 <Card key={post.id} post={post} type="home" />
               ))
             ) : (
@@ -206,7 +318,7 @@ export const HomePage = () => {
               </div>
               <h2>Marca</h2>
               <div>
-                {Object.keys(carBrandsInfo).map((brand) => (
+                {uniqueBrands.map((brand) => (
                   <Button
                     key={brand}
                     typeStyle="filter"
@@ -218,7 +330,7 @@ export const HomePage = () => {
               </div>
               <h2>Modelo</h2>
               <div>
-                {selectedModels.map((model, index) => (
+                {displayedModels.map((model, index) => (
                   <Button
                     key={index}
                     typeStyle="filter"
@@ -230,7 +342,7 @@ export const HomePage = () => {
               </div>
               <h2>Cor</h2>
               <div>
-                {uniqueColors.map((color: string, index: number) => (
+                {displayedColors.map((color: string, index: number) => (
                   <Button
                     key={index}
                     typeStyle="filter"
@@ -242,7 +354,7 @@ export const HomePage = () => {
               </div>
               <h2>Ano</h2>
               <div>
-                {uniqueYears.map((year: string, index: number) => (
+                {displayedYears.map((year: string, index: number) => (
                   <Button
                     key={index}
                     typeStyle="filter"
@@ -254,7 +366,7 @@ export const HomePage = () => {
               </div>
               <h2>Combustível</h2>
               <div>
-                {uniqueFuelTypes.map((fuelType: string, index: number) => (
+                {displayedFuelTypes.map((fuelType: string, index: number) => (
                   <Button
                     key={index}
                     typeStyle="filter"
@@ -315,13 +427,25 @@ export const HomePage = () => {
           </div>
         </section>
         <div className="paginationContainer">
+          {currentPage > 1 && (
+            <>
+              <button onClick={handlePreviousClick}>Voltar</button>
+              <button onClick={handleFirstPageClick}>
+                <Back />
+              </button>
+            </>
+          )}
           <p>
-            {" "}
-            1 <span>de 2 </span>
+            {currentPage} <span>de {totalPages} </span>
           </p>
-          <button>
-            Seguinte <Next />{" "}
-          </button>
+          {currentPage < totalPages && (
+            <>
+              <button onClick={handleNextClick}>Seguinte</button>
+              <button onClick={handleLastPageClick}>
+                <Next />
+              </button>
+            </>
+          )}
         </div>
       </MainContainer>
       <Footer />
