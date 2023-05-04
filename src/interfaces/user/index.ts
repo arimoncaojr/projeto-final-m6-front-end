@@ -46,6 +46,17 @@ export interface IUserCreatedRequest {
   password: string;
 }
 
+export interface IUserUpdate {
+  name?: string | null;
+  email?: string | null;
+  cpf?: string | null;
+  phoneNumber?: string | null;
+  dateOfBirth?: Date | null;
+  description?: string | null;
+  password?: string | null;
+  confirmPassword?: string | null;
+}
+
 export interface IPostUser {
   id: string;
   isActive: boolean;

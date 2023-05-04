@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/header/header";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Api } from "../../services/api";
 import { IComment, INewComment, IPost } from "../../interfaces/post";
 import { Footer } from "../../components/footer/footer";
@@ -26,34 +26,33 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { newCommentSchema } from "../../schemas/yupCreateComment";
 import { Flip, toast } from "react-toastify";
-
-interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  cpf: string;
-  phoneNumber: string;
-  dateOfBirth: string;
-  description: string;
-  typeOfAccount: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { UserContext } from "../../contexts/UserContext";
 
 export const DatailPostPage = () => {
-  const user: IUser = {
-    id: "0fa67b2a-c5f6-4bde-91d7-2248599fbc26",
-    name: "pedro",
-    email: "pedro@mail.com",
-    cpf: "12345678901",
-    phoneNumber: "11920055768",
-    dateOfBirth: "1996-11-08T02:00:00.000Z",
-    description: "sou um usuário me registrando nessa plataforma",
-    typeOfAccount: "comprador",
-    isActive: true,
-    createdAt: "2023-04-11T18:04:15.653Z",
-    updatedAt: "2023-04-11T18:04:15.653Z",
+  const { user } = useContext(UserContext);
+
+  const renderTimeSinceComment = (dateComment: string): string => {
+    const time = Number(new Date()) - Number(new Date(dateComment));
+    const minutes = Math.round(time / 60000);
+    const hours = Math.round(time / 3600000);
+    const days = Math.round(time / 86400000);
+
+    if (minutes < 60) {
+      if (minutes < 1) {
+        return "há 1 minuto";
+      }
+      return `há ${minutes} minutos`;
+    } else if (hours < 24) {
+      if (hours < 1) {
+        return "há 1 hora";
+      }
+      return `há ${hours} horas`;
+    } else {
+      if (days < 1) {
+        return "há 1 dia";
+      }
+      return `há ${days} dias`;
+    }
   };
 
   const { id } = useParams();
@@ -69,8 +68,22 @@ export const DatailPostPage = () => {
   };
 
   const randomColor = () => {
-    const hashColor = Math.floor(Math.random() * 16777215).toString(16);
-    return `#${hashColor}`;
+    const colors = [
+      "#E34D8C",
+      "#C04277",
+      "#7D2A4D",
+      "#7000FF",
+      "#6200E3",
+      "#36007D",
+      "#349974",
+      "#2A7D5F",
+      "#153D2E",
+      "#6100FF",
+      "#5700E3",
+      "#30007D",
+    ];
+    const randomIndex = Math.floor(Math.random() * 12);
+    return colors[randomIndex];
   };
 
   useEffect(() => {
@@ -103,6 +116,7 @@ export const DatailPostPage = () => {
         });
 
         setCommentList([data, ...commentList]);
+        setValue("description", "");
 
         toast.update(loadingToast, {
           render: "Comentario adicionado",
@@ -150,7 +164,7 @@ export const DatailPostPage = () => {
     }
   };
 
-  const { register, handleSubmit } = useForm<INewComment>({
+  const { register, handleSubmit, setValue } = useForm<INewComment>({
     resolver: yupResolver(newCommentSchema),
   });
 
@@ -232,13 +246,7 @@ export const DatailPostPage = () => {
                           {comment.userComment.charAt(0).toUpperCase()}
                           {comment.userComment.slice(1)}
                         </h4>
-                        <p>
-                          {comment.createdAt
-                            .slice(0, 10)
-                            .split("-")
-                            .reverse()
-                            .join("/")}
-                        </p>
+                        <p>{renderTimeSinceComment(comment.createdAt)}</p>
                       </div>
                       <p className="comment-description">
                         {comment.description}
@@ -268,9 +276,10 @@ export const DatailPostPage = () => {
             <form onSubmit={handleSubmit(newComment)}>
               <textarea
                 id="newComment"
-                placeholder="Digitar comentario"
+                placeholder="Digitar comentario (maximo 200 caracteres)"
                 cols={30}
                 rows={10}
+                maxLength={200}
                 {...register("description")}
               ></textarea>
               <Button

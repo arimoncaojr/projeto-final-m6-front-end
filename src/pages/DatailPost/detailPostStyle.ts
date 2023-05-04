@@ -266,6 +266,9 @@ export const ListComments = styled.div`
 
     gap: 1.5rem;
 
+    max-width: 100%;
+    overflow-x: hidden;
+
     li {
       display: flex;
       flex-direction: column;
