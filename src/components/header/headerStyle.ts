@@ -23,7 +23,7 @@ export const HeaderStyle = styled.header`
       justify-content: space-between;
       align-items: center;
 
-      & > img {
+      & > a > img {
         width: 153px;
         height: 30px;
       }
@@ -67,7 +67,8 @@ export const HeaderStyle = styled.header`
         gap: 6px;
         width: 100%;
         max-width: 80%;
-
+        cursor: pointer;
+        
         .iconUser {
           background-color: var(--color-brand-2);
           width: 32px;
