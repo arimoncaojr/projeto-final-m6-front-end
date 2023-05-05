@@ -11,6 +11,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { IPosts, ListPostsContext } from "../../contexts/ListPostsContext";
 import { InputStyle } from "../../components/input/inputStyle";
+import { UserContext } from "../../contexts/UserContext";
 
 export const HomePage = () => {
   const [filterClickMobile, setFilterClickMobile] = useState(false);
@@ -29,6 +30,9 @@ export const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { postsInfo } = useContext(ListPostsContext);
+  const { user } = useContext(UserContext);
+
+  console.log(user)
 
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));
@@ -291,7 +295,7 @@ export const HomePage = () => {
 
   return (
     <Wrapper>
-      <Header />
+      {user? <Header type="dashboard"/> : <Header />}
       <BannerStyle>
         <h1>Motors Shop</h1>
         <p>A melhor plataforma de anúncios de carros do país!</p>

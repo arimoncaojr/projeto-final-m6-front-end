@@ -99,7 +99,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
           padding: "8px",
         },
       });
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       toast.update(loadingToast, {
         render: `Senha ou e-mail invalido`,

@@ -11,16 +11,10 @@ interface IHeaderProps {
   type?: "dashboard";
 }
 
-// função de teste para mockup do nome do user
-const name = "thiago clodoadl rodrigues";
-const firstLetter = name.split(" ")[0][0];
-const secondLetter = name.split(" ")[1][0];
-const siglaName = (firstLetter + secondLetter).toUpperCase();
-
 export const Header = ({ type }: IHeaderProps) => {
   const [isOpen, setOpen] = useState(false);
   const [menuClicked, setMenuClicked] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -30,11 +24,37 @@ export const Header = ({ type }: IHeaderProps) => {
     }
   }, [menuClicked]);
 
+  const handleCipher = () => {
+    const name = user?.name.split(" ")
+    if (name && name?.length > 1) {
+      const firstLetter = name[0][0];
+      const secondLetter = name[1][0];
+      return (firstLetter + secondLetter).toUpperCase() 
+    } else {
+      return name && name[0][0].toUpperCase();
+    }  
+  }
+
+  const handleNameUser = () => { 
+    return user?.name.replace(/\b\w{1}/g, (match) =>
+      match.toUpperCase()
+    );
+  }
+
+  const handleProfileUser = () => { 
+    navigate("/profile")
+  }
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setUser(null)
+  }
+
   return (
     <HeaderStyle isOpenMenu={isOpen}>
       <nav className="container">
         <div>
-          <img src={logoColor} alt="logo motors shop" />
+          <a href="/"> <img src={logoColor} alt="logo motors shop" /> </a>
           <Hamburger
             toggled={isOpen}
             toggle={() => {
@@ -49,15 +69,14 @@ export const Header = ({ type }: IHeaderProps) => {
         <ul>
           {type ? (
             <>
-              <li className={type && "wrapperUser"}>
+              <li className={type && "wrapperUser"} onClick={handleProfileUser}>
                 <div className="iconUser">
-                  {user?.name.split(" ")[0][0].toUpperCase()}
-                  {user?.name.split(" ")[1][0].toUpperCase()}
+                  {handleCipher()}
                 </div>
-                <p className="nameUser">{user?.name}</p>
+                <p className="nameUser">{handleNameUser()}</p>
               </li>
               <li className={type && "wrapperLogout"}>
-                <Button typeStyle="logout" title="Sair">
+                <Button typeStyle="logout" title="Sair" onClick={handleLogout}>
                   <Logout />
                 </Button>
                 <span>Fazer logout</span>
