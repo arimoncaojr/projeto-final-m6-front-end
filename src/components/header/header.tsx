@@ -48,6 +48,7 @@ export const Header = ({ type }: IHeaderProps) => {
   const handleLogout = () => {
     localStorage.clear();
     setUser(null)
+    navigate("/")
   }
 
   return (

@@ -32,7 +32,6 @@ export const HomePage = () => {
   const { postsInfo } = useContext(ListPostsContext);
   const { user } = useContext(UserContext);
 
-  console.log(user)
 
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));

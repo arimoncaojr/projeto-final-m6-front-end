@@ -36,6 +36,7 @@ export const ButtonStyle = styled.button`
                     return css`
                          color: var(--gray-0);
                          border: 1.5px solid var(--gray-4);
+                         padding: 12px 17px;
                     `;
                case "colorBrand2":
                     return css`

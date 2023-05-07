@@ -2,16 +2,17 @@ import styled, { css } from "styled-components"
 
 
 interface IStyledCardProps{
-     isActive: boolean
+     isActive: boolean;
+     type?: string;
 }
 interface IStyledIconUserProps{
      firstLetter: string;
 }
 
 
-export const CardStyle = styled.article`
+export const CardStyle = styled.section`
      width: 300px;
-     height: 350px;
+     height: ${({type}:IStyledCardProps)=> type === "profile" ? "420px" : "350px"};
      border-radius: 4px;
      box-shadow: -1px -2px 10px 0px var(--gray-4);
      padding: 4px 10px;
@@ -103,6 +104,12 @@ export const CardStyle = styled.article`
                font: var(--font-heading-12);
                margin-left: auto;
           }
+     }
+
+     & > .containerButtons{
+          display: flex;
+          gap: 8px;
+          margin-top: 16px;
      }
 
      @media(min-width: 767px){
