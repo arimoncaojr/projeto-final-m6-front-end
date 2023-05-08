@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { CardStyle, IconUserStyle } from "./cardStyle";
 import {
   IoIosArrowForward as Next,
@@ -7,6 +7,8 @@ import {
 import { CgDollar as Money } from "react-icons/cg";
 import { Button } from "../button/button";
 import { IPosts } from "../../contexts/ListPostsContext";
+import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
+import { ModalPostsEdit } from "../ModalPostsEdit";
 
 interface IPostCardProps {
   post: IPosts;
@@ -14,6 +16,8 @@ interface IPostCardProps {
 }
 
 export const Card = ({ post, type }: IPostCardProps) => {
+  const { setIdPost, showModalEditPost, modalEditPost, listPostById } =
+    useContext(ModalEditPostsContext);
   const [indexImg, setIndexImg] = useState(0);
 
   const handleClickImg = (button: string) => {
@@ -56,16 +60,15 @@ export const Card = ({ post, type }: IPostCardProps) => {
   const disableButton = dbImg.length === 1 ? true : false;
 
   const handleCipher = () => {
-    const name = post.user.name.split(" ")
+    const name = post.user.name.split(" ");
     if (name && name?.length > 1) {
       const firstLetter = name[0][0];
       const secondLetter = name[1][0];
-      return (firstLetter + secondLetter).toUpperCase() 
+      return (firstLetter + secondLetter).toUpperCase();
     } else {
       return name && name[0][0].toUpperCase();
-    }  
-  }
-
+    }
+  };
 
   return (
     <CardStyle isActive={isActive} type={type}>
@@ -85,7 +88,9 @@ export const Card = ({ post, type }: IPostCardProps) => {
         >
           <Next />
         </button>
-        {type === "home" ? isGoodPurchase && <Money className="isGoodPurchase"/> : false}
+        {type === "home"
+          ? isGoodPurchase && <Money className="isGoodPurchase" />
+          : false}
         {type !== "home" && type !== "profile" ? (
           isActive ? (
             <span>Ativo</span>
@@ -107,12 +112,20 @@ export const Card = ({ post, type }: IPostCardProps) => {
         <Button typeStyle="detail">{year}</Button>
         <p>{price}</p>
       </div>
-      {type === "profile" &&
+      {type === "profile" && (
         <div className="containerButtons">
-          <Button typeStyle="noColor">Editar</Button>
+          <Button
+            typeStyle="noColor"
+            onClick={() => {
+              setIdPost(post.id);
+              listPostById(post.id);
+            }}
+          >
+            Editar
+          </Button>
           <Button typeStyle="noColor">Ver detalhes</Button>
         </div>
-      }
+      )}
     </CardStyle>
   );
 };

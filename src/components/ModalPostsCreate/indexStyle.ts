@@ -10,6 +10,8 @@ interface IStyledProps {
   backgroundChange?: string;
   widthChange?: string;
   marginChange?: string;
+  isActiveBG?: string;
+  isActiveText?: string;
 }
 
 export const ContainerModal = styled.div`
@@ -271,19 +273,19 @@ export const YesAndNoDiv = styled.div`
   }
 `;
 
-export const YesAndNoBtn = styled.button`
+export const YesAndNoBtn = styled.button<IStyledProps>`
   width: 228px;
   height: 48px;
   border: 1.5px solid #adb5bd;
   border-radius: 4px;
-  color: #0b0d0d;
+  color: ${(props) => props.isActiveText};
   font-style: normal;
   font-weight: 600;
   font-size: 1rem;
-  background-color: #ffffff;
+  background-color: ${(props) => props.isActiveBG};
 
   :hover {
-    background-color: #4529e6;
-    color: #ffffff;
+    background-color: ${(props) => props.isActiveBG};
+    color: ${(props) => props.isActiveText};
   }
 `;
