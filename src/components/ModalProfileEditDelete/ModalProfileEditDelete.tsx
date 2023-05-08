@@ -43,7 +43,7 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
 
   const updateUser = async (data: IUserUpdate) => {
     const dataRequest = formatedDataforRequest(data);
-    const token = window.localStorage.getItem("@motorsShopToken");
+    const token = window.localStorage.getItem("@motorsShop:Token");
     const loadingToast = toast.loading("Carregando...", {
       position: "top-center",
     });
@@ -106,7 +106,7 @@ const ModalProfileEditDelete: React.FC<IModalProfileProps> = ({
   };
 
   const deleteUser = async (userId: string) => {
-    const token = window.localStorage.getItem("@motorsShopToken");
+    const token = window.localStorage.getItem("@motorsShop:Token");
     const loadingToast = toast.loading("Carregando...", {
       position: "top-center",
     });

@@ -14,7 +14,7 @@ interface IModalEditPostsContext {
   setIdPost: React.Dispatch<React.SetStateAction<string>>;
   showModalEditPost: React.Dispatch<React.SetStateAction<boolean>>;
   submitEditedPostInfo: (infoData: Partial<IPostInfoEdit>) => void;
-  listPostById: () => void;
+  listPostById: (postId: string) => void;
   deletePost: () => void;
 }
 
@@ -55,7 +55,7 @@ export const ModalEditPostsContext = createContext<IModalEditPostsContext>(
 export const ModalEditPostsProvider = ({
   children,
 }: IModalEditPostsContextProps) => {
-  const token: string | null = localStorage.getItem("motorsShop:Token");
+  const token: string | null = localStorage.getItem("@motorsShop:Token");
 
   const [modalEditPost, showModalEditPost] = useState<boolean>(false);
   const [idPost, setIdPost] = useState<string>("");
@@ -113,12 +113,13 @@ export const ModalEditPostsProvider = ({
       });
   };
 
-  const listPostById = () => {
-    Api.get<IPostInfo>(`/posts/${idPost}`, {
+  const listPostById = (postId: string) => {
+    Api.get<IPostInfo>(`/posts/${postId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         setInfoPost(res.data);
+        showModalEditPost(true);
       })
       .catch((err) => {
         console.log(err);

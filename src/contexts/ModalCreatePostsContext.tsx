@@ -34,7 +34,7 @@ export const ModalCreatePostsContext = createContext<IModalCreatePostsContext>(
 export const ModalCreatePostsProvider = ({
   children,
 }: IModalCreatePostsContextProps) => {
-  const token: string | null = localStorage.getItem("motorsShop:Token");
+  const token: string | null = localStorage.getItem("@motorsShop:Token");
 
   const [modalCreatePost, showModalCreatePost] = useState<boolean>(false);
 
