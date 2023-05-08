@@ -79,12 +79,16 @@ export const ProfilePage = () => {
             <span className="typeAccount">{handleNameTypeAccount()}</span>
           </div>
           <p className="descriptionUser">{user?.description}</p>
-          <Button
-            typeStyle="createAds"
-            onClick={() => showModalCreatePost(true)}
-          >
-            Criar Anuncio
-          </Button>
+          {user?.typeOfAccount === "anunciante" && (
+            <>
+              <Button
+                typeStyle="createAds"
+                onClick={() => showModalCreatePost(true)}
+              >
+                Criar Anuncio
+              </Button>
+            </>
+          )}
         </ProfileUserContainer>
       </BackgroundColorBrand1>
       <ProfileAdds className="container">
