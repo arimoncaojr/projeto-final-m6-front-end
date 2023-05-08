@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { CardStyle, IconUserStyle } from "./cardStyle";
-// import { MdKeyboardDoubleArrowRight as Next, MdKeyboardDoubleArrowLeft as Back } from "react-icons/md"
 import {
   IoIosArrowForward as Next,
   IoIosArrowBack as Back,
@@ -53,13 +52,23 @@ export const Card = ({ post, type }: IPostCardProps) => {
     match.toUpperCase()
   );
   const firstLetter = post.user.name.split(" ")[0][0];
-  const secondLetter = post.user.name.split(" ")[1][0] ? post.user.name.split(" ")[1][0] : "";
-  const cipher = (firstLetter + secondLetter).toUpperCase();
   const dbImg = [{ imageLink: post.imageCap }, ...post.images];
   const disableButton = dbImg.length === 1 ? true : false;
 
+  const handleCipher = () => {
+    const name = post.user.name.split(" ")
+    if (name && name?.length > 1) {
+      const firstLetter = name[0][0];
+      const secondLetter = name[1][0];
+      return (firstLetter + secondLetter).toUpperCase() 
+    } else {
+      return name && name[0][0].toUpperCase();
+    }  
+  }
+
+
   return (
-    <CardStyle isActive={isActive}>
+    <CardStyle isActive={isActive} type={type}>
       <figure>
         <button
           onClick={() => handleClickImg("back")}
@@ -76,8 +85,8 @@ export const Card = ({ post, type }: IPostCardProps) => {
         >
           <Next />
         </button>
-        {isGoodPurchase && <Money className="isGoodPurchase" />}
-        {type !== "home" ? (
+        {type === "home" ? isGoodPurchase && <Money className="isGoodPurchase"/> : false}
+        {type !== "home" && type !== "profile" ? (
           isActive ? (
             <span>Ativo</span>
           ) : (
@@ -90,7 +99,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
       <h2>{nameCar}</h2>
       <p>{description}</p>
       <IconUserStyle firstLetter={firstLetter.toUpperCase()}>
-        <p className="iconUser">{cipher}</p>
+        <p className="iconUser">{handleCipher()}</p>
         <p className="nameUser">{user}</p>
       </IconUserStyle>
       <div className="containerDetail">
@@ -98,6 +107,12 @@ export const Card = ({ post, type }: IPostCardProps) => {
         <Button typeStyle="detail">{year}</Button>
         <p>{price}</p>
       </div>
+      {type === "profile" &&
+        <div className="containerButtons">
+          <Button typeStyle="noColor">Editar</Button>
+          <Button typeStyle="noColor">Ver detalhes</Button>
+        </div>
+      }
     </CardStyle>
   );
 };

@@ -1,64 +1,104 @@
 import { Header } from "../../components/header/header";
 import { Footer } from "../../components/footer/footer";
-import { useContext, useEffect } from "react";
-import { HeaderBackground, ProfileContainer } from "./profileStyle";
-import { Wrapper } from "../../styles/wrapper";
+import { useContext, useEffect, useState } from "react";
+import { ProfileAdds, ProfileUserContainer } from "./profileStyle";
+import { BackgroundColorBrand1, Wrapper } from "../../styles/wrapper";
 import { Card } from "../../components/card/card";
 import { UserContext } from "../../contexts/UserContext";
 import { getProfileUser } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/button/button";
+import ModalProfileEditDelete from "../../components/ModalProfileEditDelete/ModalProfileEditDelete";
+import ModalAddressEdit from "../../components/ModalAdressEdit/ModalAdressEdit";
 
 export const ProfilePage = () => {
+  const [showModalProfile, setShowModalProfile] = useState(false);
+  const [showModalAddress, setShowModalAddress] = useState(false);
+  const [advertiser, setAdvertiser] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const token = localStorage.getItem("@motorsShopToken");
 
-  //     if (token) {
-  //       try {
-  //         const responseApi = await getProfileUser(token);
-  //         setUser(responseApi.data);
-  //         navigate("/profile");
-  //       } catch (error) {
-  //         console.log(error);
-  //         localStorage.removeItem("@motorsShopToken");
-  //         navigate("/");
-  //       }
-  //     } else {
-  //       navigate("/");
-  //     }
-  //   })();
-  // }, [user]);
+  useEffect(() => {
+    (async () => {
+      const token = localStorage.getItem("@motorsShopToken");
+
+      if (token) {
+        try {
+          const responseApi = await getProfileUser(token);
+          const typeOfAccount = responseApi.data.typeOfAccount
+          if (typeOfAccount === "anunciante") {
+            setAdvertiser(true)
+          }
+          
+        } catch (error) {
+          console.log(error);
+          localStorage.removeItem("@motorsShopToken");
+          
+        }
+      } else {
+        // logica do id da URL
+      } 
+    })();
+  }, []);
+
+  
+  
+  const handleNameUser = () => { 
+    return user?.name.replace(/\b\w{1}/g, (match) =>
+      match.toUpperCase()
+    );
+  }
+  const handleNameTypeAccount = () => { 
+    return user?.typeOfAccount.replace(/\b\w{1}/g, (match) =>
+      match.toUpperCase()
+    );
+  }
+
+  const handleCipher = () => {
+    const name = user?.name.split(" ")
+    if (name && name?.length > 1) {
+      const firstLetter = name[0][0];
+      const secondLetter = name[1][0];
+      return (firstLetter + secondLetter).toUpperCase() 
+    } else {
+      return name && name[0][0].toUpperCase();
+    }  
+  }
+  
+  const name = user?.name.split(" ")
+  const firstLetter = name && name[0][0].toUpperCase();
 
   return (
     <Wrapper>
       <Header type="dashboard" />
-      <HeaderBackground>
-        <div>
-          <div className="profileInfo">
-            <h2>{user?.name}</h2>
-            <span>
-              {/* {user?.name.split(" ")[0][0].toUpperCase()}
-              {user?.name.split(" ")[1][0].toUpperCase()} */}
-            </span>
-            <p>{user?.typeOfAccount}</p>
-            <span>{user?.description}</span>
+      <BackgroundColorBrand1>
+      
+      <ProfileUserContainer firstLetter={firstLetter ? firstLetter : "A"}>
+            <p className="iconUser">{handleCipher()}</p>
+          <div className="IconUserWrapper">
+            <p className="nameUser">{handleNameUser()}</p>
+            <span className="typeAccount">{handleNameTypeAccount()}</span>
           </div>
-        </div>
-      </HeaderBackground>
-      <ProfileContainer className="container">
-        <section className="wrapperContainer">
+          <p className="descriptionUser">{user?.description}</p>
+          <Button typeStyle="createAds">Criar Anuncio</Button>
+        </ProfileUserContainer>
+      </BackgroundColorBrand1>
+      <ProfileAdds className="container">
+        
           <div className="cardsContainer">
             {user?.posts.length ? (
-              user?.posts.map((post) => <Card key={post.id} post={post} />)
+              user?.posts.map((post) => <Card key={post.id} post={post} type={advertiser ? "profile" : ""} />)
             ) : (
               <p>Não existe carros cadastrados.</p>
             )}
           </div>
-        </section>
-      </ProfileContainer>
+    
+      </ProfileAdds>
+      {showModalProfile && (
+        <ModalProfileEditDelete setShowModalProfile={setShowModalProfile} />
+      )}
+      {showModalAddress && (
+        <ModalAddressEdit setShowModalAddress={setShowModalAddress} />
+      )}
       <Footer />
     </Wrapper>
   );
