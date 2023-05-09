@@ -53,7 +53,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
   );
   const firstLetter = post.user.name.split(" ")[0][0];
   const dbImg = [{ imageLink: post.imageCap }, ...post.images];
-  const disableButton = dbImg.length === 1 ? true : false;
+  const disableButton = dbImg.length > 2 ? true : false;
 
   const handleCipher = () => {
     const name = post.user.name.split(" ")
@@ -70,21 +70,23 @@ export const Card = ({ post, type }: IPostCardProps) => {
   return (
     <CardStyle isActive={isActive} type={type}>
       <figure>
-        <button
-          onClick={() => handleClickImg("back")}
-          className="back"
-          disabled={disableButton}
-        >
-          <Back />
-        </button>
+        {disableButton && 
+          <button
+            onClick={() => handleClickImg("back")}
+            className="back"
+          >
+            <Back />
+          </button>
+        }
         <img src={dbImg[indexImg].imageLink} alt="foto do carro" />
-        <button
-          onClick={() => handleClickImg("next")}
-          className="next"
-          disabled={disableButton}
-        >
-          <Next />
-        </button>
+        {disableButton &&
+          <button
+            onClick={() => handleClickImg("next")}
+            className="next"
+          >
+            <Next />
+          </button>
+        }
         {type === "home" ? isGoodPurchase && <Money className="isGoodPurchase"/> : false}
         {type !== "home" && type !== "profile" ? (
           isActive ? (

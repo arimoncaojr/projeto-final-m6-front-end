@@ -7,12 +7,8 @@ import { Card } from "../../components/card/card";
 import { UserContext } from "../../contexts/UserContext";
 import { getProfileUser } from "../../services/api";
 import { Button } from "../../components/button/button";
-import ModalProfileEditDelete from "../../components/ModalProfileEditDelete/ModalProfileEditDelete";
-import ModalAddressEdit from "../../components/ModalAdressEdit/ModalAdressEdit";
 
 export const ProfilePage = () => {
-  const [showModalProfile, setShowModalProfile] = useState(false);
-  const [showModalAddress, setShowModalAddress] = useState(false);
   const [advertiser, setAdvertiser] = useState(false);
   const { user, setUser } = useContext(UserContext);
 
@@ -93,12 +89,6 @@ export const ProfilePage = () => {
           </div>
     
       </ProfileAdds>
-      {showModalProfile && (
-        <ModalProfileEditDelete setShowModalProfile={setShowModalProfile} />
-      )}
-      {showModalAddress && (
-        <ModalAddressEdit setShowModalAddress={setShowModalAddress} />
-      )}
       <Footer />
     </Wrapper>
   );

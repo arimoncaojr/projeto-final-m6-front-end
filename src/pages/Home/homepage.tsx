@@ -304,7 +304,7 @@ export const HomePage = () => {
           <div className="cardsContainer">
             {filteredPosts.length > 0 ? (
               paginatedPosts(filteredPosts, currentPage).map((post) => (
-                <Card key={post.id} post={post} type="home" />
+                <Card key={post.id} post={post} type="home"/>
               ))
             ) : (
               <p className="messageNotFoundCar">Não há carros disponíveis</p>

@@ -14,7 +14,7 @@ export const RoutesMain = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/product/:id" element={<DatailPostPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="profile/:id" element={<ProfilePage />} />
         <Route path="/resetpassword/:token" element={<ResetPassword />} />
       </Routes>
     </>
