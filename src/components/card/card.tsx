@@ -73,27 +73,23 @@ export const Card = ({ post, type }: IPostCardProps) => {
   return (
     <CardStyle isActive={isActive} type={type}>
       <figure>
-        {disableButton && 
-          <button
-            onClick={() => handleClickImg("back")}
-            className="back"
-          >
+        {disableButton && (
+          <button onClick={() => handleClickImg("back")} className="back">
             <Back />
           </button>
-        }
+        )}
         <img src={dbImg[indexImg].imageLink} alt="foto do carro" />
-        
-        {disableButton &&
-          <button
-            onClick={() => handleClickImg("next")}
-            className="next"
-          >
+
+        {disableButton && (
+          <button onClick={() => handleClickImg("next")} className="next">
             <Next />
           </button>
-        }
-        {type === "home" ? isGoodPurchase && <Money className="isGoodPurchase"/> : false}
+        )}
+        {type === "home"
+          ? isGoodPurchase && <Money className="isGoodPurchase" />
+          : false}
 
-        {type !== "home" && type !== "profile" ? (
+        {type !== "home" ? (
           isActive ? (
             <span>Ativo</span>
           ) : (

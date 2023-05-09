@@ -8,7 +8,9 @@ import { UserContext } from "../../contexts/UserContext";
 import { ModalCreatePostsContext } from "../../contexts/ModalCreatePostsContext";
 import { getProfileUser } from "../../services/api";
 import { Button } from "../../components/button/button";
-
+import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
+import { ModalPostsEdit } from "../../components/ModalPostsEdit";
+import { ModalPostsCreate } from "../../components/ModalPostsCreate";
 
 export const ProfilePage = () => {
   const [advertiser, setAdvertiser] = useState(false);
@@ -101,6 +103,8 @@ export const ProfilePage = () => {
         </div>
       </ProfileAdds>
       <Footer />
+      {modalCreatePost && <ModalPostsCreate />}
+      {modalEditPost && <ModalPostsEdit />}
     </Wrapper>
   );
 };
