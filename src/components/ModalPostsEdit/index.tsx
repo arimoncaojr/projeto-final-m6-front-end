@@ -10,7 +10,6 @@ import {
   LabelAndFieldDiv,
   Label,
   BigInput,
-  BigSelect,
   SmallInput,
   SmallSelect,
   TextArea,
@@ -21,7 +20,6 @@ import {
   YesAndNoBtn,
   YesAndNoDiv,
 } from "../ModalPostsCreate/indexStyle";
-import { ListCarsKenzieContext } from "../../contexts/ListCarsKenzieContext";
 import { useContext, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,27 +30,24 @@ import { get } from "lodash";
 import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
 
 export const ModalPostsEdit = () => {
-  const [fuelType, setFuelType] = useState<number | null>(null);
-  const [tablePriceFipe, setTablePriceFipe] = useState<number | null>(null);
-  const [imageCount, setImageCount] = useState<number>(2);
-  const [formattedPrice, setFormattedPrice] = useState<string>("");
-  const [formattedKm, setFormattedKm] = useState<string>("");
-  const [valueYear, setValueYear] = useState<string>("");
-  const [valueColor, setValueColor] = useState<string>("");
-  const [valueDescription, setValueDescription] = useState<string>("");
-  const [valueImg, setValueImg] = useState<string>("");
-  //   const [isActive, setIsActive] = useState<boolean>(true);
+  const { submitEditedPostInfo, showModalEditPost, infoPost, deletePost } =
+    useContext(ModalEditPostsContext);
 
-  const countImages = () => {
-    if (infoPost.images && infoPost.images.length > 0) {
-      setImageCount(infoPost.images.length);
-    }
-  };
+  const [fuelType, setFuelType] = useState<string>(infoPost.fuelType);
+  const [imageCount, setImageCount] = useState<number>(2);
+  const [formattedPrice, setFormattedPrice] = useState<string>(infoPost.price);
+  const [formattedKm, setFormattedKm] = useState<string>(infoPost.kilometers);
+  const [valueYear, setValueYear] = useState<string>(infoPost.year);
+  const [valueColor, setValueColor] = useState<string>(infoPost.color);
+  const [valueDescription, setValueDescription] = useState<string>(
+    `${infoPost.description}`
+  );
+  const [valueImg, setValueImg] = useState<string>(infoPost.imageCap);
+  const [isActive, setIsActive] = useState<boolean>(infoPost.isActive);
 
   const checkInputs = () => {
     if (
       !fuelType ||
-      !tablePriceFipe ||
       formattedPrice.length <= 3 ||
       formattedKm.length === 0 ||
       valueColor.length === 0 ||
@@ -65,29 +60,15 @@ export const ModalPostsEdit = () => {
     return true;
   };
 
-  const { carBrandsInfo, carDetails, getCarDetails } = useContext(
-    ListCarsKenzieContext
-  );
-  const {
-    submitEditedPostInfo,
-    showModalEditPost,
-    infoPost,
-    listPostById,
-    deletePost,
-  } = useContext(ModalEditPostsContext);
-
   useEffect(() => {
     countImages();
   }, [infoPost]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useForm<IPostInfoEdit>({ resolver: yupResolver(editSchema) });
+  const countImages = () => {
+    if (infoPost.images && infoPost.images.length > 0) {
+      setImageCount(infoPost.images.length);
+    }
+  };
 
   const addImageField = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -120,7 +101,6 @@ export const ModalPostsEdit = () => {
           <BigInput
             key={`image${i + 1 + 1}`}
             id={`image${i + 1}`}
-            value={infoPost.images[i]?.imageLink}
             {...register(`images.${i}.imageLink`, { required: false })}
           />
         </>
@@ -128,48 +108,6 @@ export const ModalPostsEdit = () => {
     }
 
     return additionalImages;
-  };
-
-  const fuelTypeLabel = (type: number | null) => {
-    switch (type) {
-      case 1:
-        return "flex";
-      case 2:
-        return "hibrido";
-      case 3:
-        return "eletrico";
-      default:
-        return "";
-    }
-  };
-
-  const capitalizeFirstLetter = (str: string): string => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
-  const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const brand = event.target.value;
-    if (brand) {
-      getCarDetails(brand);
-    }
-  };
-
-  const handleModelChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedModel = event.target.value;
-    const modelInfo = carDetails.find((model) => model.name === selectedModel);
-
-    if (modelInfo) {
-      setValue("fuelType", fuelTypeLabel(modelInfo.fuel));
-      setValue("tablePriceFiper", `${formatPrice(modelInfo.value)}`);
-      setValue("model", selectedModel);
-      setFuelType(modelInfo.fuel);
-      setTablePriceFipe(modelInfo.value);
-      clearErrors("tablePriceFiper");
-      clearErrors("fuelType");
-    }
   };
 
   const formatPrice = (price: number) => {
@@ -184,18 +122,38 @@ export const ModalPostsEdit = () => {
     return km.replace(/\D/g, "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
   };
 
-  const getLabelContent = (errorPath: string, defaultMessage: string) => {
-    return get(errors, errorPath, defaultMessage);
-  };
-
   const handleIsActiveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const value = event.currentTarget.getAttribute("data-value");
     if (value === "true") {
       setValue("isActive", "true");
+      setIsActive(true);
     } else if (value === "false") {
       setValue("isActive", "false");
+      setIsActive(false);
     }
   };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm<IPostInfoEdit>({
+    resolver: yupResolver(editSchema),
+    defaultValues: {
+      fuelType: infoPost.fuelType,
+      year: infoPost.year,
+      color: infoPost.color,
+      kilometers: formatKmInput(infoPost.kilometers),
+      tablePriceFiper: `R$ ${formatPrice(Number(infoPost.tablePriceFiper))}`,
+      price: `R$ ${formatPriceInput(infoPost.price)}`,
+      description: infoPost.description,
+      isActive: infoPost.isActive,
+      imageCap: infoPost.imageCap,
+    },
+  });
 
   return (
     <ContainerModal>
@@ -214,15 +172,6 @@ export const ModalPostsEdit = () => {
         </TitleAndButton>
         <ContentWrapper>
           <SubTitlePost>Informações do veículo</SubTitlePost>
-          <button
-            type="button"
-            onClick={() => {
-              listPostById();
-              console.log(infoPost);
-            }}
-          >
-            Botão de Teste
-          </button>
           <LabelAndFieldDiv>
             <LabelAndInputWrapper changeGap>
               <Label
@@ -233,8 +182,10 @@ export const ModalPostsEdit = () => {
               </Label>
               <SmallSelect
                 id="fuelType"
-                value={infoPost.fuelType}
-                {...register("fuelType")}
+                value={fuelType}
+                {...register("fuelType", {
+                  onChange: (e) => setFuelType(e.target.value),
+                })}
               >
                 <option value="">Selecione</option>
                 <option value="flex">Flex</option>
@@ -252,7 +203,6 @@ export const ModalPostsEdit = () => {
               <SmallInput
                 id="year"
                 placeholder="ex: 2018"
-                value={infoPost.year}
                 {...register("year", {
                   onChange: (e) => setValueYear(e.target.value),
                 })}
@@ -269,7 +219,6 @@ export const ModalPostsEdit = () => {
               </Label>
               <SmallSelect
                 id="color"
-                value={infoPost.color}
                 {...register("color", {
                   onChange: (e) => setValueColor(e.target.value),
                 })}
@@ -297,7 +246,7 @@ export const ModalPostsEdit = () => {
               <SmallInput
                 id="kilometers"
                 placeholder="ex: 30.000"
-                value={formatKmInput(infoPost.kilometers)}
+                value={formatKmInput(formattedKm)}
                 {...register("kilometers", {
                   onChange: (e) => {
                     setValue("kilometers", e.target.value);
@@ -319,7 +268,6 @@ export const ModalPostsEdit = () => {
               </Label>
               <SmallInput
                 id="tablePriceFiper"
-                value={`R$ ${formatPrice(Number(infoPost.tablePriceFiper))}`}
                 readOnly
                 {...register("tablePriceFiper")}
               />
@@ -333,8 +281,8 @@ export const ModalPostsEdit = () => {
               </Label>
               <SmallInput
                 id="price"
+                value={`R$ ${formatPriceInput(formattedPrice)}`}
                 placeholder="ex: R$ 50.000"
-                value={`R$ ${formatPriceInput(infoPost.price)}`}
                 {...register("price", {
                   onChange: (e) => {
                     setValue("price", e.target.value);
@@ -351,17 +299,28 @@ export const ModalPostsEdit = () => {
             {errors.description ? errors.description.message : "Descrição"}
           </Label>
           <TextArea
-            value={infoPost.description}
             {...register("description", {
               onChange: (e) => setValueDescription(e.target.value),
             })}
           ></TextArea>
           <Label htmlFor="isActive">Publicado</Label>
           <YesAndNoDiv>
-            <YesAndNoBtn data-value="true" onClick={handleIsActiveClick}>
+            <YesAndNoBtn
+              type="button"
+              data-value="true"
+              onClick={handleIsActiveClick}
+              isActiveBG={isActive ? "#4529e6" : "#ffffff"}
+              isActiveText={isActive ? "#ffffff" : "#adb5bd"}
+            >
               Sim
             </YesAndNoBtn>
-            <YesAndNoBtn data-value="false" onClick={handleIsActiveClick}>
+            <YesAndNoBtn
+              type="button"
+              data-value="false"
+              onClick={handleIsActiveClick}
+              isActiveBG={isActive ? "#ffffff" : "#4529e6"}
+              isActiveText={isActive ? "#adb5bd" : "#ffffff"}
+            >
               Não
             </YesAndNoBtn>
           </YesAndNoDiv>
@@ -374,54 +333,53 @@ export const ModalPostsEdit = () => {
           </Label>
           <BigInput
             id="imageCap"
-            value={infoPost.imageCap}
             {...register("imageCap", {
               onChange: (e) => setValueImg(e.target.value),
             })}
           />
-          <Label
-            errorColor={
-              errors.images && errors.images[0]?.imageLink ? "red" : "#212529"
-            }
-            htmlFor="firstImage"
-          >
-            {errors.images && errors.images[0]?.imageLink
-              ? errors.images[0].imageLink.message
-              : "1° Imagem da galeria"}
-          </Label>
-          <BigInput
-            id="firstImage"
-            value={infoPost.images[0]?.imageLink}
-            {...register("images.0.imageLink")}
-          />
-          <Label
-            errorColor={
-              errors.images && errors.images[1]?.imageLink ? "red" : "#212529"
-            }
-            htmlFor="secondImage"
-          >
-            {errors.images && errors.images[1]?.imageLink
-              ? errors.images[1].imageLink.message
-              : "2° Imagem da galeria"}
-          </Label>
-          <BigInput
-            id="secondImage"
-            value={infoPost.images[1]?.imageLink}
-            {...register("images.1.imageLink")}
-          />
-          {renderAdditionalImages()}
-          <AddImageBtn
-            type="button"
-            onClick={addImageField}
-            opacityLimit={imageCount >= 6 ? "0.5" : "1"}
-            cursorLimit={imageCount >= 6 ? "not-allowed" : "pointer"}
-            transitionLimit={
-              imageCount >= 6 ? "none" : "transform 0.3s ease-in-out"
-            }
-            transformLimit={imageCount >= 6 ? "none" : "scale(0.9)"}
-          >
-            Adicionar campo para imagem da galeria
-          </AddImageBtn>
+          {infoPost.images.length < 6 && (
+            <>
+              <Label
+                errorColor={
+                  errors.images && errors.images[0]?.imageLink
+                    ? "red"
+                    : "#212529"
+                }
+                htmlFor="firstImage"
+              >
+                {errors.images && errors.images[0]?.imageLink
+                  ? errors.images[0].imageLink.message
+                  : "1° Imagem da galeria"}
+              </Label>
+              <BigInput id="firstImage" {...register("images.0.imageLink")} />
+              <Label
+                errorColor={
+                  errors.images && errors.images[1]?.imageLink
+                    ? "red"
+                    : "#212529"
+                }
+                htmlFor="secondImage"
+              >
+                {errors.images && errors.images[1]?.imageLink
+                  ? errors.images[1].imageLink.message
+                  : "2° Imagem da galeria"}
+              </Label>
+              <BigInput id="secondImage" {...register("images.1.imageLink")} />
+              {infoPost.images.length < 6 && renderAdditionalImages()}
+              <AddImageBtn
+                type="button"
+                onClick={addImageField}
+                opacityLimit={imageCount === 6 ? "0.5" : "1"}
+                cursorLimit={imageCount === 6 ? "not-allowed" : "pointer"}
+                transitionLimit={
+                  imageCount === 6 ? "none" : "transform 0.3s ease-in-out"
+                }
+                transformLimit={imageCount === 6 ? "none" : "scale(0.9)"}
+              >
+                Adicionar campo para imagem da galeria
+              </AddImageBtn>
+            </>
+          )}
           <DivFinalBtns marginChange={"0"}>
             <CancelBtn
               widthChange={"262px"}
