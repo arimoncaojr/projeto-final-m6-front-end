@@ -10,6 +10,9 @@ import { Api, getProfileUser } from "../../services/api";
 import { Button } from "../../components/button/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { IUserProfileRequest } from "../../interfaces/user";
+import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
+import { ModalPostsEdit } from "../../components/ModalPostsEdit";
+import { ModalPostsCreate } from "../../components/ModalPostsCreate";
 
 export const ProfilePage = () => {
   const [advertiser, setAdvertiser] = useState(false);
@@ -17,6 +20,7 @@ export const ProfilePage = () => {
   const { modalCreatePost, showModalCreatePost } = useContext(
     ModalCreatePostsContext
   );
+  const { modalEditPost } = useContext(ModalEditPostsContext);
   const [userProfile, setUserProfile] = useState<IUserProfileRequest | null>(
     null
   );
@@ -122,6 +126,8 @@ export const ProfilePage = () => {
         </div>
       </ProfileAdds>
       <Footer />
+      {modalCreatePost && <ModalPostsCreate />}
+      {modalEditPost && <ModalPostsEdit />}
     </Wrapper>
   );
 };

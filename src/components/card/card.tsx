@@ -92,7 +92,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
           ? isGoodPurchase && <Money className="isGoodPurchase" />
           : false}
 
-        {type !== "home" && type !== "profile" ? (
+        {type !== "home" ? (
           isActive ? (
             <span>Ativo</span>
           ) : (
