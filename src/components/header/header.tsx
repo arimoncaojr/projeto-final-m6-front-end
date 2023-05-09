@@ -3,9 +3,10 @@ import { Squash as Hamburger } from "hamburger-react";
 import { useContext, useEffect, useState } from "react";
 import logoColor from "../../assets/logo-colored.svg";
 import { Button } from "../button/button";
-import { RiLogoutBoxRFill as Logout } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
+import ModalProfileEditDelete from "../../components/ModalProfileEditDelete/ModalProfileEditDelete";
+import ModalAddressEdit from "../../components/ModalAdressEdit/ModalAdressEdit";
 
 interface IHeaderProps {
   type?: "dashboard";
@@ -14,6 +15,8 @@ interface IHeaderProps {
 export const Header = ({ type }: IHeaderProps) => {
   const [isOpen, setOpen] = useState(false);
   const [menuClicked, setMenuClicked] = useState(false);
+  const [showModalProfile, setShowModalProfile] = useState(false);
+  const [showModalAddress, setShowModalAddress] = useState(false);
   const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -42,7 +45,7 @@ export const Header = ({ type }: IHeaderProps) => {
   }
 
   const handleProfileUser = () => { 
-    navigate("/profile")
+    navigate(`/profile/${user?.id}`)
   }
 
   const handleLogout = () => {
@@ -51,57 +54,81 @@ export const Header = ({ type }: IHeaderProps) => {
     navigate("/")
   }
 
+  const typeOfaccount = user?.typeOfAccount
+
   return (
-    <HeaderStyle isOpenMenu={isOpen}>
-      <nav className="container">
-        <div>
-          <a href="/"> <img src={logoColor} alt="logo motors shop" /> </a>
-          <Hamburger
-            toggled={isOpen}
-            toggle={() => {
-              setOpen(!isOpen);
-              setMenuClicked(true);
-            }}
-            color="#2C2C2C"
-            size={25}
-            rounded
-          />
-        </div>
-        <ul>
-          {type ? (
-            <>
-              <li className={type && "wrapperUser"} onClick={handleProfileUser}>
+    <>
+      <HeaderStyle isOpenMenu={isOpen} type={type}>
+        <nav className="container">
+          <div>
+            <a href="/"> <img src={logoColor} alt="logo motors shop" /> </a>  
+            <Hamburger
+              toggled={isOpen}
+              toggle={() => {
+                setOpen(!isOpen);
+                setMenuClicked(true);
+              }}
+              color="#2C2C2C"
+              size={25}
+              rounded
+              />
+            {type &&
+              <button className="wrapperUser" onClick={() => {
+                setOpen(!isOpen);
+                setMenuClicked(true);
+              }}>
                 <div className="iconUser">
                   {handleCipher()}
                 </div>
                 <p className="nameUser">{handleNameUser()}</p>
-              </li>
-              <li className={type && "wrapperLogout"}>
-                <Button typeStyle="logout" title="Sair" onClick={handleLogout}>
-                  <Logout />
-                </Button>
-                <span>Fazer logout</span>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <Button typeStyle="login" onClick={() => navigate("/login")}>
-                  Fazer Login
-                </Button>
-              </li>
-              <li>
-                <Button
-                  typeStyle="noColor"
-                  onClick={() => navigate("/register")}
-                >
-                  Cadastrar
-                </Button>
-              </li>
-            </>
-          )}
-        </ul>
-      </nav>
-    </HeaderStyle>
+              </button>
+            }
+            
+          </div>
+          <ul>
+            {type ? (
+              <>
+                <li>
+                  <Button typeStyle="menu" title="Editar Perfil" onClick={()=>setShowModalProfile(true)}>Editar Perfil</Button>
+                </li> 
+                <li>
+                  <Button typeStyle="menu" title="Editar Endereço" onClick={()=>setShowModalAddress(true)}>Editar Endereço</Button>
+                </li> 
+                {typeOfaccount === "anunciante" &&
+                  <li>
+                    <Button typeStyle="menu" title="Meus Anuncios" onClick={()=>handleProfileUser()}>Meus Anuncios</Button>
+                  </li> 
+                }
+                <li>
+                  <Button typeStyle="menu" title="Sair" onClick={handleLogout}>Sair</Button>
+                </li> 
+              </>
+            ) : (
+              <>
+                <li>
+                  <Button typeStyle="login" onClick={() => navigate("/login")}>
+                    Fazer Login
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    typeStyle="noColor"
+                    onClick={() => navigate("/register")}
+                    >
+                    Cadastrar
+                  </Button>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
+      </HeaderStyle>
+      {showModalProfile && (
+        <ModalProfileEditDelete setShowModalProfile={setShowModalProfile} />
+      )}
+      {showModalAddress && (
+        <ModalAddressEdit setShowModalAddress={setShowModalAddress} />
+      )}
+    </>
   );
 };

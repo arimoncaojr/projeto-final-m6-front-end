@@ -1,8 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import "animate.css";
 
 export interface IStyledHeaderProps {
   isOpenMenu: boolean;
+  type?: "dashboard";
 }
 
 export const HeaderStyle = styled.header`
@@ -17,6 +18,7 @@ export const HeaderStyle = styled.header`
     flex-direction: column;
     width: 100%;
     height: 100%;
+    justify-content: center;
 
     & > div {
       display: flex;
@@ -31,7 +33,12 @@ export const HeaderStyle = styled.header`
       & > .hamburger-react {
         margin-right: 9px;
       }
+
+      .wrapperUser{
+        display: none;
+      }
     }
+    
 
     & > ul {
       width: 100%;
@@ -44,7 +51,7 @@ export const HeaderStyle = styled.header`
       position: absolute;
       left: 0;
       top: ${({ isOpenMenu }: IStyledHeaderProps) =>
-        isOpenMenu ? "72px" : "-94px"};
+        isOpenMenu ? "72px" : "-160px"};
       gap: 32px;
       padding: 16px;
       transition: top 0.5s ease;
@@ -59,48 +66,7 @@ export const HeaderStyle = styled.header`
       }
       & > li:last-child {
         width: 100%;
-      }
-
-      & > li.wrapperUser {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        width: 100%;
-        max-width: 80%;
-        cursor: pointer;
-        
-        .iconUser {
-          background-color: var(--color-brand-2);
-          width: 32px;
-          height: 32px;
-          padding: 6px;
-          border-radius: 50%;
-          font-family: var(--font-text);
-          font-weight: 700;
-          font-size: 14px;
-          color: var(--whiteFixed);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .nameUser {
-          font: var(--font-body-2);
-          color: var(--gray-2);
-        }
-      }
-      & > li.wrapperLogout {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        width: unset;
-
-        & > span {
-          white-space: nowrap;
-          font: var(--font-body-2);
-          color: var(--gray-2);
-        }
-      }
+      }      
     }
   }
 
@@ -113,49 +79,85 @@ export const HeaderStyle = styled.header`
         flex-direction: row;
         justify-content: space-between;
         padding-left: 16px;
+        position: relative;
 
         & > div {
+          width: ${({ type }: IStyledHeaderProps) => type && "95%"};
+          justify-content : ${({ type }: IStyledHeaderProps) => type && "space-between"};
+         
+
           & > .hamburger-react {
             display: none;
           }
-        }
 
+          & > .wrapperUser {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-style: none;
+            background-color: transparent;
+            cursor: pointer;
+            
+
+            .iconUser {
+              background-color: var(--color-brand-2);
+              width: 32px;
+              height: 32px;
+              padding: 6px;
+              border-radius: 50%;
+              font-family: var(--font-text);
+              font-weight: 700;
+              font-size: 14px;
+              color: var(--whiteFixed);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .nameUser {
+              font: var(--font-body-2);
+              color: var(--gray-2);
+            }
+          }
+        }
+    
         & > ul {
-          flex-direction: row;
-          align-items: center;
-          justify-content: flex-end;
-          padding-right: 16px;
-          position: unset;
-          top: unset;
-          left: unset;
-          z-index: unset;
-          max-width: 370px;
-          min-height: 100%;
-          border-radius: unset;
-          background-color: unset;
-          box-shadow: unset;
-          animation: unset;
-          transition: unset;
-          border-left: 2px solid var(--gray-6);
+          ${({ type }: IStyledHeaderProps) => {
+            switch (type) { 
+              case "dashboard":
+                return css`
+                  max-width: 234px;
+                  left: unset;
+                  right: 0px;
+                `;
+              default:
+                return css`
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: flex-end;
+                  padding-right: 16px;
+                  position:unset;
+                  top: unset;
+                  left: unset;
+                  z-index: unset;
+                  max-width: 370px;
+                  min-height: 100%;
+                  border-radius: unset;
+                  background-color:unset;
+                  box-shadow: unset;
+                  animation: unset;
+                  transition: unset;
+                  border-left: 2px solid var(--gray-6);
+                `
+            }
+          }}
 
           & > li:first-child {
             margin-top: unset;
           }
           & > li:last-child {
             max-width: 133px;
-          }
-          & > li.wrapperUser {
-            padding-left: unset;
-          }
-          & > li.wrapperLogout {
-            display: unset;
-            align-items: unset;
-            gap: unset;
-
-            & > span {
-              display: none;
-            }
-          }
+          }         
         }
       }
     }
