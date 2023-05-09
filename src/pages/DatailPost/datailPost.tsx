@@ -170,7 +170,7 @@ export const DatailPostPage = () => {
 
   return (
     <Wrapper>
-      <Header />
+      <Header type="dashboard" />
       <ContainerMain>
         <BackgroundColor />
         <PostContainer>
