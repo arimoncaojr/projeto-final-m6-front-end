@@ -187,6 +187,21 @@ export const DatailPostPage = () => {
     resolver: yupResolver(newCommentSchema),
   });
 
+  const generateWhatsAppLink = (phoneNumber: string, message: string) => {
+    const encodedMessage = encodeURIComponent(message);
+    return `https://wa.me/55${phoneNumber}?text=${encodedMessage}`;
+  };
+
+  const handleBuyClick = () => {
+    if (user && post) {
+      const message = `Olá ${post.user.name}, estou querendo comprar o carro ${post.model}`;
+      const whatsappLink = generateWhatsAppLink(post.user.phoneNumber, message);
+      window.open(whatsappLink, "_blank");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <Wrapper>
       <Header type="dashboard" />
@@ -208,7 +223,9 @@ export const DatailPostPage = () => {
               <p>R$ {post?.price}</p>
             </div>
             {user ? (
-              <Button typeStyle="colorBrand1Withlimit">Comprar</Button>
+              <Button typeStyle="colorBrand1Withlimit" onClick={handleBuyClick}>
+                Comprar
+              </Button>
             ) : (
               <Button typeStyle="colorGray5" onClick={() => navigate("/login")}>
                 Comprar

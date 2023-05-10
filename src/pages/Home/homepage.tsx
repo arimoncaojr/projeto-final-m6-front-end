@@ -32,7 +32,6 @@ export const HomePage = () => {
   const { postsInfo } = useContext(ListPostsContext);
   const { user } = useContext(UserContext);
 
-
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));
   };
@@ -46,6 +45,10 @@ export const HomePage = () => {
   };
 
   const filterPosts = (posts: IPosts[]) => {
+    if (!Array.isArray(posts)) {
+      return [];
+    }
+
     return posts.filter((post) => {
       const {
         brand,
@@ -97,7 +100,9 @@ export const HomePage = () => {
     return posts.slice(startIndex, endIndex);
   };
 
-  const uniqueYears = Array.from(new Set(postsInfo.map((post) => post.year)));
+  const uniqueYears = Array.isArray(postsInfo)
+    ? Array.from(new Set(postsInfo.map((post) => post.year)))
+    : [];
 
   const capitalizeFirstLetter = (str: string): string => {
     return str
@@ -106,11 +111,11 @@ export const HomePage = () => {
       .join(" ");
   };
 
-  const uniqueFuelTypes = Array.from(
-    new Set(postsInfo.map((post) => post.fuelType))
-  )
-    .filter(Boolean)
-    .map((fuelType: string) => capitalizeFirstLetter(fuelType));
+  const uniqueFuelTypes = Array.isArray(postsInfo)
+    ? Array.from(new Set(postsInfo.map((post) => post.fuelType)))
+        .filter(Boolean)
+        .map((fuelType: string) => capitalizeFirstLetter(fuelType))
+    : [];
 
   const hasActiveFilters = () => {
     return Object.values(filters).some((filterValue) => filterValue !== "");
@@ -151,13 +156,19 @@ export const HomePage = () => {
     setFilters((prevState) => ({ ...prevState, maxKm: e.target.value }));
   };
 
-  const uniqueColors = Array.from(
-    new Set(postsInfo.map((post) => post.color))
-  ).map((color: string) => capitalizeFirstLetter(color));
+  const uniqueColors = Array.isArray(postsInfo)
+    ? Array.from(new Set(postsInfo.map((post) => post.color))).map(
+        (color: string) => capitalizeFirstLetter(color)
+      )
+    : [];
 
-  const uniqueBrands = Array.from(new Set(postsInfo.map((post) => post.mark)));
+  const uniqueBrands = Array.isArray(postsInfo)
+    ? Array.from(new Set(postsInfo.map((post) => post.mark)))
+    : [];
 
-  const uniqueModels = Array.from(new Set(postsInfo.map((post) => post.model)));
+  const uniqueModels = Array.isArray(postsInfo)
+    ? Array.from(new Set(postsInfo.map((post) => post.model)))
+    : [];
 
   const HandleFilterMobileClick = () => {
     setFilterClickMobile(!filterClickMobile);
@@ -294,7 +305,7 @@ export const HomePage = () => {
 
   return (
     <Wrapper>
-      {user? <Header type="dashboard"/> : <Header />}
+      {user ? <Header type="dashboard" /> : <Header />}
       <BannerStyle>
         <h1>Motors Shop</h1>
         <p>A melhor plataforma de anúncios de carros do país!</p>
@@ -304,7 +315,7 @@ export const HomePage = () => {
           <div className="cardsContainer">
             {filteredPosts.length > 0 ? (
               paginatedPosts(filteredPosts, currentPage).map((post) => (
-                <Card key={post.id} post={post} type="home"/>
+                <Card key={post.id} post={post} type="home" />
               ))
             ) : (
               <p className="messageNotFoundCar">Não há carros disponíveis</p>
