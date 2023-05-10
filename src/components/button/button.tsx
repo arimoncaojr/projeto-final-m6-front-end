@@ -13,7 +13,7 @@ interface IButtonProps {
      | "seeAllAds"
      | "createAds"
      | "login"
-     | "logout"
+     | "menu"
      | "colorGray6"
      | "colorGray5"
      | "delete"

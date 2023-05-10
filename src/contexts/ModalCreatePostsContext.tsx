@@ -34,7 +34,7 @@ export const ModalCreatePostsContext = createContext<IModalCreatePostsContext>(
 export const ModalCreatePostsProvider = ({
   children,
 }: IModalCreatePostsContextProps) => {
-  const token: string | null = localStorage.getItem("motorsShop:Token");
+  const token: string | null = localStorage.getItem("@motorsShop:Token");
 
   const [modalCreatePost, showModalCreatePost] = useState<boolean>(false);
 
@@ -62,7 +62,7 @@ export const ModalCreatePostsProvider = ({
 
     Api.post("/posts", formattedInfoData, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlT2ZBY2NvdW50IjoiY29tcHJhZG9yIiwiaWF0IjoxNjgyNjgzNzk0LCJleHAiOjE2ODI3NzAxOTQsInN1YiI6IjBiMGQ3MzZiLTIxNDMtNDMyNy05MmEyLTI5ZTgxNTQ2MmVjOSJ9.TQkXQOIjOKX_NHIR_hzYaFmD-UNJ4QtX-5IK9NPiSfo`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {

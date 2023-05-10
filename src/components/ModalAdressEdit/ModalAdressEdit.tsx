@@ -29,7 +29,7 @@ const ModalAddressEdit: React.FC<IModalAdressProps> = ({
   const [loadingBtn, setLoadingBtn] = useState(false);
 
   const updateAddress = async (dataAddress: IAddressRequest) => {
-    const token = window.localStorage.getItem("@motorsShopToken");
+    const token = window.localStorage.getItem("@motorsShop:Token");
     const address = {
       address: dataAddress,
     };

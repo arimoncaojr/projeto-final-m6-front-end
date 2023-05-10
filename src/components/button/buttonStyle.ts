@@ -12,7 +12,7 @@ export interface IStyledButtonProps{
      | "seeAllAds"    
      | "createAds"    
      | "login"        
-     | "logout"
+     | "menu"
      | "colorGray6"
      | "colorGray5"
      | "delete"
@@ -36,6 +36,7 @@ export const ButtonStyle = styled.button`
                     return css`
                          color: var(--gray-0);
                          border: 1.5px solid var(--gray-4);
+                         padding: 12px 17px;
                     `;
                case "colorBrand2":
                     return css`
@@ -94,17 +95,15 @@ export const ButtonStyle = styled.button`
                          color: var(--color-brand-1);
                          border: none;
                     `
-               case "logout":
+               case "menu":
                     return css`
-                         max-width: 53px;
-                         height: 40px;
-                         padding: 9px 0px;
+                         width: unset;
+                         height: unset;
+                         padding: unset;
                          border-radius: none;
-                         font-size: 30px;
                          color: var(--gray-2);
-                         display: flex;
-                         align-items: center;
-                         justify-content: space-around;
+                         font: var(--font-body-2);
+                         white-space: nowrap;
                     `
                case "colorGray6":
                     return css`

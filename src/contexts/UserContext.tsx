@@ -43,7 +43,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
 
   useEffect(() => {
     const autoLogin = async () => {
-      const token = localStorage.getItem("@motorsShopToken");
+      const token = localStorage.getItem("@motorsShop:Token");
       if (token) {
         try {
           const { data } = await getProfileUser(token);
@@ -74,7 +74,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
 
     try {
       const token = await loginApi(data);
-      localStorage.setItem("@motorsShopToken", token.data.token);
+      localStorage.setItem("@motorsShop:Token", token.data.token);
 
       const getUser = await getProfileUser(token.data.token);
       setUser(getUser.data);
@@ -99,7 +99,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
           padding: "8px",
         },
       });
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       toast.update(loadingToast, {
         render: `Senha ou e-mail invalido`,

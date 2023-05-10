@@ -109,7 +109,7 @@ export const DatailPostPage = () => {
 
   const newComment = async (dataNewPost: INewComment) => {
     const loadingToast = toast.loading("Carregando...");
-    const token = window.localStorage.getItem("@motorsShopToken");
+    const token = window.localStorage.getItem("@motorsShop:Token");
     if (token) {
       try {
         const { data } = await Api.post(`/posts/${id}/comments`, dataNewPost, {
@@ -189,7 +189,7 @@ export const DatailPostPage = () => {
 
   return (
     <Wrapper>
-      <Header />
+      <Header type="dashboard" />
       <ContainerMain>
         <BackgroundColor />
         <PostContainer>
