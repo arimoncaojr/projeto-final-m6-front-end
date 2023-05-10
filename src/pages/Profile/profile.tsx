@@ -16,7 +16,7 @@ import { ModalPostsCreate } from "../../components/ModalPostsCreate";
 
 export const ProfilePage = () => {
   const [advertiser, setAdvertiser] = useState(false);
-  // const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { modalCreatePost, showModalCreatePost } = useContext(
     ModalCreatePostsContext
   );
@@ -50,7 +50,6 @@ export const ProfilePage = () => {
     (async () => {
       try {
         const { data } = await Api.get(`/users/profile/${id}`);
-        console.log(data);
         setUserProfile(data);
         if (data.typeOfAccount === "anunciante") {
           setAdvertiser(true);
@@ -98,7 +97,7 @@ export const ProfilePage = () => {
             <span className="typeAccount">{handleNameTypeAccount()}</span>
           </div>
           <p className="descriptionUser">{userProfile?.description}</p>
-          {userProfile?.typeOfAccount === "anunciante" && (
+          {userProfile?.typeOfAccount === "anunciante" && user?.id === id && (
             <>
               <Button
                 typeStyle="createAds"

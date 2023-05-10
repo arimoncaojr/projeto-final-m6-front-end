@@ -36,7 +36,7 @@ const ModalCommentEdit: React.FC<IModalCommentProps> = ({
   };
 
   const deleteComment = async () => {
-    const token = localStorage.getItem("@motorsShopToken");
+    const token = localStorage.getItem("@motorsShop:Token");
     const commentId = comment?.id;
     const loadingToast = toast.loading("Carregando...", {
       position: "top-center",
@@ -103,7 +103,7 @@ const ModalCommentEdit: React.FC<IModalCommentProps> = ({
   };
 
   const updateComment = async (updatedData: INewComment) => {
-    const token = localStorage.getItem("@motorsShopToken");
+    const token = localStorage.getItem("@motorsShop:Token");
     const commentId = comment?.id;
     const loadingToast = toast.loading("Carregando...", {
       position: "top-center",
