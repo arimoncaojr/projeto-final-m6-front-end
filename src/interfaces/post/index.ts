@@ -10,6 +10,7 @@ export interface IComment {
   id: string;
   description: string;
   userComment: string;
+  userCommentId: string;
   post: string;
   createdAt: string;
 }

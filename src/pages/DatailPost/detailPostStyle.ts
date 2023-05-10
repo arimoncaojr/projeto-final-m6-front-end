@@ -267,6 +267,7 @@ export const ListComments = styled.div`
     gap: 1.5rem;
 
     max-width: 100%;
+    width: 100%;
     overflow-x: hidden;
 
     li {
@@ -294,8 +295,21 @@ export const ListComments = styled.div`
     }
 
     .comment-description {
-      font-size: 0.8rem;
-      font-weight: 400;
+      display: flex;
+      justify-content: space-between;
+
+      p {
+        font-size: 0.8rem;
+        font-weight: 400;
+      }
+
+      button {
+        border-radius: 4px;
+        border-style: none;
+        color: var(--whiteFixed);
+        padding: 5px;
+        background-color: var(--gray-0);
+      }
     }
   }
 `;
