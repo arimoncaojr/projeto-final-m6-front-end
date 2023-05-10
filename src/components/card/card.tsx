@@ -10,6 +10,7 @@ import { IPosts } from "../../contexts/ListPostsContext";
 import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
 import { ModalPostsEdit } from "../ModalPostsEdit";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext";
 
 interface IPostCardProps {
   post: IPosts;
@@ -19,6 +20,7 @@ interface IPostCardProps {
 export const Card = ({ post, type }: IPostCardProps) => {
   const { setIdPost, showModalEditPost, modalEditPost, listPostById } =
     useContext(ModalEditPostsContext);
+  const { user } = useContext(UserContext);
   const [indexImg, setIndexImg] = useState(0);
 
   const navigate = useNavigate();
@@ -55,7 +57,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
     style: "currency",
     currency: "BRL",
   });
-  const user = post.user.name.replace(/\b\w{1}/g, (match) =>
+  const userName = post.user.name.replace(/\b\w{1}/g, (match) =>
     match.toUpperCase()
   );
   const firstLetter = post.user.name.split(" ")[0][0];
@@ -110,7 +112,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
           className="nameUser"
           onClick={() => navigate(`/profile/${post.user.id}`)}
         >
-          {user}
+          {userName}
         </p>
       </IconUserStyle>
       <div className="containerDetail">
@@ -118,7 +120,7 @@ export const Card = ({ post, type }: IPostCardProps) => {
         <Button typeStyle="detail">{year}</Button>
         <p>{price}</p>
       </div>
-      {type === "profile" && (
+      {type === "profile" && post.user.id === user?.id && (
         <div className="containerButtons">
           <Button
             typeStyle="noColor"
@@ -129,7 +131,12 @@ export const Card = ({ post, type }: IPostCardProps) => {
           >
             Editar
           </Button>
-          <Button typeStyle="noColor">Ver detalhes</Button>
+          <Button
+            typeStyle="noColor"
+            onClick={() => navigate(`/product/${post.id}`)}
+          >
+            Ver detalhes
+          </Button>
         </div>
       )}
     </CardStyle>
