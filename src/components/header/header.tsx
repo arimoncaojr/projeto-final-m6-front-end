@@ -28,40 +28,41 @@ export const Header = ({ type }: IHeaderProps) => {
   }, [menuClicked]);
 
   const handleCipher = () => {
-    const name = user?.name.split(" ")
+    const name = user?.name.split(" ");
     if (name && name?.length > 1) {
       const firstLetter = name[0][0];
       const secondLetter = name[1][0];
-      return (firstLetter + secondLetter).toUpperCase() 
+      return (firstLetter + secondLetter).toUpperCase();
     } else {
       return name && name[0][0].toUpperCase();
-    }  
-  }
+    }
+  };
 
-  const handleNameUser = () => { 
-    return user?.name.replace(/\b\w{1}/g, (match) =>
-      match.toUpperCase()
-    );
-  }
+  const handleNameUser = () => {
+    return user?.name.replace(/\b\w{1}/g, (match) => match.toUpperCase());
+  };
 
-  const handleProfileUser = () => { 
-    navigate(`/profile/${user?.id}`)
-  }
+  const handleProfileUser = () => {
+    navigate(`/profile/${user?.id}`);
+  };
 
   const handleLogout = () => {
     localStorage.clear();
-    setUser(null)
-    navigate("/")
-  }
+    setUser(null);
+    navigate("/");
+  };
 
-  const typeOfaccount = user?.typeOfAccount
+  const typeOfaccount = user?.typeOfAccount;
 
   return (
     <>
       <HeaderStyle isOpenMenu={isOpen} type={type}>
         <nav className="container">
           <div>
-            <a href="/"> <img src={logoColor} alt="logo motors shop" /> </a>  
+            <a href="/">
+              {" "}
+              <img src={logoColor} alt="logo motors shop" />{" "}
+            </a>
             <Hamburger
               toggled={isOpen}
               toggle={() => {
@@ -71,37 +72,57 @@ export const Header = ({ type }: IHeaderProps) => {
               color="#2C2C2C"
               size={25}
               rounded
-              />
-            {type &&
-              <button className="wrapperUser" onClick={() => {
-                setOpen(!isOpen);
-                setMenuClicked(true);
-              }}>
-                <div className="iconUser">
-                  {handleCipher()}
-                </div>
+            />
+            {type && (
+              <button
+                className="wrapperUser"
+                onClick={() => {
+                  setOpen(!isOpen);
+                  setMenuClicked(true);
+                }}
+              >
+                <div className="iconUser">{handleCipher()}</div>
                 <p className="nameUser">{handleNameUser()}</p>
               </button>
-            }
-            
+            )}
           </div>
           <ul>
             {type ? (
               <>
                 <li>
-                  <Button typeStyle="menu" title="Editar Perfil" onClick={()=>setShowModalProfile(true)}>Editar Perfil</Button>
-                </li> 
+                  <Button
+                    typeStyle="menu"
+                    title="Editar Perfil"
+                    onClick={() => setShowModalProfile(true)}
+                  >
+                    Editar Perfil
+                  </Button>
+                </li>
                 <li>
-                  <Button typeStyle="menu" title="Editar Endereço" onClick={()=>setShowModalAddress(true)}>Editar Endereço</Button>
-                </li> 
-                {typeOfaccount === "anunciante" &&
+                  <Button
+                    typeStyle="menu"
+                    title="Editar Endereço"
+                    onClick={() => setShowModalAddress(true)}
+                  >
+                    Editar Endereço
+                  </Button>
+                </li>
+                {typeOfaccount === "anunciante" && (
                   <li>
-                    <Button typeStyle="menu" title="Meus Anuncios" onClick={()=>handleProfileUser()}>Meus Anuncios</Button>
-                  </li> 
-                }
+                    <Button
+                      typeStyle="menu"
+                      title="Meus Anuncios"
+                      onClick={() => handleProfileUser()}
+                    >
+                      Meus Anuncios
+                    </Button>
+                  </li>
+                )}
                 <li>
-                  <Button typeStyle="menu" title="Sair" onClick={handleLogout}>Sair</Button>
-                </li> 
+                  <Button typeStyle="menu" title="Sair" onClick={handleLogout}>
+                    Sair
+                  </Button>
+                </li>
               </>
             ) : (
               <>
@@ -114,7 +135,7 @@ export const Header = ({ type }: IHeaderProps) => {
                   <Button
                     typeStyle="noColor"
                     onClick={() => navigate("/register")}
-                    >
+                  >
                     Cadastrar
                   </Button>
                 </li>
