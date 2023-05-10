@@ -3,7 +3,7 @@ import { Ilogin } from "../interfaces/login";
 import { IResetPasswordRequest, IUserCreatedRequest } from "../interfaces/user";
 
 export const Api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://kenzie-kars-19.onrender.com",
   timeout: 5000,
 });
 
