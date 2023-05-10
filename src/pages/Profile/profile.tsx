@@ -27,25 +27,6 @@ export const ProfilePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const token = localStorage.getItem("@motorsShop:Token");
-
-  //     if (token) {
-  //       try {
-  //         const responseApi = await getProfileUser(token);
-  //         const typeOfAccount = responseApi.data.typeOfAccount;
-  //         if (typeOfAccount === "anunciante") {
-  //           setAdvertiser(true);
-  //         }
-  //       } catch (error) {
-  //         console.log(error);
-  //         localStorage.removeItem("@motorsShop:Token");
-  //       }
-  //     } else {
-  //     }
-  //   })();
-  // }, []);
   useEffect(() => {
     (async () => {
       try {

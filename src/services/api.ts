@@ -4,7 +4,7 @@ import { IResetPasswordRequest, IUserCreatedRequest } from "../interfaces/user";
 
 export const Api = axios.create({
   baseURL: "https://kenzie-kars-19.onrender.com",
-  timeout: 5000,
+  timeout: 20000,
 });
 
 export const registerApi = async (data: IUserCreatedRequest) => {
@@ -35,16 +35,7 @@ export const resetPasswordUser = async (
   token: string | undefined,
   data: IResetPasswordRequest
 ) => {
-  console.log(data);
   const resp = await Api.post(`/users/reset/${token}`, data);
-  // const resp = await fetch(`http://localhost:3000/users/reset/${token}`, {
-  //     headers: {'Content-Type': 'application/json'},
-  //     method: 'POST',
-  //     body: JSON.stringify(data)
-  //   })
-  //   .then(resp => resp.json())
-  //   .then(resp => resp)
-  //   .catch(err => console.error(err))
 
   return resp;
 };
