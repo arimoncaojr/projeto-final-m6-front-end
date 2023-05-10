@@ -60,7 +60,7 @@ export const ProfilePage = () => {
         navigate("/");
       }
     })();
-  }, []);
+  }, [userProfile?.posts]);
 
   const handleNameUser = () => {
     return userProfile?.name.replace(/\b\w{1}/g, (match) =>
