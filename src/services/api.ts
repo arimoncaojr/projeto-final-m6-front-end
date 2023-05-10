@@ -26,13 +26,16 @@ export const loginApi = async (data: Ilogin) => {
   return resp;
 };
 
-export const accessAuthenticationTokenSendEmail = async (token:any) => {
+export const accessAuthenticationTokenSendEmail = async (token: any) => {
   const resp = await Api.get(`/users/authentication/${token}`);
   return resp;
-}
+};
 
-export const resetPasswordUser = async (token:string | undefined, data:IResetPasswordRequest) => {
-  console.log(data)
+export const resetPasswordUser = async (
+  token: string | undefined,
+  data: IResetPasswordRequest
+) => {
+  console.log(data);
   const resp = await Api.post(`/users/reset/${token}`, data);
   // const resp = await fetch(`http://localhost:3000/users/reset/${token}`, {
   //     headers: {'Content-Type': 'application/json'},
@@ -42,6 +45,6 @@ export const resetPasswordUser = async (token:string | undefined, data:IResetPas
   //   .then(resp => resp.json())
   //   .then(resp => resp)
   //   .catch(err => console.error(err))
-    
+
   return resp;
-}
+};

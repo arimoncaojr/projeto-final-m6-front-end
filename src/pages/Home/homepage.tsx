@@ -32,7 +32,6 @@ export const HomePage = () => {
   const { postsInfo } = useContext(ListPostsContext);
   const { user } = useContext(UserContext);
 
-
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prevState) => ({ ...prevState, minPrice: e.target.value }));
   };
@@ -294,7 +293,7 @@ export const HomePage = () => {
 
   return (
     <Wrapper>
-      {user? <Header type="dashboard"/> : <Header />}
+      {user ? <Header type="dashboard" /> : <Header />}
       <BannerStyle>
         <h1>Motors Shop</h1>
         <p>A melhor plataforma de anúncios de carros do país!</p>
@@ -304,7 +303,7 @@ export const HomePage = () => {
           <div className="cardsContainer">
             {filteredPosts.length > 0 ? (
               paginatedPosts(filteredPosts, currentPage).map((post) => (
-                <Card key={post.id} post={post} type="home"/>
+                <Card key={post.id} post={post} type="home" />
               ))
             ) : (
               <p className="messageNotFoundCar">Não há carros disponíveis</p>
