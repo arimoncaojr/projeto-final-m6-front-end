@@ -27,6 +27,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { newCommentSchema } from "../../schemas/yupCreateComment";
 import { Flip, toast } from "react-toastify";
 import { UserContext } from "../../contexts/UserContext";
+import ModalCommentEdit from "../../components/ModalCommentEdit/ModalCommentEdit";
 
 export const DatailPostPage = () => {
   const { user } = useContext(UserContext);
@@ -58,8 +59,10 @@ export const DatailPostPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState<IPost | null>(null);
   const [commentList, setCommentList] = useState<IComment[]>([]);
+  const [comment, setComment] = useState<IComment | null>(null);
   const [showImage, setShowImage] = useState<string | null>(null);
   const [showModalImgage, setShowModalImage] = useState(false);
+  const [showModalComment, setShowModalComment] = useState(false);
   const navigate = useNavigate();
 
   const catchImage = (img: string) => {
@@ -164,6 +167,22 @@ export const DatailPostPage = () => {
     }
   };
 
+  const openModalContact = (comment: IComment) => {
+    setComment(comment);
+    setShowModalComment(true);
+  };
+
+  const handleCipher = (userData: string | undefined) => {
+    const name = userData?.split(" ");
+    if (name && name?.length > 1) {
+      const firstLetter = name[0][0];
+      const secondLetter = name[1][0];
+      return (firstLetter + secondLetter).toUpperCase();
+    } else {
+      return name && name[0][0].toUpperCase();
+    }
+  };
+
   const { register, handleSubmit, setValue } = useForm<INewComment>({
     resolver: yupResolver(newCommentSchema),
   });
@@ -238,13 +257,18 @@ export const DatailPostPage = () => {
             )}
           </PhotosContainer>
           <AdvertiserInfos>
-            <h3>{post?.user.name.slice(0, 2).toUpperCase()}</h3>
+            <h3>{handleCipher(post?.user.name)}</h3>
             <h4>
               {post?.user.name.charAt(0).toUpperCase()}
               {post?.user.name.slice(1)}
             </h4>
             <p>{post?.user.description}</p>
-            <Button typeStyle="seeAllAds">Ver todos anuncios</Button>
+            <Button
+              typeStyle="seeAllAds"
+              onClick={() => navigate(`/profile/${post?.user.id}`)}
+            >
+              Ver todos anuncios
+            </Button>
           </AdvertiserInfos>
         </AsideContainer>
         <CommentsContainer>
@@ -257,7 +281,7 @@ export const DatailPostPage = () => {
                     <li>
                       <div>
                         <Avatar color={randomColor()}>
-                          {comment.userComment.slice(0, 2).toUpperCase()}
+                          {handleCipher(comment.userComment)}
                         </Avatar>
                         <h4>
                           {comment.userComment.charAt(0).toUpperCase()}
@@ -265,9 +289,16 @@ export const DatailPostPage = () => {
                         </h4>
                         <p>{renderTimeSinceComment(comment.createdAt)}</p>
                       </div>
-                      <p className="comment-description">
-                        {comment.description}
-                      </p>
+                      <div className="comment-description">
+                        <p>{comment.description}</p>
+                        {user?.id === comment.userCommentId ? (
+                          <button onClick={() => openModalContact(comment)}>
+                            editar
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
                     </li>
                   );
                 })
@@ -279,9 +310,7 @@ export const DatailPostPage = () => {
           <NewComment>
             {user ? (
               <section>
-                <Avatar color={randomColor()}>
-                  {user.name.slice(0, 2).toUpperCase()}
-                </Avatar>
+                <Avatar color={randomColor()}>{handleCipher(user.name)}</Avatar>
                 <h4>
                   {user.name.charAt(0).toUpperCase()}
                   {user.name.slice(1)}
@@ -314,6 +343,15 @@ export const DatailPostPage = () => {
           img={showImage}
           setShowImage={setShowImage}
           setShowModalImage={setShowModalImage}
+        />
+      )}
+      {showModalComment && (
+        <ModalCommentEdit
+          setShowModalComment={setShowModalComment}
+          comment={comment}
+          setComment={setComment}
+          commentList={commentList}
+          setCommentList={setCommentList}
         />
       )}
       <Footer />
