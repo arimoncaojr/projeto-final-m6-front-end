@@ -9,6 +9,7 @@ import { Button } from "../button/button";
 import { IPosts } from "../../contexts/ListPostsContext";
 import { ModalEditPostsContext } from "../../contexts/ModalEditPostsContext";
 import { ModalPostsEdit } from "../ModalPostsEdit";
+import { useNavigate } from "react-router-dom";
 
 interface IPostCardProps {
   post: IPosts;
@@ -19,6 +20,8 @@ export const Card = ({ post, type }: IPostCardProps) => {
   const { setIdPost, showModalEditPost, modalEditPost, listPostById } =
     useContext(ModalEditPostsContext);
   const [indexImg, setIndexImg] = useState(0);
+
+  const navigate = useNavigate();
 
   const handleClickImg = (button: string) => {
     const sizeDbImg = dbImg.length - 1;
@@ -99,11 +102,16 @@ export const Card = ({ post, type }: IPostCardProps) => {
           false
         )}
       </figure>
-      <h2>{nameCar}</h2>
+      <h2 onClick={() => navigate(`/product/${post.id}`)}>{nameCar}</h2>
       <p>{description}</p>
       <IconUserStyle firstLetter={firstLetter.toUpperCase()}>
         <p className="iconUser">{handleCipher()}</p>
-        <p className="nameUser">{user}</p>
+        <p
+          className="nameUser"
+          onClick={() => navigate(`/profile/${post.user.id}`)}
+        >
+          {user}
+        </p>
       </IconUserStyle>
       <div className="containerDetail">
         <Button typeStyle="detail">{km}</Button>
