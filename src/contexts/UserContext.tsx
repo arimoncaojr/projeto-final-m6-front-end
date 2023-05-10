@@ -56,6 +56,7 @@ export const UserProvider = ({ children }: IUserContextProps) => {
     };
     autoLogin();
   }, []);
+  //user.posts
 
   const createdUser = async (data: IUserCreatedRequest) => {
     try {
